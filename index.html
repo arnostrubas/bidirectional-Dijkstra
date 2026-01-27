@@ -10,12 +10,21 @@
 
 
 <body>
-    <div id="container">
-        <div id="cy1"></div> 
-        <div id="cy2"></div>
+    <div id="graph_containers">
+        <div id="graph_container1"></div> 
+        <div id="graph_container2"></div>
     </div>
-
-
+    <div id="all_queues">
+        <div id="first_queues">
+            <div class="priority_queue" id="Qf1"> Prioritní fronta 1.1 </div>
+            <div class="priority_queue" id="Qb1"> Prioritní fronta 1.2 </div>
+        </div>
+        <div id="second_queues">
+            <div class="priority_queue" id="Qf2"> Prioritní fronta 2.1 </div>
+            <div class="priority_queue" id="Qb2"> Prioritní fronta 2.2 </div>
+        </div>
+    </div>
+   
     <script>
     let cy1 = cytoscape({
             container: document.getElementById('cy1')

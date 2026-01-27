@@ -4,16 +4,44 @@ html, body {
     padding: 0;
 }
 
-#container {
+#graph_containers {
     display: flex;
-    height: 100%;
+    flex: 1;
+    height: 50%;
     align-items: center; 
-    justify-content: space-around;
+    justify-content: space-between;
+    padding: 10px;
 }
 
-#cy1, #cy2 {
+#graph_container1, #graph_container2 {
     width: 47%;
-    height: 50%;
-    border: 1px solid #0a0808;
+    height: 100%;
+    border: 1px solid #000000;
     box-sizing: border-box;
+}
+
+#first_queues, #second_queues {
+    display: flex;
+    flex: 1;
+    height: 5%;
+    padding: 5px;
+    gap: 10px;
+}
+
+.priority_queue {
+    flex: 1;
+    border: 1px solid #000000; 
+    padding: 10px;
+    align-items: center; 
+    justify-content: center;
+    font-family: sans-serif;
+    font-size: 1vw;
+}
+
+#all_queues {
+    display: flex;
+    height: 100%;
+    gap: 5.4%;
+    padding-left: 5px;
+    padding-right: 5px;
 }

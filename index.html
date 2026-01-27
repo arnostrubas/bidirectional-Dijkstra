@@ -1,188 +1,29 @@
 <!DOCTYPE html>
 <html lang="cs">
+
 <head>
     <meta charset="UTF-8">
-    <title>Dijkstra Algoritmus Demo</title>
-    
-    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
-    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+    <title>Bidirectional Dijkstra visualisation</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
-
-    <py-config>
-        packages = ["networkx"]
-    </py-config>
-
-    <style>
-    #mynetwork {
-    width: 800px;
-    height: 500px;
-    border: 1px solid #ccc;
-    margin: 20px auto;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-        button { padding: 10px 20px; font-size: 1.2rem; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 5px; }
-        button:hover { background-color: #0056b3; }
-        #cy {
-            width: 100%;
-            height: 500px;
-            border: 1px solid #ccc;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
+
+
 <body>
-    
-    <h1>Vizualizace Dijkstrova Algoritmu</h1>
-    <p>Klikni pro provedení dalšího kroku algoritmu.</p>
-    
-    <button id="nextBtn">Další krok</button>
-    <button id="prevBtn">minulý Krok</button>
-    <button id="calculateBtn">Vypočítat</button>
-    
-    <div id="cy"></div>
-    <script type="py" src="./code.py"></script>
+    <div id="container">
+        <div id="cy1"></div> 
+        <div id="cy2"></div>
+    </div>
+
 
     <script>
-        let layout = {
-                name: 'breadthfirst',
-                animate: false,
-                padding: 10,
-                directed: true,
-            };
-        let style = [
-                {
-                selector: 'node',
-                    style: {
-                        'label': 'data(label)',
-                        'width': '50px',
-                        'height': '50px',
-                        'text-valign': 'center',
-                        'text-halign': 'center',
-                        'color': '#333',
-                        'font-size': '12px',
-                        'border-width': 2,
-                        'border-color': '#555'
-                    }
-                },
-                
-                {
-                    selector: 'node[state = "UNVISITED"]',
-                    style: {
-                        'background-color': '#e0e0e0', 
-                    }
-                },
-                {
-                    selector: 'node[state = "OPEN"]',
-                    style: {
-                        'background-color': '#ffc107',
-                        'border-color': '#d39e00'
-                    }
-                },
-                {
-                    selector: 'node[state = "CLOSED"]',
-                    style: {
-                        'background-color': '#28a745',
-                        'color': 'white',
-                        'border-color': '#1e7e34'
-                    }
-                },
-                
-                {
-                    selector: 'edge',
-                    style: {
-                        'curve-style': 'bezier',
-                        'width': '3px',
-                        'line-color': '#999',
-                        'target-arrow-shape': 'triangle',
-                        'target-arrow-color': '#999',
-                        'label': 'data(weight)', 
-                        'font-size': '20px',
-                        'color': '#555',
-                        'text-background-color': 'white',
-                        'text-background-opacity': 0.8
-                    }
-                }
-            ]
-        let init_graph = null;
-        let init_node = null;
-        let cy = cytoscape({
-            container: document.getElementById('cy'),
-            layout: layout,
-            style: style
+    let cy1 = cytoscape({
+            container: document.getElementById('cy1')
         });
-        function startApp() {
-            const init_data = JSON.parse(window.complicatedGraph());
-            init_graph = init_data.graph;
-            graph = JSON.parse(init_graph);
-            init_node = init_data.first;
-            cy.add(graph.elements);
-            cy.layout(layout).run();
-            cy.fit();
-        }
-
-        function initializeOrUpdateGraph(elementsData) { 
-            cy.remove(cy.elements());
-            cy.add(elementsData);
-            cy.layout(layout).run();
-            cy.fit();
-        }
-    
-    
-    const nextBtn = document.getElementById('nextBtn');
-    nextBtn.disabled = true;
-    const prevBtn = document.getElementById('prevBtn');
-    prevBtn.disabled = true;
-    const loadBtn = document.getElementById('calculateBtn');
-    let graphLst = null;
-    let graph_n = 0;
-
-    loadBtn.addEventListener('click', () => {
-        try {
-            const jsonData = window.Dijkstra_one_step(init_graph, init_node);
-            loadBtn.disabled = true;
-            nextBtn.disabled = false;
-            prevBtn.disabled = false;
-            const dataObject = JSON.parse(jsonData);
-            graphLst = dataObject.graph;
-            graph = JSON.parse(graphLst[graph_n]);
-            initializeOrUpdateGraph(graph.elements);
-        } catch (error) {alert(error.message)}
+    let cy2 = cytoscape({
+        container: document.getElementById('cy1')
     });
-
-    nextBtn.addEventListener('click', () => {
-        try {
-            if (graph_n + 1 == graphLst.length) 
-            {
-                throw "End of algorithm";
-            } 
-            else 
-            {
-                graph_n++;
-                graph = JSON.parse(graphLst[graph_n])
-                initializeOrUpdateGraph(graph.elements)
-            }
-        } catch (error) 
-        {
-            alert(error)
-        }
-    });
-
-    prevBtn.addEventListener('click', () => {
-        try {
-            if (graph_n == 0) 
-            {
-                throw "Cannot go back";
-            } 
-            else 
-            {
-                graph_n--;
-                graph = JSON.parse(graphLst[graph_n])
-                initializeOrUpdateGraph(graph.elements)
-            }
-        } catch (error) 
-        {
-            alert(error)
-        }
-    });
-</script>
+    </script>
 </body>
+
 </html>

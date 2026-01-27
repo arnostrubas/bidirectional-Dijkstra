@@ -100,6 +100,10 @@ html, body {
     border: none; 
     border-radius: 5px; 
     padding: 10px;
+
+    appearance: none;
+    -webkit-appearance: none;
+    display: inline-block;
 }
 
 .main_button:hover { 
@@ -108,6 +112,7 @@ html, body {
 
 .main_button:disabled {
     background-color: #929292;
+    cursor: not-allowed;
 }
 
 #steps {

@@ -10,28 +10,65 @@
 
 
 <body>
+    <div id="above_containers">
+        <div id="strategies_select_1">
+            <select class="select" id="end_strategy_1">
+                <option value="default">Strategie ukončení</option>
+                <option value="first_encounter">První průsečík</option>
+                <option value="same_vertex_closed">Stejný vrchol</option>
+                <option value="using_search_distance">Vzdálenost průzkumů</option>
+                <option value="Dijkstra">Dijkstrův algoritmus</option>
+            </select>
+            <select class="select" id="search_strategy_1">
+                <option value="default">Strategie prohledávání</option>
+                <option value="one_vertex">Po jednom vrcholu</option>
+                <option value="one_edge">Po jedné hraně</option>
+                <option value="less_open_vertexes">Méně otevřených vrcholů</option>
+                <option value="lower_queue_priority">Nižší priorita fronty</option>
+                <option value="Dijkstra">Dijkstrův algoritmus</option>
+            </select>
+        </div>
+        <button class="main_button" id="start">Start</button>
+        <button class="main_button" id="next_step">Next step</button>
+        <button class="main_button" id="reset">Reset</button>
+        <div id="strategies_select_2">
+            <select class="select" id="end_strategy_1">
+                <option value="default">Strategie ukončení</option>
+                <option value="first_encounter">První průsečík</option>
+                <option value="same_vertex_closed">Stejný vrchol</option>
+                <option value="using_search_distance">Vzdálenost průzkumů</option>
+                <option value="Dijkstra">Dijkstrův algoritmus</option>
+            </select>
+            <select class="select" id="search_strategy_1">
+                <option value="default">Strategie prohledávání</option>
+                <option value="one_vertex">Po jednom vrcholu</option>
+                <option value="one_edge">Po jedné hraně</option>
+                <option value="less_open_vertexes">Méně otevřených vrcholů</option>
+                <option value="lower_queue_priority">Nižší priorita fronty</option>
+                <option value="Dijkstra">Dijkstrův algoritmus</option>
+            </select>
+        </div>
+    </div>
     <div id="graph_containers">
         <div id="graph_container1"></div> 
         <div id="graph_container2"></div>
     </div>
-    <div id="all_queues">
+    <div id="queues">
         <div id="first_queues">
-            <div class="priority_queue" id="Qf1"> Prioritní fronta 1.1 </div>
-            <div class="priority_queue" id="Qb1"> Prioritní fronta 1.2 </div>
+            <div class="priority_queue_f" id="Qf1"> Q<sub>f</sub>: <span id="Qf1_text"> Prioritní fronta 1.1 </span> </div>
+            <div class="priority_queue_b" id="Qb1"> Q<sub>b</sub>: <span id="Qb1_text"> Prioritní fronta 1.2 </span> </div>
         </div>
         <div id="second_queues">
-            <div class="priority_queue" id="Qf2"> Prioritní fronta 2.1 </div>
-            <div class="priority_queue" id="Qb2"> Prioritní fronta 2.2 </div>
+            <div class="priority_queue_f" id="Qf2"> Q<sub>f</sub>: <span id="Qf2_text"> Prioritní fronta 2.1 </span> </div>
+            <div class="priority_queue_b" id="Qb2"> Q<sub>b</sub>: <span id="Qb2_text"> Prioritní fronta 2.2 </span> </div>
         </div>
     </div>
    
     <script>
-    let cy1 = cytoscape({
-            container: document.getElementById('cy1')
-        });
-    let cy2 = cytoscape({
-        container: document.getElementById('cy1')
-    });
+        function setStatus(id, value) {
+            const el = document.getElementById(id);
+            if (el) el.innerText = value;
+        }
     </script>
 </body>
 

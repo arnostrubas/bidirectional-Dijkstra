@@ -1,9 +1,17 @@
+/*  ====================================================================================
+    GENERIC - html, body, etc....
+    ====================================================================================
+*/
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
 }
 
+/*  ====================================================================================
+    GRAPH CONTAINERS
+    ====================================================================================
+*/
 #graph_containers {
     display: flex;
     flex: 1;
@@ -20,6 +28,10 @@ html, body {
     box-sizing: border-box;
 }
 
+/*  ====================================================================================
+    QUEUES
+    ====================================================================================
+*/
 #first_queues, #second_queues {
     display: flex;
     flex: 1;
@@ -28,7 +40,7 @@ html, body {
     gap: 10px;
 }
 
-.priority_queue {
+.priority_queue_f, .priority_queue_b {
     flex: 1;
     border: 1px solid #000000; 
     padding: 10px;
@@ -38,10 +50,53 @@ html, body {
     font-size: 1vw;
 }
 
-#all_queues {
+#queues {
     display: flex;
     height: 100%;
     gap: 5.4%;
     padding-left: 5px;
     padding-right: 5px;
+}
+
+/*  ====================================================================================
+    SELECT, START, RESET
+    ====================================================================================
+*/
+#above_containers {
+    display: flex;
+    flex-direction: row;
+    padding-top: 10px;
+    gap: 10px;
+}
+
+#strategies_select_1, #strategies_select_2 {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-left: 10px;
+    width: 15%;
+}
+
+.select {
+    width: 100%;            
+    padding: 8px;            
+    border: 1px solid #000;  
+    background: #fff;   
+    font-family: sans-serif; 
+    cursor: pointer;
+}
+
+.main_button {
+    flex: 1;
+    font-size: 1.5vw; 
+    background-color: #929292;
+    cursor: pointer; 
+    border: none; 
+    border-radius: 5px; 
+    padding: 10px;
+}
+
+.main_button:hover { 
+    background-color: #0056b3; 
 }

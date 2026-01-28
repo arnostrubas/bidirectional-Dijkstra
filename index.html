@@ -19,10 +19,11 @@
         </label>
         </div>
         <button class="add_remove_button" id="add_vertex">Přidat vrchol</button>
-        <button class="add_remove_button" id="remove_vertex">Odstranit vrchol</button>
+        <button class="add_remove_button" id="remove_vertex">Odstranit vybraný vrchol</button>
         <button class="add_remove_button" id="add_edge">Přidat hranu</button>
-        <button class="add_remove_button" id="remove_edge">Odstranit hranu</button>
+        <button class="add_remove_button" id="remove_edge">Odstranit vybranou hranu</button>
     </div>
+    <div id="fill"></div>
     <div id="above_containers">
         <div id="strategies_select_1">
             <div id="strategy_text">Strategie ukončení</div>
@@ -43,17 +44,25 @@
                 <option value="Dijkstra">Dijkstrův algoritmus</option>
             </select>
         </div>
-        <button class="main_button" id="start">Start</button>
-        <button class="main_button" id="next_step" disabled>Další krok</button>
+        <div class="empty"></div>
+        <div id="start_reset">
+            <button class="main_button" id="start">Start</button>
+            <button class="main_button" id="reset" disabled>Reset</button>
+        </div>
+        <div id="middle"></div>
         <div id="steps">
-            <div id="steps_text"> vyberte počet kroků</div>
+            <div id="steps_buttons">
+                <button class="main_button" id="prev_step" disabled>Předchozí krok</button>
+                <button class="main_button" id="next_step" disabled>Další krok</button>
+            </div>
+            <div id="steps_text"> vyberte velikost kroku</div>
             <select id="number_of_steps">
                 <option value="default">1 hrana</option>
                 <option value="vertex">1 vrchol</option>
                 <option value="end_result">Výsledná cesta</option>
             </select>
         </div>
-        <button class="main_button" id="reset" disabled>Reset</button>
+        <div class="empty"></div>
         <div id="strategies_select_2">
             <div id="strategy_text">Strategie ukončení</div>
             <select class="select" id="end_strategy_2">

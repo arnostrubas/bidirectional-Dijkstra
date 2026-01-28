@@ -1,9 +1,12 @@
-import { add_vertex } from './cytoscape_script.js'
+import { remove_vertex, reset, add_vertex } from './cytoscape_script.js'
 
 const startBtn = document.getElementById('start');
 const resetBtn = document.getElementById('reset');
 const nextBtn = document.getElementById('next_step');
-const addBtn = document.getElementById('add_vertex');
+const addVertexBtn = document.getElementById('add_vertex');
+const removeVertexBtn = document.getElementById('remove_vertex');
+const addEdgeBtn = document.getElementById('add_edge');
+const removeEdgeBtn = document.getElementById('remove_edge');
 const left_graph_checkbox = document.getElementById('left_graph_enabled');
 const right_graph_checkbox = document.getElementById('right_graph_enabled');
 
@@ -23,13 +26,14 @@ resetBtn.addEventListener('click', () => {
         resetBtn.disabled = true;
         nextBtn.disabled = true;
         startBtn.disabled = false;
+        reset();
     }
     catch (error) {
         alert(error.message)
     }
 });
 
-addBtn.addEventListener('click', () => {
+addVertexBtn.addEventListener('click', () => {
     try {
         add_vertex(left_graph_checkbox.checked, right_graph_checkbox.checked);
     }
@@ -38,12 +42,39 @@ addBtn.addEventListener('click', () => {
     }
 });
 
+removeVertexBtn.addEventListener('click', () => {
+    try {
+        if (left_graph_checkbox.checked || right_graph_checkbox.checked) {
+            remove_vertex(left_graph_checkbox.checked, right_graph_checkbox.checked);
+        }
+    }
+    catch (error) {
+        alert(error.message)
+    }
+});
+
+function add_remove_disable() 
+{
+    addVertexBtn.disabled = true;
+    removeVertexBtn.disabled = true;
+    addEdgeBtn.disabled = true;
+    removeEdgeBtn.disabled = true;
+}
+
+function add_remove_enable() 
+{
+    addVertexBtn.disabled = false;
+    removeVertexBtn.disabled = false;
+    addEdgeBtn.disabled = false;
+    removeEdgeBtn.disabled = false;
+}
+
 left_graph_checkbox.addEventListener('click', () => {
     try {
         if (!left_graph_checkbox.checked && !right_graph_checkbox.checked) {
-            addBtn.disabled = true;
+            add_remove_disable();
         } else {
-            addBtn.disabled = false;
+            add_remove_enable();
         }
     }
     catch (error) {
@@ -54,9 +85,9 @@ left_graph_checkbox.addEventListener('click', () => {
 right_graph_checkbox.addEventListener('click', () => {
     try {
         if (!left_graph_checkbox.checked && !right_graph_checkbox.checked) {
-            addBtn.disabled = true;
+            add_remove_disable();
         } else {
-            addBtn.disabled = false;
+            add_remove_enable();
         }
     }
     catch (error) {

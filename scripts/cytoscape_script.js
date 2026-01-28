@@ -79,6 +79,31 @@ export function add_vertex(left_enabled, right_enabled) {
     }
 }
 
+export function remove_vertex(first, second) 
+{
+    let selected_cy1 = cy1.$('node:selected');
+    if (selected_cy1 && first) {
+        selected_cy1.forEach(v => {
+            if (v.id() === 's' || v.id() === 't') alert("Nelze odstranit počáteční/koncový vrchol");
+            else v.remove();
+        });
+    }
+    let selected_cy2 = cy2.$('node:selected');
+    if (selected_cy2 && second) {
+        selected_cy2.forEach(v => {
+            if (v.id() === 's' || v.id() === 't') alert("Nelze odstranit počáteční/koncový vrchol");
+            else v.remove();
+        });
+    }
+}
+
+export function reset() {
+    cy1.layout(layout).run();
+    cy1.fit();
+    cy2.layout(layout).run();
+    cy2.fit();
+}
+
 /*
 const rect1 = container1.getBoundingClientRect();
 const rect2 = container2.getBoundingClientRect();

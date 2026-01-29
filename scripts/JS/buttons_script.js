@@ -1,4 +1,5 @@
 import { disableVertexAdding, enableVertexAdding, enableEdgeAdding, disableEdgeAdding, remove_edge, remove_vertex, reset } from './cytoscape_script.js'
+import { create_json_of_graphs } from './JS_json.js'
 
 const startBtn = document.getElementById('start');
 const resetBtn = document.getElementById('reset');
@@ -11,6 +12,12 @@ const addEdgeCheckBox = document.getElementById('add_edge');
 const removeEdgeBtn = document.getElementById('remove_edge');
 
 const bothGraphsCheckBox = document.getElementById('both_graphs');
+
+const end_strat1 = document.getElementById('end_strategy_1');
+const search_strat1 = document.getElementById('search_strategy_1');
+
+const end_strat2 = document.getElementById('end_strategy_2');
+const search_strat2 = document.getElementById('search_strategy_2');
 
 function add_remove_disable() 
 {
@@ -38,11 +45,19 @@ function add_remove_enable()
 
 startBtn.addEventListener('click', () => {
     try {
-        startBtn.disabled = true;
-        nextBtn.disabled = false;
-        prevBtn.disabled = false;
-        resetBtn.disabled = false;
-        add_remove_disable();
+        /*!!!!!!!!!!!!!!!!!!!!!!!!!REMOVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/ 
+        if (false && (search_strat1.value === 'default' || search_strat2.value === 'default' ||
+            end_strat1.value === 'default' || end_strat2.value === 'default')) {
+                alert("vyberte všechny strategie");
+        }
+        else {
+            startBtn.disabled = true;
+            nextBtn.disabled = false;
+            prevBtn.disabled = false;
+            resetBtn.disabled = false;
+            add_remove_disable();
+            create_json_of_graphs(search_strat1, search_strat2, end_strat1, end_strat2);
+        }
     }
     catch (error) {
         alert(error.message)

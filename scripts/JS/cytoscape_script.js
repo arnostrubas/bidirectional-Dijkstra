@@ -85,11 +85,33 @@ function add_vertex(event)
             group: 'nodes',
             data: { 
                 id: new_index,
-                label: new_index,
+                label: new_index.toString(),
             },
             position: { x: pos.x, y: pos.y }
         });
     }
+}
+
+function clean_data(cy)
+{
+    let nodes = cy.nodes().map(node => {
+        return {
+            id: node.id(),
+            label: node.data('label'),
+        }
+    });
+    let edges = cy.edges().map(edge => {
+        return {
+            source: edge.source().id(),
+            target: edge.target().id(),
+            weight: edge.data('weight')
+        };
+    });
+    let graph = {
+        nodes: nodes,
+        edges: edges
+    };
+    return graph;
 }
 
 /*
@@ -152,4 +174,13 @@ export function enableEdgeAdding() {
 export function disableEdgeAdding() {
     eh1.disableDrawMode();
     eh2.disableDrawMode();
+}
+
+
+export function getcy1Elements() {
+    return clean_data(cy1);
+}
+
+export function getcy2Elements() {
+    return clean_data(cy2);
 }

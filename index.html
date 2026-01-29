@@ -4,11 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Bidirectional Dijkstra visualisation</title>
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 
 
 <body>
+    <script type="py" src="./scripts/python/code.py"></script>
     <div id="adding_removing">
         <div id="checkboxes">
             <label>
@@ -62,7 +65,6 @@
             <div id="steps_text"> vyberte velikost kroku</div>
             <select id="number_of_steps">
                 <option value="default">1 hrana</option>
-                <option value="vertex">1 vrchol</option>
                 <option value="end_result">Výsledná cesta</option>
             </select>
         </div>
@@ -109,7 +111,7 @@
         }
     }
 </script>
-    <script type="module" src="./scripts/script.js"></script>
+    <script type="module" src="./scripts/JS/script.js"></script>
 </body>
 
 </html>

@@ -10,8 +10,7 @@ const removeVertexBtn = document.getElementById('remove_vertex');
 const addEdgeCheckBox = document.getElementById('add_edge');
 const removeEdgeBtn = document.getElementById('remove_edge');
 
-const left_graph_checkbox = document.getElementById('left_graph_enabled');
-const right_graph_checkbox = document.getElementById('right_graph_enabled');
+const bothGraphsCheckBox = document.getElementById('both_graphs');
 
 function add_remove_disable() 
 {
@@ -76,35 +75,7 @@ addVertexCheckbox.addEventListener('click', () => {
 
 removeVertexBtn.addEventListener('click', () => {
     try {
-        if (left_graph_checkbox.checked || right_graph_checkbox.checked) {
-            remove_vertex(left_graph_checkbox.checked, right_graph_checkbox.checked);
-        }
-    }
-    catch (error) {
-        alert(error.message)
-    }
-});
-
-left_graph_checkbox.addEventListener('click', () => {
-    try {
-        if (!left_graph_checkbox.checked && !right_graph_checkbox.checked) {
-            add_remove_disable();
-        } else {
-            add_remove_enable();
-        }
-    }
-    catch (error) {
-        alert(error.message)
-    }
-});
-
-right_graph_checkbox.addEventListener('click', () => {
-    try {
-        if (!left_graph_checkbox.checked && !right_graph_checkbox.checked) {
-            add_remove_disable();
-        } else {
-            add_remove_enable();
-        }
+        remove_vertex();
     }
     catch (error) {
         alert(error.message)
@@ -113,9 +84,7 @@ right_graph_checkbox.addEventListener('click', () => {
 
 removeEdgeBtn.addEventListener('click', () => {
     try {
-        if (left_graph_checkbox.checked || right_graph_checkbox.checked) {
-            remove_edge(left_graph_checkbox.checked, right_graph_checkbox.checked);
-        }
+        remove_edge();
     }
     catch (error) {
         alert(error.message)

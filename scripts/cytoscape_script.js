@@ -2,6 +2,7 @@ import cytoscape from 'cytoscape';
 import edgehandles from 'cytoscape-edgehandles';
 cytoscape.use(edgehandles);
 import { layout, style } from './cy_style_script.js';
+import * as graphs from './graphs.js';
 
 const container1 = document.getElementById('graph_container1');
 const container2 = document.getElementById('graph_container2');
@@ -19,29 +20,6 @@ let cy2 = cytoscape({
     style: style,
 });
 let eh2 = cy2.edgehandles();
-
-let elements = [{ data: { id: '-1', label: 'S' } },
-    { data: { id: '1', label: '1' } },
-    { data: { id: '2', label: '2' } },
-    { data: { id: '3', label: '3' } },
-    { data: { id: '4', label: '4' } },
-    { data: { id: '5', label: '5' } },
-    { data: { id: '6', label: '6' } },
-    { data: { id: '0', label: 'T' } },
-
-    { data: { id: 'e1', source: '-1', target: '1', weight: 5 } },
-    { data: { id: 'e2', source: '-1', target: '2', weight: 4 } },
-    { data: { id: 'e3', source: '1', target: '3', weight: 2 } },
-    { data: { id: 'e4', source: '2', target: '3', weight: 4 } },
-    { data: { id: 'e5', source: '2', target: '4', weight: 1 } },
-    { data: { id: 'e6', source: '3', target: '4', weight: 3 } },
-    { data: { id: 'e7', source: '4', target: '5', weight: 1 } },
-    { data: { id: 'e8', source: '5', target: '3', weight: 8 } },
-    { data: { id: 'e9', source: '3', target: '0', weight: 3 } },
-    { data: { id: 'e10', source: '4', target: '6', weight: 2 } },
-    { data: { id: 'e11', source: '0', target: '6', weight: 4 } },
-    { data: { id: 'e12', source: '-1', target: '0', weight: 10000}}
-];
 
 /* 
 ==================================================================================
@@ -80,23 +58,6 @@ function find_new_vertex_id(cy)
     return new_index;
 }
 
-function add_vertex_to_cy(cy)
-{
-    const x = Math.random() * cy.width();
-    const y = Math.random() * cy.height();
-    let vertexId = find_new_vertex_id(cy);
-    const node = {
-        group: 'nodes',
-        data: { id: vertexId, label: vertexId },
-        position: {
-            x: x,
-            y: y
-        }
-    }
-    cy.add(node);
-    cy.fit();
-}
-
 function remove_from_selected_vertexes(cy)
 {
     cy.forEach(v => {
@@ -131,7 +92,6 @@ function add_vertex(event)
     }
 }
 
-
 /*
 ==================================================================================
                             EXPORT FUNCTIONS
@@ -139,10 +99,10 @@ function add_vertex(event)
 */ 
 
 export function graphs_init() {
-    cy1.add(elements);
+    cy1.add(graphs.basic_graph);
     cy1.layout(layout).run();
     cy1.fit();
-    cy2.add(elements);
+    cy2.add(graphs.basic_graph);
     cy2.layout(layout).run();
     cy2.fit();
 }
@@ -159,22 +119,22 @@ export function disableVertexAdding()
     cy2.off('tap', add_vertex);
 }
 
-export function remove_vertex(first, second) 
+export function remove_vertex() 
 {
     let selected_vertex1 = cy1.$('node:selected');
-    if (selected_vertex1 && first) remove_from_selected_vertexes(selected_vertex1);
+    if (selected_vertex1) remove_from_selected_vertexes(selected_vertex1);
 
     let selected_vertex2 = cy2.$('node:selected');
-    if (selected_vertex2 && second) remove_from_selected_vertexes(selected_vertex2);
+    if (selected_vertex2) remove_from_selected_vertexes(selected_vertex2);
 }
 
-export function remove_edge(first, second)
+export function remove_edge()
 {
     let selected_edge1 = cy1.$('edge:selected');
-    if (selected_edge1 && first) remove_from_selected_edges(selected_edge1);
+    if (selected_edge1) remove_from_selected_edges(selected_edge1);
 
     let selected_edge2 = cy2.$('edge:selected');
-    if (selected_edge2 && second) remove_from_selected_edges(selected_edge2);
+    if (selected_edge2) remove_from_selected_edges(selected_edge2);
 }
 
 export function reset() {
@@ -193,25 +153,3 @@ export function disableEdgeAdding() {
     eh1.disableDrawMode();
     eh2.disableDrawMode();
 }
-
-/*
-const rect1 = container1.getBoundingClientRect();
-const rect2 = container2.getBoundingClientRect();
-
-let add_vertex_menu = document.getElementById('add_vertex_menu');
-
-cy2.on('cxttap', function(event) {
-    if (event.target === cy2) {
-        const position = event.position;
-        
-        add_vertex_menu.style.display = 'block';
-        add_vertex_menu.style.left = (event.renderedPosition.x + rect2.left + window.scrollX) + 'px';
-        add_vertex_menu.style.top = (event.renderedPosition.y + rect2.top + window.scrollY) + 'px';
-    }
-});
-
-
-
-let selectedElement = null;
-const menu = document.getElementById('popup_menu')
-*/

@@ -12,11 +12,9 @@
     <div id="adding_removing">
         <div id="checkboxes">
             <label>
-                <input type="checkbox" id="left_graph_enabled" checked> Levý graf
+                <input type="checkbox" id="both_graphs" checked> Upravit oba grafy (zatím nefunkční)
             </label>
-            <label>
-                <input type="checkbox" id="right_graph_enabled" checked> pravý graf
-            </label>
+            <div>Jakmile je jeden graf upraven samostatně, přestane fungovat</div>
         </div>
         <div id="checkboxes">
             <label>
@@ -105,10 +103,10 @@
     </div>
     <script type="importmap">
     {
-    "imports": {
-        "cytoscape": "https://esm.sh/cytoscape@3.28.1",
-        "cytoscape-edgehandles": "https://esm.sh/cytoscape-edgehandles@4.0.1"
-    }
+        "imports": {
+            "cytoscape": "https://esm.sh/cytoscape@3.28.1",
+            "cytoscape-edgehandles": "https://esm.sh/cytoscape-edgehandles@4.0.1"
+        }
     }
 </script>
     <script type="module" src="./scripts/script.js"></script>

@@ -114,6 +114,24 @@ function remove_from_selected_edges(cy)
     });
 }
 
+function add_vertex(event)
+{  
+    const cy = event.cy;
+    if (event.target === cy) {
+        let pos = event.position;
+        let new_index = find_new_vertex_id(cy);
+        cy.add({
+            group: 'nodes',
+            data: { 
+                id: new_index,
+                label: new_index,
+            },
+            position: { x: pos.x, y: pos.y }
+        });
+    }
+}
+
+
 /*
 ==================================================================================
                             EXPORT FUNCTIONS
@@ -129,13 +147,16 @@ export function graphs_init() {
     cy2.fit();
 }
 
-export function add_vertex(left_enabled, right_enabled) {
-    if (left_enabled) {
-        add_vertex_to_cy(cy1);
-    }
-    if (right_enabled) {
-        add_vertex_to_cy(cy2);
-    }
+export function enableVertexAdding()
+{
+    cy1.on('tap', add_vertex);
+    cy2.on('tap', add_vertex);
+}
+
+export function disableVertexAdding()
+{
+    cy1.off('tap', add_vertex);
+    cy2.off('tap', add_vertex);
 }
 
 export function remove_vertex(first, second) 

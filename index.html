@@ -11,20 +11,23 @@
 <body>
     <div id="adding_removing">
         <div id="checkboxes">
-        <label>
-            <input type="checkbox" id="left_graph_enabled" checked> Levý graf
-        </label>
-        <label>
-            <input type="checkbox" id="right_graph_enabled" checked> pravý graf
-        </label>
+            <label>
+                <input type="checkbox" id="left_graph_enabled" checked> Levý graf
+            </label>
+            <label>
+                <input type="checkbox" id="right_graph_enabled" checked> pravý graf
+            </label>
         </div>
-        <button class="add_remove_button" id="add_vertex">Přidat vrchol</button>
+        <div id="checkboxes">
+            <label>
+                <input type="checkbox" id="add_vertex"> Přidávání vrcholu (přidáte kliknutím na volné místo v grafu)
+            </label>
+            <label>
+                <input type="checkbox" id="add_edge"> Přidávání hrany (přidáte podržením a potažením z vrcholu)
+            </label>
+        </div>        
         <button class="add_remove_button" id="remove_vertex">Odstranit vybraný vrchol</button>
         <button class="add_remove_button" id="remove_edge">Odstranit vybranou hranu</button>
-        <label>
-            <input type="checkbox" id="add_edge"> Povolit přidání hrany (pro oba grafy)
-        </label>
-        <div>hranu přidáte podržením vrcholu a potažením na jiný vrchol</div>
     </div>
     <div id="fill"></div>
     <div id="above_containers">

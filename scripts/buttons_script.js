@@ -1,11 +1,11 @@
-import { enableEdgeAdding, disableEdgeAdding, remove_edge, remove_vertex, reset, add_vertex } from './cytoscape_script.js'
+import { disableVertexAdding, enableVertexAdding, enableEdgeAdding, disableEdgeAdding, remove_edge, remove_vertex, reset } from './cytoscape_script.js'
 
 const startBtn = document.getElementById('start');
 const resetBtn = document.getElementById('reset');
 const nextBtn = document.getElementById('next_step');
 const prevBtn = document.getElementById('prev_step')
 
-const addVertexBtn = document.getElementById('add_vertex');
+const addVertexCheckbox = document.getElementById('add_vertex');
 const removeVertexBtn = document.getElementById('remove_vertex');
 const addEdgeCheckBox = document.getElementById('add_edge');
 const removeEdgeBtn = document.getElementById('remove_edge');
@@ -15,16 +15,26 @@ const right_graph_checkbox = document.getElementById('right_graph_enabled');
 
 function add_remove_disable() 
 {
-    addVertexBtn.disabled = true;
     removeVertexBtn.disabled = true;
     removeEdgeBtn.disabled = true;
+
+    addEdgeCheckBox.disabled = true;
+    addEdgeCheckBox.checked = false;
+    disableEdgeAdding();
+
+    addVertexCheckbox.disabled = true;
+    addVertexCheckbox.checked = false;
+    disableVertexAdding();
 }
 
 function add_remove_enable() 
 {
-    addVertexBtn.disabled = false;
     removeVertexBtn.disabled = false;
     removeEdgeBtn.disabled = false;
+    addEdgeCheckBox.disabled = false;
+    enableEdgeAdding();
+    addVertexCheckbox.disabled = false;
+    enableVertexAdding();
 }
 
 startBtn.addEventListener('click', () => {
@@ -33,6 +43,7 @@ startBtn.addEventListener('click', () => {
         nextBtn.disabled = false;
         prevBtn.disabled = false;
         resetBtn.disabled = false;
+        add_remove_disable();
     }
     catch (error) {
         alert(error.message)
@@ -45,6 +56,7 @@ resetBtn.addEventListener('click', () => {
         nextBtn.disabled = true;
         prevBtn.disabled = true;
         startBtn.disabled = false;
+        add_remove_enable();
         reset();
     }
     catch (error) {
@@ -52,9 +64,10 @@ resetBtn.addEventListener('click', () => {
     }
 });
 
-addVertexBtn.addEventListener('click', () => {
+addVertexCheckbox.addEventListener('click', () => {
     try {
-        add_vertex(left_graph_checkbox.checked, right_graph_checkbox.checked);
+        if (addVertexCheckbox.checked) enableVertexAdding();
+        else disableVertexAdding();
     }
     catch (error) {
         alert(error.message)

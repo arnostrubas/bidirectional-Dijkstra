@@ -11,7 +11,7 @@
 <body>
     <div id="adding_removing">
         <div id="checkboxes">
-            <label>
+        <label>
             <input type="checkbox" id="left_graph_enabled" checked> Levý graf
         </label>
         <label>
@@ -20,8 +20,11 @@
         </div>
         <button class="add_remove_button" id="add_vertex">Přidat vrchol</button>
         <button class="add_remove_button" id="remove_vertex">Odstranit vybraný vrchol</button>
-        <button class="add_remove_button" id="add_edge">Přidat hranu</button>
         <button class="add_remove_button" id="remove_edge">Odstranit vybranou hranu</button>
+        <label>
+            <input type="checkbox" id="add_edge"> Povolit přidání hrany (pro oba grafy)
+        </label>
+        <div>hranu přidáte podržením vrcholu a potažením na jiný vrchol</div>
     </div>
     <div id="fill"></div>
     <div id="above_containers">
@@ -97,6 +100,14 @@
             <div class="priority_queue_b" id="Qb2"> Q<sub>b</sub>: <span id="Qb2_text"> Prioritní fronta 2.2 </span> </div>
         </div>
     </div>
+    <script type="importmap">
+    {
+    "imports": {
+        "cytoscape": "https://esm.sh/cytoscape@3.28.1",
+        "cytoscape-edgehandles": "https://esm.sh/cytoscape-edgehandles@4.0.1"
+    }
+    }
+</script>
     <script type="module" src="./scripts/script.js"></script>
 </body>
 

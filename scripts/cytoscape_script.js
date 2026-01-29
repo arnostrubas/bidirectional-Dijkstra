@@ -1,45 +1,124 @@
-import cytoscape from 'https://esm.sh/cytoscape@3.28.1';
+import cytoscape from 'cytoscape';
+import edgehandles from 'cytoscape-edgehandles';
+cytoscape.use(edgehandles);
 import { layout, style } from './cy_style_script.js';
 
 const container1 = document.getElementById('graph_container1');
 const container2 = document.getElementById('graph_container2');
-let leftNodeCount = 5;
-let rightNodeCount = 5;
 
 let cy1 = cytoscape({
     container: container1,
     layout: layout,
     style: style,
 });
+let eh1 = cy1.edgehandles();
 
 let cy2 = cytoscape({
     container: container2,
     layout: layout,
     style: style,
 });
+let eh2 = cy2.edgehandles();
 
-let elements = [{ data: { id: 's', label: 'S' } },
+let elements = [{ data: { id: '-1', label: 'S' } },
     { data: { id: '1', label: '1' } },
     { data: { id: '2', label: '2' } },
     { data: { id: '3', label: '3' } },
     { data: { id: '4', label: '4' } },
     { data: { id: '5', label: '5' } },
     { data: { id: '6', label: '6' } },
-    { data: { id: 't', label: 'T' } },
+    { data: { id: '0', label: 'T' } },
 
-    { data: { id: 'e1', source: 's', target: '1', weight: 5 } },
-    { data: { id: 'e2', source: 's', target: '2', weight: 4 } },
+    { data: { id: 'e1', source: '-1', target: '1', weight: 5 } },
+    { data: { id: 'e2', source: '-1', target: '2', weight: 4 } },
     { data: { id: 'e3', source: '1', target: '3', weight: 2 } },
     { data: { id: 'e4', source: '2', target: '3', weight: 4 } },
     { data: { id: 'e5', source: '2', target: '4', weight: 1 } },
     { data: { id: 'e6', source: '3', target: '4', weight: 3 } },
     { data: { id: 'e7', source: '4', target: '5', weight: 1 } },
     { data: { id: 'e8', source: '5', target: '3', weight: 8 } },
-    { data: { id: 'e9', source: '3', target: 't', weight: 3 } },
+    { data: { id: 'e9', source: '3', target: '0', weight: 3 } },
     { data: { id: 'e10', source: '4', target: '6', weight: 2 } },
-    { data: { id: 'e11', source: 't', target: '6', weight: 4 } },
-    { data: { id: 'e12', source: 's', target: 't', weight: 10000}}
+    { data: { id: 'e11', source: '0', target: '6', weight: 4 } },
+    { data: { id: 'e12', source: '-1', target: '0', weight: 10000}}
 ];
+
+/* 
+==================================================================================
+                            HELP FUNCTIONS
+==================================================================================
+*/
+
+function add_edge(addedEdge) 
+{
+    let input = prompt("Zadej váhu hrany (číslo):", "1");
+    if (input !== null) {
+        let weight = Number(input);
+
+        if (!isNaN(weight) && weight > 0) {
+            addedEdge.data('weight', weight);
+        } else {
+            alert("To není platné číslo!");
+            addedEdge.remove();
+        }
+    }
+}
+
+cy1.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge));
+cy2.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge));
+
+function find_new_vertex_id(cy) 
+{
+    const sortedVertexes = cy.nodes().sort((a, b) => {
+        return a.id().localeCompare(b.id(), undefined, {numeric: true, sensitivity: 'base'});
+    });
+    let new_index = -1;
+    sortedVertexes.forEach(v => {
+        if (v.id() != new_index) return new_index;
+        new_index++;
+    });
+    return new_index;
+}
+
+function add_vertex_to_cy(cy)
+{
+    const x = Math.random() * cy.width();
+    const y = Math.random() * cy.height();
+    let vertexId = find_new_vertex_id(cy);
+    const node = {
+        group: 'nodes',
+        data: { id: vertexId, label: vertexId },
+        position: {
+            x: x,
+            y: y
+        }
+    }
+    cy.add(node);
+    cy.fit();
+}
+
+function remove_from_selected_vertexes(cy)
+{
+    cy.forEach(v => {
+        if (v.id() === '0' || v.id() === '-1') alert("Nelze odstranit počáteční/koncový vrchol");
+        else {
+            v.remove();
+        }
+    });
+}
+
+function remove_from_selected_edges(cy)
+{
+    cy.forEach(e => {
+        e.remove();
+    });
+}
+
+/*
+==================================================================================
+                            EXPORT FUNCTIONS
+==================================================================================
+*/ 
 
 export function graphs_init() {
     cy1.add(elements);
@@ -52,53 +131,29 @@ export function graphs_init() {
 
 export function add_vertex(left_enabled, right_enabled) {
     if (left_enabled) {
-        const x = Math.random() * cy1.width();
-        const y = Math.random() * cy1.height();
-        leftNodeCount++;
-        const node = {
-            group: 'nodes',
-            data: { id: leftNodeCount, label: leftNodeCount },
-            position: {
-                x: x,
-                y: y
-            }
-        }
-        cy1.add(node);
-        cy1.fit();
+        add_vertex_to_cy(cy1);
     }
     if (right_enabled) {
-        const x = Math.random() * cy2.width();
-        const y = Math.random() * cy2.height();
-        rightNodeCount++;
-        const node = {
-            group: 'nodes',
-            data: { id: rightNodeCount, label: rightNodeCount },
-            position: {
-                x: x,
-                y: y
-            }
-        }
-        cy2.add(node);
-        cy2.fit();
+        add_vertex_to_cy(cy2);
     }
 }
 
 export function remove_vertex(first, second) 
 {
-    let selected_cy1 = cy1.$('node:selected');
-    if (selected_cy1 && first) {
-        selected_cy1.forEach(v => {
-            if (v.id() === 's' || v.id() === 't') alert("Nelze odstranit počáteční/koncový vrchol");
-            else v.remove();
-        });
-    }
-    let selected_cy2 = cy2.$('node:selected');
-    if (selected_cy2 && second) {
-        selected_cy2.forEach(v => {
-            if (v.id() === 's' || v.id() === 't') alert("Nelze odstranit počáteční/koncový vrchol");
-            else v.remove();
-        });
-    }
+    let selected_vertex1 = cy1.$('node:selected');
+    if (selected_vertex1 && first) remove_from_selected_vertexes(selected_vertex1);
+
+    let selected_vertex2 = cy2.$('node:selected');
+    if (selected_vertex2 && second) remove_from_selected_vertexes(selected_vertex2);
+}
+
+export function remove_edge(first, second)
+{
+    let selected_edge1 = cy1.$('edge:selected');
+    if (selected_edge1 && first) remove_from_selected_edges(selected_edge1);
+
+    let selected_edge2 = cy2.$('edge:selected');
+    if (selected_edge2 && second) remove_from_selected_edges(selected_edge2);
 }
 
 export function reset() {
@@ -106,6 +161,16 @@ export function reset() {
     cy1.fit();
     cy2.layout(layout).run();
     cy2.fit();
+}
+
+export function enableEdgeAdding() {
+    eh1.enableDrawMode();
+    eh2.enableDrawMode();
+}
+
+export function disableEdgeAdding() {
+    eh1.disableDrawMode();
+    eh2.disableDrawMode();
 }
 
 /*

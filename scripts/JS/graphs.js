@@ -6,7 +6,6 @@ export let basic_graph = [
     { data: { id: '4', label: '4' } },
     { data: { id: '5', label: '5' } },
     { data: { id: '6', label: '6' } },
-    { data: { id: '7', label: '7' } },
     { data: { id: '0', label: 'T' } },
 
     { data: { id: 'e1', source: '-1', target: '1', weight: 5 } },

@@ -71,6 +71,14 @@ export let style = [
         }
     },
     {
+        selector: 'node:selected',
+        style: {
+            'border-width': 4,     
+            'border-color': '#2a0ce7',
+            'border-opacity': 1
+        }
+    },
+    {
         selector: 'edge',
         style: {
             'curve-style': 'bezier',
@@ -88,8 +96,8 @@ export let style = [
     {
         selector: 'edge:selected',
         style: {
-            'line-color': '#FF0000',      
-            'target-arrow-color': '#FF0000', 
+            'line-color': '#2a0ce7',      
+            'target-arrow-color': '#2a0ce7', 
             'width': 4,                    
             'opacity': 1                   
         }

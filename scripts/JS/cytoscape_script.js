@@ -3,6 +3,7 @@ import edgehandles from 'cytoscape-edgehandles';
 cytoscape.use(edgehandles);
 import { layout, style } from './cy_style_script.js';
 import * as graphs from './graphs.js';
+import { setText } from './other_functions_script.js'
 
 const container1 = document.getElementById('graph_container1');
 const container2 = document.getElementById('graph_container2');
@@ -15,6 +16,9 @@ let cy1 = cytoscape({
 let eh1 = cy1.edgehandles();
 let first_graph_list = [];
 let first_graph_n = 0;
+let first_graph_q_f = [];
+let first_graph_q_b = [];
+
 
 let cy2 = cytoscape({
     container: container2,
@@ -128,6 +132,36 @@ function createGraph(cy, elements)
     cy.fit();
 }
 
+function toUper(num) {
+    const uper = {
+        '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
+        '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹',
+    };
+    return num.toString().split('').map(char => uper[char] || char).join('');
+}
+
+function queue_to_text(Q)
+{
+    let text = "";
+    if (Q) {
+        Q.queue.sort((x, y) => x[0] - y[0]).forEach(tuple => {
+            let [priority, id] = tuple;
+            let label = id.toString();
+            if (id == -1) label = 'S';
+            if (id == 0) label = 'T';
+            let priorityTxt = priority === 999999999 ? "∞" : toUper(priority);
+            text += label + priorityTxt + "   "
+        });
+    }
+    return text
+}
+
+function update_queue()
+{
+    setText('Qf1_text', queue_to_text(first_graph_q_f[first_graph_n]));
+    setText('Qb1_text', queue_to_text(first_graph_q_b[first_graph_n]));
+}
+
 /*
 ==================================================================================
                             EXPORT FUNCTIONS
@@ -204,29 +238,38 @@ export function calculate(json)
     let result = window.run(json)
     const data = JSON.parse(result)
     const first_part = data.part_one
-    const first_steps = first_part.steps;
+    const first_steps = JSON.parse(first_part.steps);
     const first_path = first_part.path;
-    const first_graph_json_list = JSON.parse(first_steps).graph;
+    const first_graph_data = first_steps.data;
 
-    first_graph_json_list.forEach(e => {
-        first_graph_list.push(JSON.parse(e).elements)
+    first_graph_data.forEach(e => {
+        let data = JSON.parse(e);
+        let graph = JSON.parse(data.graph);
+        let queue_f = JSON.parse(data.queue_f);
+        let queue_b = JSON.parse(data.queue_b);
+        
+        let elements = graph.elements;
+        first_graph_list.push(elements)
+        first_graph_q_f.push(queue_f);
+        first_graph_q_b.push(queue_b);
     });
-    console.log(first_graph_list);
     createGraph(cy1, first_graph_list[first_graph_n]);
+    update_queue();
 }
 
 export function move(next)
 {
     if (next) {
         try {
-            if (first_graph_n == first_graph_list.length) 
+            if (first_graph_n + 1 == first_graph_list.length) 
             {
                 throw "End of algorithm";
             } 
             else 
             {
                 first_graph_n++;
-                createGraph(cy1, first_graph_list[first_graph_n])
+                createGraph(cy1, first_graph_list[first_graph_n]);
+                update_queue();
             }
         } catch (error) 
         {
@@ -237,12 +280,13 @@ export function move(next)
         try {
             if (first_graph_n == 0) 
             {
-                throw "End of algorithm";
+                throw "Cannot go back";
             } 
             else 
             {
                 first_graph_n--;
-                createGraph(cy1, first_graph_list[first_graph_n])
+                createGraph(cy1, first_graph_list[first_graph_n]);
+                update_queue();
             }
         } catch (error) 
         {

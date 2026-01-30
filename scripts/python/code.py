@@ -102,6 +102,15 @@ def graph_to_json(G):
     }
     return json.dumps(json_data)
 
+def queue_to_json(queue, forward):
+    nodes = []
+    for d, node in queue:
+        if(forward and node.d_f == d): nodes.append((d, node.id))
+        if(not forward and node.d_b == d): nodes.append((d, node.id))
+    return json.dumps({
+        "queue": nodes
+    })
+
 #endregion
 
 #region algorithms and their functions
@@ -123,11 +132,11 @@ def Dijkstra(G, w, s, t):
     init(G, s)
     Q = Queue()
     Q.insert(s)
-    yield 
+    yield Q
     while not Q.isEmpty():
         v = Q.extractMin()
         v.state_f = "CLOSED"
-        yield                       # for visualisation purposes
+        yield Q                     # for visualisation purposes
         if (v == t):
             return None
         for u in list(G.successors(v)):
@@ -135,12 +144,12 @@ def Dijkstra(G, w, s, t):
                 u.d_f = v.d_f + w(G, v, u)
                 u.state_f = "OPEN"
                 Q.insert(u)
-                yield               # for visualisation purposes
+                yield Q             # for visualisation purposes
             elif u.state_f == "OPEN":
                 if v.d_f + w(G, v, u) < u.d_f:
                     u.d_f = v.d_f + w(G, v, u)
                     Q.update(u) 
-                    yield           # for visualisation purposes
+                    yield Q         # for visualisation purposes
     return None
 #endregion
 
@@ -156,10 +165,16 @@ def visualise_Dijkstra(G):
     t = node_from_graph(G, 0)
     runner = Dijkstra(G, w, s, t)
     result = []
-    for _ in runner:
-        result.append(graph_to_json(G))
+    for queue in runner:
+        data = {
+            "graph": graph_to_json(G),
+            "queue_f": queue_to_json(queue, True),
+            "queue_b": None
+        } 
+        result.append(json.dumps(data))
     res =  {
-        "graph": result
+        "data": result,
+        "path": None
     }
     return json.dumps(res)
 
@@ -182,6 +197,8 @@ def run_algorithm(graph_dict):
         weight = edge["weight"]
         G.add_weighted_edges_from([(u, v, int(weight))])
     
+
+    #decide which algorithm to run
     return visualise_Dijkstra(G)
     
 

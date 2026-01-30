@@ -1,5 +1,5 @@
 import networkx as nx
-from js import window
+from js import window # type: ignore
 import json
 import heapq
 

@@ -315,12 +315,13 @@ export function move(next)
         try {
             const first_done = first_graph_n + 1 == first_graph_list.length;
             const second_done = second_graph_n + 1 == second_graph_list.length;
+
             if (first_done && second_done) throw "End of both algorithms";
-            if (first_graph_n + 1 != first_graph_list.length) {
+            if (!first_done) {
                 first_graph_n++;
                 createGraph(cy1, first_graph_list[first_graph_n]);
             }
-            if (second_graph_n + 1 != second_graph_list.length) {
+            if (!second_done) {
                 second_graph_n++;
                 createGraph(cy2, second_graph_list[second_graph_n]);
             }
@@ -331,14 +332,14 @@ export function move(next)
     } 
     else {
         try {
-            if (first_graph_n == 0 && second_graph_n == 0) {
-                throw "At the start of both algorithms";
-            } 
-            if (first_graph_n != 0) {
+            const first_start = first_graph_n == 0;
+            const second_start = second_graph_n == 0;
+            if (first_start && second_start) throw "At the start of both algorithms";
+            if (!first_start && first_graph_n >= second_graph_n) {
                 first_graph_n--;
                 createGraph(cy1, first_graph_list[first_graph_n]);
             }
-            if (second_graph_n != 0) {
+            if (!second_start && second_graph_n >= first_graph_n + 1) {
                 second_graph_n--;
                 createGraph(cy2, second_graph_list[second_graph_n]);
             }

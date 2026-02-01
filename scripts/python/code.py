@@ -1,4 +1,4 @@
-import networkx as nx
+import networkx as nx # type: ignore
 from js import window # type: ignore
 import json
 import heapq
@@ -139,7 +139,7 @@ def Dijkstra(G, w, s, t):
         yield Q                     # for visualisation purposes
         if (v == t):
             return None
-        for u in list(G.successors(v)):
+        for u in sorted(G.successors(v), key=lambda node: node.id):
             if u.state_f == "UNVISITED":
                 u.d_f = v.d_f + w(G, v, u)
                 u.state_f = "OPEN"

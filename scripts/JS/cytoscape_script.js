@@ -135,6 +135,8 @@ function createGraph(cy, elements)
     cy.add(edges);
     cy.layout(layout).run();
     cy.fit();
+    
+    update_queues();
 }
 
 function toUper(num) {
@@ -161,7 +163,7 @@ function queue_to_text(Q)
     return text
 }
 
-function update_queue()
+function update_queues()
 {
     setText('Qf1_text', queue_to_text(first_graph_q_f[first_graph_n]));
     setText('Qb1_text', queue_to_text(first_graph_q_b[first_graph_n]));
@@ -183,6 +185,17 @@ function reset_graphs()
     second_graph_n = 0;
 }
 
+function update_graph(cy, elements)
+{
+    let nodes = JSON.parse(elements.nodes);
+    
+    nodes.forEach(node => {
+        let changed_node = cy.$('#' + node.data.id);
+        changed_node.data(node.data);
+    });
+    update_queues();
+}
+
 /*
 ==================================================================================
                             EXPORT FUNCTIONS
@@ -190,10 +203,10 @@ function reset_graphs()
 */ 
 
 export function graphs_init() {
-    cy1.add(graphs.basic_graph);
+    cy1.add(JSON.parse(JSON.stringify(graphs.basic_graph)));
     cy1.layout(layout).run();
     cy1.fit();
-    cy2.add(graphs.basic_graph);
+    cy2.add(JSON.parse(JSON.stringify(graphs.basic_graph)));
     cy2.layout(layout).run();
     cy2.fit();
 }
@@ -292,7 +305,7 @@ export function calculate(json)
         first_graph_q_f.push(queue_f);
         first_graph_q_b.push(queue_b);
     });
-    createGraph(cy1, first_graph_list[first_graph_n]);
+    update_graph(cy1, first_graph_list[first_graph_n]);
 
     second_graph_data.forEach(e => {
         let data = JSON.parse(e);
@@ -305,8 +318,7 @@ export function calculate(json)
         second_graph_q_f.push(queue_f);
         second_graph_q_b.push(queue_b);
     });
-    createGraph(cy2, second_graph_list[second_graph_n]);
-    update_queue();
+    update_graph(cy2, second_graph_list[second_graph_n]);
 }
 
 export function move(next)
@@ -319,13 +331,13 @@ export function move(next)
             if (first_done && second_done) throw "End of both algorithms";
             if (!first_done) {
                 first_graph_n++;
-                createGraph(cy1, first_graph_list[first_graph_n]);
+                update_graph(cy1, first_graph_list[first_graph_n]);
             }
             if (!second_done) {
                 second_graph_n++;
-                createGraph(cy2, second_graph_list[second_graph_n]);
+                update_graph(cy2, second_graph_list[second_graph_n]);
             }
-            update_queue();
+            update_queues();
         } catch (error) {
             alert(error)
         }
@@ -337,13 +349,13 @@ export function move(next)
             if (first_start && second_start) throw "At the start of both algorithms";
             if (!first_start && first_graph_n >= second_graph_n) {
                 first_graph_n--;
-                createGraph(cy1, first_graph_list[first_graph_n]);
+                update_graph(cy1, first_graph_list[first_graph_n]);
             }
             if (!second_start && second_graph_n >= first_graph_n + 1) {
                 second_graph_n--;
-                createGraph(cy2, second_graph_list[second_graph_n]);
+                update_graph(cy2, second_graph_list[second_graph_n]);
             }
-            update_queue();
+            update_queues();
         } catch (error) {
             alert(error)
         }

@@ -1,4 +1,5 @@
 import networkx as nx # type: ignore
+from functools import partial
 from js import window # type: ignore
 import json
 import heapq
@@ -49,7 +50,7 @@ class Queue(list):
                     return None
                 d, element = heapq.heappop(self)
         else:
-            while element.d_f != d:
+            while element.d_b != d:
                 if len(self) == 0:
                     return None
                 d, element = heapq.heappop(self)
@@ -117,7 +118,7 @@ def queue_to_json(queue, forward):
 def w(graph, u, v):
     return graph[u][v]['weight']
 
-def init(G, s):
+def init(G, s, t=None):
     for node in G.nodes:
         node.d_f = 999999999
         node.pi_f = None
@@ -127,6 +128,9 @@ def init(G, s):
         node.state_b = "UNVISITED"
     s.d_f = 0
     s.state_f = "OPEN"
+    if (t):
+        t.d_b = 0
+        t.state_b = "OPEN"
 
 def Dijkstra(G, w, s, t):
     init(G, s)
@@ -141,17 +145,70 @@ def Dijkstra(G, w, s, t):
             return None
         for u in sorted(G.successors(v), key=lambda node: node.id):
             if u.state_f == "UNVISITED":
-                u.d_f = v.d_f + w(G, v, u)
+                u.d_f = v.d_f + w(v, u)
                 u.state_f = "OPEN"
                 Q.insert(u)
                 yield Q             # for visualisation purposes
             elif u.state_f == "OPEN":
-                if v.d_f + w(G, v, u) < u.d_f:
-                    u.d_f = v.d_f + w(G, v, u)
+                if v.d_f + w(v, u) < u.d_f:
+                    u.d_f = v.d_f + w(v, u)
                     Q.update(u) 
                     yield Q         # for visualisation purposes
     return None
 #endregion
+
+def bidirectional_Dijkstra_1(G, w, s, t):
+    """
+    Search = after one vertex \n
+    End = same vertex close
+    """
+    init(G, s, t)
+    Q_f = Queue()
+    Q_f.insert(s)
+    Q_b = Queue(False)
+    Q_b.insert(t)
+    fwd = True
+    yield Q_f, Q_b                          # for visualisation purposes
+    while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
+        if (fwd):
+            v = Q_f.extractMin()
+            v.state_f = "CLOSED"
+            yield Q_f, Q_b                  # for visualisation purposes
+            if (v.state_b == "CLOSED"):
+                return None                  
+            for u in sorted(G.successors(v), key=lambda node: node.id):
+                if u.state_f == "UNVISITED":
+                    u.d_f = v.d_f + w(v, u)
+                    u.state_f = "OPEN"
+                    Q_f.insert(u)
+                    yield Q_f, Q_b            # for visualisation purposes
+                elif u.state_f == "OPEN":
+                    if v.d_f + w(v, u) < u.d_f:
+                        u.d_f = v.d_f + w(v, u)
+                        Q_f.update(u) 
+                        yield Q_f, Q_b       # for visualisation purposes
+            fwd = not fwd
+        else:
+            v = Q_b.extractMin()
+            v.state_b = "CLOSED"
+            yield Q_f, Q_b                    # for visualisation purposes
+            if (v.state_f == "CLOSED"):
+                return None
+            for u in sorted(G.predecessors(v), key=lambda node: node.id):
+                if u.state_b == "UNVISITED":
+                    u.d_b = v.d_b + w(u, v)
+                    u.state_b = "OPEN"
+                    Q_b.insert(u)
+                    yield Q_f, Q_b            # for visualisation purposes
+                elif u.state_b == "OPEN":
+                    if v.d_b + w(u, v) < u.d_b:
+                        u.d_b = v.d_b + w(u, v)
+                        Q_b.update(u) 
+                        yield Q_f, Q_b       # for visualisation purposes
+            fwd = not fwd
+    return None
+
+
 
 #region visualisation functions
 def node_from_graph(G, id):
@@ -163,13 +220,31 @@ def node_from_graph(G, id):
 def visualise_Dijkstra(G):
     s = node_from_graph(G, -1) 
     t = node_from_graph(G, 0)
-    runner = Dijkstra(G, w, s, t)
+    runner = Dijkstra(G, partial(w, G), s, t)
     result = []
     for queue in runner:
         data = {
             "graph": graph_to_json(G),
             "queue_f": queue_to_json(queue, True),
             "queue_b": None
+        } 
+        result.append(json.dumps(data))
+    res =  {
+        "data": result,
+        "path": None
+    }
+    return json.dumps(res)
+
+def visualise_biDijkstra(G, search, end):
+    s = node_from_graph(G, -1) 
+    t = node_from_graph(G, 0)
+    runner = bidirectional_Dijkstra_1(G, partial(w, G), s, t)
+    result = []
+    for queue_f, queue_b in runner:
+        data = {
+            "graph": graph_to_json(G),
+            "queue_f": queue_to_json(queue_f, True),
+            "queue_b": queue_to_json(queue_b, False),
         } 
         result.append(json.dumps(data))
     res =  {
@@ -199,7 +274,10 @@ def run_algorithm(graph_dict):
     
 
     #decide which algorithm to run
-    return visualise_Dijkstra(G)
+    if (search == "Dijkstra" or end == "Dijkstra"):
+        return visualise_Dijkstra(G)
+    else: 
+        return visualise_biDijkstra(G, search, end)
     
 
 def run(JSON):

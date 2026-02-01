@@ -268,8 +268,8 @@ export function calculate(json)
     first_graph = cy1.elements().clone();
     second_graph = cy2.elements().clone();
 
-    let result = window.run(json)
-    const data = JSON.parse(result)
+    let result = window.run(json);
+    const data = JSON.parse(result);
 
     const first_part = data.part_one;
     const first_steps = JSON.parse(first_part.steps);
@@ -313,10 +313,9 @@ export function move(next)
 {
     if (next) {
         try {
-            if (first_graph_n + 1 == first_graph_list.length && 
-                second_graph_n + 1 == second_graph_list.length) {
-                throw "End of both algorithms";
-            } 
+            const first_done = first_graph_n + 1 == first_graph_list.length;
+            const second_done = second_graph_n + 1 == second_graph_list.length;
+            if (first_done && second_done) throw "End of both algorithms";
             if (first_graph_n + 1 != first_graph_list.length) {
                 first_graph_n++;
                 createGraph(cy1, first_graph_list[first_graph_n]);

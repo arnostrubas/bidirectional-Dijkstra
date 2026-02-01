@@ -1,7 +1,10 @@
 export let layout = {
     name: 'breadthfirst',
+    directed: true,   
+    spacingFactor: 1.75, 
     animate: false,
-    padding: 10,
+    padding: 30,
+    grid: false 
 };
 export let style = [
     {

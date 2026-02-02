@@ -42,8 +42,7 @@ function add_remove_enable()
 }
 
 startBtn.addEventListener('click', () => {
-    try {
-        /*!!!!!!!!!!!!!!!!!!!!!!!!!REMOVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/ 
+    try { 
         if (search_strat1.value === 'default' || search_strat2.value === 'default' ||
             end_strat1.value === 'default' || end_strat2.value === 'default') {
                 alert("vyberte všechny strategie");

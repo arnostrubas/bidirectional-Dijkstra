@@ -36,6 +36,12 @@ export let style = [
         }
     },
     {
+        selector: 'node[state_f = "PATH"][state_b = "PATH"]',
+        style: {
+            'background-gradient-stop-colors': 'blue blue',
+        }
+    },
+    {
         selector: 'node[state_f = "UNVISITED"][state_b = "OPEN"]',
         style: {
             'background-gradient-stop-colors': 'gray green', 
@@ -113,6 +119,15 @@ export let style = [
             'target-arrow-color': '#2a0ce7', 
             'width': 4,                    
             'opacity': 1                   
+        }
+    },
+    {
+        selector: 'edge[state = "PATH"]',
+        style: {
+            'line-color': '#2a0ce7',      
+            'target-arrow-color': '#2a0ce7', 
+            'width': 4,                    
+            'opacity': 1            
         }
     },
     {

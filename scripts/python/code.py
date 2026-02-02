@@ -77,10 +77,10 @@ def graph_to_json(G):
                 "label": label,
                 "id": str(node.id),
                 "d_f": node.d_f,
-                "pi_f": node.pi_f,
+                "pi_f": node.pi_f.id if node.pi_f else None,
                 "state_f": node.state_f,
                 "d_b": node.d_b,
-                "pi_b": node.pi_b,
+                "pi_b": node.pi_b.id if node.pi_b else None,
                 "state_b": node.state_b
             }
         })
@@ -89,9 +89,11 @@ def graph_to_json(G):
     for u, v, data in G.edges(data=True):
         edges.append({
             "data": {
+                "id": data['id'],
                 "source": str(u.id), 
                 "target": str(v.id),  
-                "weight": data['weight']
+                "weight": data['weight'],
+                "state": data['state']
             }
         })
 
@@ -115,6 +117,49 @@ def queue_to_json(queue, forward):
 #endregion
 
 #region algorithms and their functions
+def node_on_path(node):
+    node.state_f = "PATH"
+    node.state_b = "PATH"
+
+def edge_on_path(G, id1, id2):
+    G[node_from_graph(G, id1)][node_from_graph(G, id2)]['state'] = "PATH"
+
+def NCPP(G, end):
+    "Dijkstra"
+    if end == 0: 
+        t = node_from_graph(G, 0)
+        node_on_path(t)
+        prev = t
+        node = t.pi_f
+        while node is not None:
+            node_on_path(node)
+            edge_on_path(G, node.id, prev.id)
+            prev = node
+            node = node.pi_f
+            
+    'same vertex closed'
+    if end == 1:
+        minimum = None
+        middle_node = None
+        for node in G.nodes:
+            if (not minimum or node.d_f + node.d_b < minimum):
+                minimum = node.d_f + node.d_b
+                middle_node = node
+        pred = middle_node
+        while pred is not None:
+            node_on_path(pred)
+            if (pred.pi_f): edge_on_path(G, pred.pi_f.id, pred.id)
+            pred = pred.pi_f
+
+        pred = middle_node
+        while pred is not None:
+            node_on_path(pred)
+            if (pred.pi_b): edge_on_path(G, pred.id, pred.pi_b.id)
+            pred = pred.pi_b
+        
+
+        
+
 def w(graph, u, v):
     return graph[u][v]['weight']
 
@@ -142,16 +187,20 @@ def Dijkstra(G, w, s, t):
         v.state_f = "CLOSED"
         yield Q                     # for visualisation purposes
         if (v == t):
-            return None
+            NCPP(G, 0)
+            yield Q
+            return
         for u in sorted(G.successors(v), key=lambda node: node.id):
             if u.state_f == "UNVISITED":
                 u.d_f = v.d_f + w(v, u)
                 u.state_f = "OPEN"
+                u.pi_f = v
                 Q.insert(u)
                 yield Q             # for visualisation purposes
             elif u.state_f == "OPEN":
                 if v.d_f + w(v, u) < u.d_f:
                     u.d_f = v.d_f + w(v, u)
+                    u.pi_f = v
                     Q.update(u) 
                     yield Q         # for visualisation purposes
     return None
@@ -175,16 +224,20 @@ def bidirectional_Dijkstra_1(G, w, s, t):
             v.state_f = "CLOSED"
             yield Q_f, Q_b                  # for visualisation purposes
             if (v.state_b == "CLOSED"):
-                return None                  
+                NCPP(G, 1)
+                yield Q_f, Q_b
+                return None                 
             for u in sorted(G.successors(v), key=lambda node: node.id):
                 if u.state_f == "UNVISITED":
                     u.d_f = v.d_f + w(v, u)
                     u.state_f = "OPEN"
+                    u.pi_f = v
                     Q_f.insert(u)
                     yield Q_f, Q_b            # for visualisation purposes
                 elif u.state_f == "OPEN":
                     if v.d_f + w(v, u) < u.d_f:
                         u.d_f = v.d_f + w(v, u)
+                        u.pi_f = v
                         Q_f.update(u) 
                         yield Q_f, Q_b       # for visualisation purposes
             fwd = not fwd
@@ -193,16 +246,20 @@ def bidirectional_Dijkstra_1(G, w, s, t):
             v.state_b = "CLOSED"
             yield Q_f, Q_b                    # for visualisation purposes
             if (v.state_f == "CLOSED"):
-                return None
+                NCPP(G, 1)
+                yield Q_f, Q_b
+                return None  
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
                 if u.state_b == "UNVISITED":
                     u.d_b = v.d_b + w(u, v)
                     u.state_b = "OPEN"
+                    u.pi_b = v
                     Q_b.insert(u)
                     yield Q_f, Q_b            # for visualisation purposes
                 elif u.state_b == "OPEN":
                     if v.d_b + w(u, v) < u.d_b:
                         u.d_b = v.d_b + w(u, v)
+                        u.pi_b = v
                         Q_b.update(u) 
                         yield Q_f, Q_b       # for visualisation purposes
             fwd = not fwd
@@ -230,8 +287,7 @@ def visualise_Dijkstra(G):
         } 
         result.append(json.dumps(data))
     res =  {
-        "data": result,
-        "path": None
+        "data": result
     }
     return json.dumps(res)
 
@@ -249,7 +305,6 @@ def visualise_biDijkstra(G, search, end):
         result.append(json.dumps(data))
     res =  {
         "data": result,
-        "path": None
     }
     return json.dumps(res)
 
@@ -270,7 +325,7 @@ def run_algorithm(graph_dict):
         u = node_from_graph(G, int(u_id))
         v = node_from_graph(G, int(v_id))
         weight = edge["weight"]
-        G.add_weighted_edges_from([(u, v, int(weight))])
+        G.add_edges_from([(u, v, {'weight': int(weight), 'state': 'EMPTY', 'id': edge["id"]})])
     
 
     #decide which algorithm to run

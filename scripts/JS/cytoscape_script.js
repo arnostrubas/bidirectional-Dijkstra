@@ -113,6 +113,7 @@ function clean_data(cy)
     });
     let edges = cy.edges().map(edge => {
         return {
+            id: edge.data('id'),
             source: edge.source().id(),
             target: edge.target().id(),
             weight: edge.data('weight')
@@ -188,6 +189,7 @@ function reset_graphs()
 function update_graph(cy, elements, animate)
 {
     let nodes = JSON.parse(elements.nodes);
+    let edges = JSON.parse(elements.edges);
     
     nodes.forEach(node => {
         let changed_node = cy.$('#' + node.data.id);
@@ -206,6 +208,10 @@ function update_graph(cy, elements, animate)
                 }, 600);
             }
         }
+    });
+    edges.forEach(edge => {
+        let changed_edge = cy.$('#' + edge.data.id);
+        if (changed_edge.data.state != edge.data.state) changed_edge.data(edge.data);
     });
     update_queues();
 }
@@ -300,12 +306,10 @@ export function calculate(json)
 
     const first_part = data.part_one;
     const first_steps = JSON.parse(first_part.steps);
-    const first_path = first_part.path;
     const first_graph_data = first_steps.data;
 
     const second_part = data.part_two;
     const second_steps = JSON.parse(second_part.steps);
-    const second_path = second_part.path;
     const second_graph_data = second_steps.data;
 
     first_graph_data.forEach(e => {
@@ -342,7 +346,10 @@ export function move(next)
             const first_done = first_graph_n + 1 == first_graph_list.length;
             const second_done = second_graph_n + 1 == second_graph_list.length;
 
-            if (first_done && second_done) throw "End of both algorithms";
+            if (first_done && second_done) {
+                console.log(cy1.edges())
+                throw "End of both algorithms"
+            };
             if (!first_done) {
                 first_graph_n++;
                 update_graph(cy1, first_graph_list[first_graph_n], true);

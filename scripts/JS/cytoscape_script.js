@@ -12,6 +12,7 @@ let cy1 = cytoscape({
     container: container1,
     layout: layout,
     style: style,
+    wheelSensitivity: 0.1
 });
 let eh1 = cy1.edgehandles();
 let first_graph = null;
@@ -25,6 +26,7 @@ let cy2 = cytoscape({
     container: container2,
     layout: layout,
     style: style,
+    wheelSensitivity: 0.1
 });
 let eh2 = cy2.edgehandles();
 let second_graph = null;
@@ -269,14 +271,12 @@ export function reset() {
     setText('Qb1_text', "");
     cy1.remove(cy1.elements());
     cy1.add(first_graph);
-    cy1.layout(layout).run();
     cy1.fit();
 
     setText('Qf2_text', "");
     setText('Qb2_text', "");
     cy2.remove(cy2.elements());
     cy2.add(second_graph);
-    cy2.layout(layout).run();
     cy2.fit();
     reset_graphs();
 }

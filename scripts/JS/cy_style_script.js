@@ -4,7 +4,7 @@ export let layout = {
     spacingFactor: 1.75, 
     animate: false,
     padding: 30,
-    grid: false 
+    grid: false
 };
 export let style = [
     {

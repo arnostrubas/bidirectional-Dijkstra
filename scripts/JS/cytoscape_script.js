@@ -52,6 +52,9 @@ function add_edge(addedEdge)
             addedEdge.remove();
         }
     }
+    else {
+        addedEdge.remove();
+    }
 }
 
 cy1.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge));

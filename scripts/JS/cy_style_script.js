@@ -22,7 +22,17 @@ export let style = [
             'background-fill': 'linear-gradient',
             'background-gradient-stop-colors': 'gray gray', 
             'background-gradient-stop-positions': '50% 50%',
-            'background-gradient-direction': 'to-right'
+            'background-gradient-direction': 'to-right',
+            'transition-property': 'background-color',
+            'transition-duration': '600ms'
+        }
+    },
+    {
+        selector: '.highlighted',
+        style: {
+            'background-color': '#ff0000', // zlatá barva při bliknutí
+            'border-width': 4,
+            'border-color': '#ff0000'
         }
     },
     {

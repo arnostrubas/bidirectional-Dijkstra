@@ -185,13 +185,27 @@ function reset_graphs()
     second_graph_n = 0;
 }
 
-function update_graph(cy, elements)
+function update_graph(cy, elements, animate)
 {
     let nodes = JSON.parse(elements.nodes);
     
     nodes.forEach(node => {
         let changed_node = cy.$('#' + node.data.id);
-        changed_node.data(node.data);
+        let new_data = changed_node.data();
+        let old_data = node.data
+        if (new_data.state_f != old_data.state_f ||
+                new_data.state_b != old_data.state_b ||
+                new_data.d_f != old_data.d_f ||
+                new_data.d_b != old_data.d_b) {
+            changed_node.data(node.data);
+            if (animate) {
+                changed_node.addClass('highlighted');
+                
+                setTimeout(() => {
+                    changed_node.removeClass('highlighted');
+                }, 600);
+            }
+        }
     });
     update_queues();
 }
@@ -305,7 +319,7 @@ export function calculate(json)
         first_graph_q_f.push(queue_f);
         first_graph_q_b.push(queue_b);
     });
-    update_graph(cy1, first_graph_list[first_graph_n]);
+    update_graph(cy1, first_graph_list[first_graph_n], false);
 
     second_graph_data.forEach(e => {
         let data = JSON.parse(e);
@@ -318,7 +332,7 @@ export function calculate(json)
         second_graph_q_f.push(queue_f);
         second_graph_q_b.push(queue_b);
     });
-    update_graph(cy2, second_graph_list[second_graph_n]);
+    update_graph(cy2, second_graph_list[second_graph_n], false);
 }
 
 export function move(next)
@@ -331,11 +345,11 @@ export function move(next)
             if (first_done && second_done) throw "End of both algorithms";
             if (!first_done) {
                 first_graph_n++;
-                update_graph(cy1, first_graph_list[first_graph_n]);
+                update_graph(cy1, first_graph_list[first_graph_n], true);
             }
             if (!second_done) {
                 second_graph_n++;
-                update_graph(cy2, second_graph_list[second_graph_n]);
+                update_graph(cy2, second_graph_list[second_graph_n], true);
             }
             update_queues();
         } catch (error) {
@@ -349,11 +363,11 @@ export function move(next)
             if (first_start && second_start) throw "At the start of both algorithms";
             if (!first_start && first_graph_n >= second_graph_n) {
                 first_graph_n--;
-                update_graph(cy1, first_graph_list[first_graph_n]);
+                update_graph(cy1, first_graph_list[first_graph_n], false);
             }
             if (!second_start && second_graph_n >= first_graph_n + 1) {
                 second_graph_n--;
-                update_graph(cy2, second_graph_list[second_graph_n]);
+                update_graph(cy2, second_graph_list[second_graph_n], false);
             }
             update_queues();
         } catch (error) {

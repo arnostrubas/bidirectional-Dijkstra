@@ -43,11 +43,11 @@ let second_graph_q_b = [];
 
 function add_edge(addedEdge) 
 {
-    let input = prompt("Zadej váhu hrany (číslo):", "1");
+    let input = prompt("Zadej váhu hrany (číslo mezi 1 a 999999 včetně):", "1");
     if (input !== null) {
         let weight = Number(input);
 
-        if (!isNaN(weight) && weight > 0) {
+        if (!isNaN(weight) && weight >= 1 && weight <= 999999) {
             addedEdge.data('weight', weight);
         } else {
             alert("To není platné číslo!");
@@ -162,7 +162,7 @@ function queue_to_text(Q)
             let label = id.toString();
             if (id == -1) label = 'S';
             if (id == 0) label = 'T';
-            let priorityTxt = priority === 999999999 ? "∞" : toUper(priority);
+            let priorityTxt = toUper(priority);
             text += label + priorityTxt + "   "
         });
     }
@@ -228,10 +228,10 @@ function update_graph(cy, elements, animate)
 */ 
 
 export function graphs_init() {
-    cy1.add(JSON.parse(JSON.stringify(graphs.random_graph)));
+    cy1.add(JSON.parse(JSON.stringify(graphs.basic_graph)));
     cy1.layout(layout).run();
     cy1.fit();
-    cy2.add(JSON.parse(JSON.stringify(graphs.random_graph)));
+    cy2.add(JSON.parse(JSON.stringify(graphs.basic_graph)));
     cy2.layout(layout).run();
     cy2.fit();
 }

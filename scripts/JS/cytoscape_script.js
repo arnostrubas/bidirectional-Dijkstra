@@ -320,6 +320,7 @@ export function calculate(json)
         let graph = JSON.parse(data.graph);
         let queue_f = JSON.parse(data.queue_f);
         let queue_b = JSON.parse(data.queue_b);
+        let mu = JSON.parse(data.mu);
         
         let elements = graph.elements;
         first_graph_list.push(elements)
@@ -333,6 +334,7 @@ export function calculate(json)
         let graph = JSON.parse(data.graph);
         let queue_f = JSON.parse(data.queue_f);
         let queue_b = JSON.parse(data.queue_b);
+        let mu = JSON.parse(data.mu);
         
         let elements = graph.elements;
         second_graph_list.push(elements)

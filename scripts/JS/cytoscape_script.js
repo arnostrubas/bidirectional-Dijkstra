@@ -352,7 +352,6 @@ export function move(next)
             const second_done = second_graph_n + 1 == second_graph_list.length;
 
             if (first_done && second_done) {
-                console.log(cy1.edges())
                 throw "End of both algorithms"
             };
             if (!first_done) {

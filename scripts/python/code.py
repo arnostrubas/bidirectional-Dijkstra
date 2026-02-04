@@ -6,6 +6,9 @@ import heapq
 
 #region custom_classes
 class Node:
+    '''
+    Custom class representing node of the graph.
+    '''
     def __init__(self, id, d_f = None, pi_f = None, state_f = None, d_b = None, pi_b = None, state_b = None):
         self.id = id
         self.d_f = d_f
@@ -24,16 +27,20 @@ class Node:
         return str(self.id)
 
 class Queue(list):
+    '''
+    Class representing the priority queue. Uses heapq
+    '''
     def __init__(self, forward = True):
         '''
-        Docstring for Queue __init__
-        
         :param forward: if True, uses forward data. True by default 
         '''
         self.count = 0
         self.forward = forward
 
     def insert(self, element):
+        '''
+        inserts `element` into queue
+        '''
         if (self.forward):
             heapq.heappush(self, (element.d_f, element))
         else:
@@ -41,12 +48,18 @@ class Queue(list):
         self.count += 1
 
     def update(self, element):
+        '''
+        :param element: element which priority should be updated
+        '''
         if (self.forward):
             heapq.heappush(self, (element.d_f, element))
         else:
             heapq.heappush(self, (element.d_b, element))
 
     def extractMin(self):
+        '''
+        pops the element with lowest prioriry in queue and returns it
+        '''
         d, element = heapq.heappop(self)
         if (self.forward):
             while element.d_f != d:
@@ -62,15 +75,24 @@ class Queue(list):
         return element
     
     def min(self):
+        '''
+        returns priority of the element with lowest priority without removing it from the queue
+        '''
         element = self.extractMin()
         self.insert(element)
         if (self.forward): return element.d_f
         else: return element.d_b
     
     def isEmpty(self):
+        '''
+        True if there are no elements in the queue
+        '''
         return self.count == 0
     
 class VisualData:
+    '''
+    class used for the visualisation
+    '''
     def __init__(self, queue_f = Queue(), queue_b = Queue(), mu = 0):
         self.queue_f = queue_f
         self.queue_b = queue_b
@@ -80,6 +102,9 @@ class VisualData:
 
 #region json_functions
 def graph_to_json(G):
+    '''
+    return JSON of given graph `G`
+    '''
     nodes = []
     for node in G.nodes:
         label = str(node.id)
@@ -120,32 +145,51 @@ def graph_to_json(G):
     }
     return json.dumps(json_data)
 
-def queue_to_json(queue, forward):
+def queue_to_json(queue):
+    '''
+    converts given `queue` to JSON
+    '''
     nodes = []
     for d, node in queue:
-        if(forward and node.d_f == d): nodes.append((d, node.id))
-        if(not forward and node.d_b == d): nodes.append((d, node.id))
+        if(queue.forward and node.d_f == d): nodes.append((d, node.id))
+        if(not queue.forward and node.d_b == d): nodes.append((d, node.id))
     return json.dumps({
         "queue": nodes
     })
-
 #endregion
 
-#region algorithms and their functions
+#region other functions
+def node_from_graph(G, id):
+    '''
+    returns node with `id` in graph `G`, otherwise None
+    '''
+    for node in G.nodes:
+        if node.id == id:
+            return node
+    return None
+
 def node_on_path(node):
+    '''
+    Changes states of `node` so it is highlighted in graph visual
+    '''
     node.state_f = "PATH"
     node.state_b = "PATH"
 
 def edge_on_path(G, id1, id2):
+    '''
+    changes state of edge between `id1` and `id2` so that it is highlighted in graph visual
+    '''
     G[node_from_graph(G, id1)][node_from_graph(G, id2)]['state'] = "PATH"
+#endregion
 
+#region algorithms and their functions
 def NCPP(G, end, v = None):
     '''
     highlights the shortest path found by (bi)directional Dijkstra
     
     :param G: graph to extract the shortest path from
-    :param end: 0 for Dijkstra, 1 for same vertex closed, 2 for search distance
-    :param v: used only when end = 2, search distance
+    :param end: 0 for Dijkstra, 1 for same vertex closed/first encounter, 2 for search distance
+    :param v: middle node, used only when end = 2, search distance
     '''
     "Dijkstra"
     if end == 0: 
@@ -159,7 +203,7 @@ def NCPP(G, end, v = None):
             prev = node
             node = node.pi_f
             
-    'same vertex closed'
+    "same vertex closed"
     if end == 1:
         minimum = None
         middle_node = None
@@ -179,7 +223,7 @@ def NCPP(G, end, v = None):
             if (pred.pi_b): edge_on_path(G, pred.id, pred.pi_b.id)
             pred = pred.pi_b
     
-    'search distance'
+    "search distance"
     if end == 2:
         pred = v
         while pred is not None:
@@ -193,10 +237,19 @@ def NCPP(G, end, v = None):
             if (pred.pi_b): edge_on_path(G, pred.id, pred.pi_b.id)
             pred = pred.pi_b
 
-def w_function(graph, u, v):
-    return graph[u][v]['weight']
+def w_function(G, u, v):
+    '''
+    return weight of edge between `u` and `v` in graph `G`
+    '''
+    return G[u][v]['weight']
 
 def init(G, s, t=None):
+    '''
+    initialises graph `G`
+    
+    :param s: starting node
+    :param t: ending node, specify only for bidirectional search
+    '''
     for node in G.nodes:
         node.d_f = 999999999
         node.pi_f = None
@@ -1044,17 +1097,15 @@ def bidirectional_Dijkstra_12(G, w, s, t):
         fwd = not fwd
             
     return None
-
 #endregion
 
 #region visualisation functions
-def node_from_graph(G, id):
-    for node in G.nodes:
-        if node.id == id:
-            return node
-    return None
-
 def visualise_algorithm(G, search, end):
+    '''
+    visualises algorithm with `search` and `end` strategies on graph `G`
+
+    returns json with graph, queue and other data
+    '''
     s = node_from_graph(G, -1) 
     t = node_from_graph(G, 0)
     w = partial(w_function, G)
@@ -1089,8 +1140,8 @@ def visualise_algorithm(G, search, end):
     for yielded in runner:
         data = {
             "graph": graph_to_json(G),
-            "queue_f": queue_to_json(yielded.queue_f, True),
-            "queue_b": queue_to_json(yielded.queue_b, False),
+            "queue_f": queue_to_json(yielded.queue_f),
+            "queue_b": queue_to_json(yielded.queue_b),
             "mu": str(yielded.mu)
         } 
         result.append(json.dumps(data))
@@ -1120,7 +1171,6 @@ def run_algorithm(graph_dict):
     
     return visualise_algorithm(G, search, end)
     
-
 def run(JSON):
     json_dict = json.loads(JSON)
     part_one = json_dict["part_one"]
@@ -1136,10 +1186,9 @@ def run(JSON):
         }
     }
     return json.dumps(result)
-
-
 #endregion
 
+#allows run to be accessed from JavaScript
 window.run = run
 
 window.python_ready()

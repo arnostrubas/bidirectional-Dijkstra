@@ -23,7 +23,6 @@ class Node:
     def __str__(self):
         return str(self.id)
 
-
 class Queue(list):
     def __init__(self, forward = True):
         self.count = 0
@@ -59,11 +58,16 @@ class Queue(list):
     
     def isEmpty(self):
         return self.count == 0
+    
+class VisualData:
+    def __init__(self, queue_f = Queue(), queue_b = Queue(), mu = 0):
+        self.queue_f = queue_f
+        self.queue_b = queue_b
+        self.mu = mu
 
 #endregion
 
 #region json_functions
-
 def graph_to_json(G):
     nodes = []
     for node in G.nodes:
@@ -126,7 +130,7 @@ def edge_on_path(G, id1, id2):
 
 def NCPP(G, end, v = None):
     '''
-    highlights the shortestr path found by (bi)directional Dijkstra
+    highlights the shortest path found by (bi)directional Dijkstra
     
     :param G: graph to extract the shortest path from
     :param end: 0 for Dijkstra, 1 for same vertex closed, 2 for search distance
@@ -178,7 +182,6 @@ def NCPP(G, end, v = None):
             if (pred.pi_b): edge_on_path(G, pred.id, pred.pi_b.id)
             pred = pred.pi_b
 
-
 def w_function(graph, u, v):
     return graph[u][v]['weight']
 
@@ -200,14 +203,14 @@ def Dijkstra(G, w, s, t):
     init(G, s)
     Q = Queue()
     Q.insert(s)
-    yield Q, [], 0
+    yield VisualData(queue_f=Q)
     while not Q.isEmpty():
         v = Q.extractMin()
         v.state_f = "CLOSED"
-        yield Q, [], 0                     # for visualisation purposes
+        yield VisualData(queue_f=Q)                     # for visualisation purposes
         if (v == t):
             NCPP(G, 0)
-            yield Q, [], 0
+            yield VisualData(queue_f=Q)                 # for visualisation purposes
             return
         for u in sorted(G.successors(v), key=lambda node: node.id):
             if u.state_f == "UNVISITED":
@@ -215,13 +218,13 @@ def Dijkstra(G, w, s, t):
                 u.state_f = "OPEN"
                 u.pi_f = v
                 Q.insert(u)
-                yield Q, [], 0            # for visualisation purposes
+                yield VisualData(queue_f=Q)             # for visualisation purposes
             elif u.state_f == "OPEN":
                 if v.d_f + w(v, u) < u.d_f:
                     u.d_f = v.d_f + w(v, u)
                     u.pi_f = v
                     Q.update(u) 
-                    yield Q, [], 0         # for visualisation purposes
+                    yield VisualData(queue_f=Q)         # for visualisation purposes
     return None
 
 def bidirectional_Dijkstra_1(G, w, s, t):
@@ -235,15 +238,15 @@ def bidirectional_Dijkstra_1(G, w, s, t):
     Q_b = Queue(False)
     Q_b.insert(t)
     fwd = True
-    yield Q_f, Q_b, 0                          # for visualisation purposes
+    yield VisualData(queue_f=Q_f, queue_b=Q_b)                      # for visualisation purposes
     while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
         if (fwd):
             v = Q_f.extractMin()
             v.state_f = "CLOSED"
-            yield Q_f, Q_b, 0                  # for visualisation purposes
+            yield VisualData(queue_f=Q_f, queue_b=Q_b)              # for visualisation purposes
             if (v.state_b == "CLOSED"):
                 NCPP(G, 1)
-                yield Q_f, Q_b, 0
+                yield VisualData(queue_f=Q_f, queue_b=Q_b)          # for visualisation purposes
                 return None                 
             for u in sorted(G.successors(v), key=lambda node: node.id):
                 if u.state_f == "UNVISITED":
@@ -251,21 +254,21 @@ def bidirectional_Dijkstra_1(G, w, s, t):
                     u.state_f = "OPEN"
                     u.pi_f = v
                     Q_f.insert(u)
-                    yield Q_f, Q_b, 0            # for visualisation purposes
+                    yield VisualData(queue_f=Q_f, queue_b=Q_b)      # for visualisation purposes
                 elif u.state_f == "OPEN":
                     if v.d_f + w(v, u) < u.d_f:
                         u.d_f = v.d_f + w(v, u)
                         u.pi_f = v
                         Q_f.update(u) 
-                        yield Q_f, Q_b, 0       # for visualisation purposes
+                        yield VisualData(queue_f=Q_f, queue_b=Q_b)  # for visualisation purposes
             fwd = not fwd
         else:
             v = Q_b.extractMin()
             v.state_b = "CLOSED"
-            yield Q_f, Q_b, 0                    # for visualisation purposes
+            yield VisualData(queue_f=Q_f, queue_b=Q_b)              # for visualisation purposes
             if (v.state_f == "CLOSED"):
                 NCPP(G, 1)
-                yield Q_f, Q_b, 0
+                yield VisualData(queue_f=Q_f, queue_b=Q_b)
                 return None  
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
                 if u.state_b == "UNVISITED":
@@ -273,13 +276,13 @@ def bidirectional_Dijkstra_1(G, w, s, t):
                     u.state_b = "OPEN"
                     u.pi_b = v
                     Q_b.insert(u)
-                    yield Q_f, Q_b, 0            # for visualisation purposes
+                    yield VisualData(queue_f=Q_f, queue_b=Q_b)     # for visualisation purposes
                 elif u.state_b == "OPEN":
                     if v.d_b + w(u, v) < u.d_b:
                         u.d_b = v.d_b + w(u, v)
                         u.pi_b = v
                         Q_b.update(u) 
-                        yield Q_f, Q_b, 0       # for visualisation purposes
+                        yield VisualData(queue_f=Q_f, queue_b=Q_b) # for visualisation purposes
             fwd = not fwd
     return None
 
@@ -294,50 +297,50 @@ def bidirectional_Dijkstra_2(G, w, s, t):
     Q_b = Queue(False)
     Q_b.insert(t)
     fwd = True
-    yield Q_f, Q_b, 0                          # for visualisation purposes
+    yield VisualData(queue_f=Q_f, queue_b=Q_b)                          # for visualisation purposes
     while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
         if (fwd):
             v = Q_f.extractMin()
             v.state_f = "CLOSED"
-            yield Q_f, Q_b, 0                  # for visualisation purposes               
+            yield VisualData(queue_f=Q_f, queue_b=Q_b)                  # for visualisation purposes               
             for u in sorted(G.successors(v), key=lambda node: node.id):
                 if u.state_f == "UNVISITED":
                     u.d_f = v.d_f + w(v, u)
                     u.state_f = "OPEN"
                     u.pi_f = v
                     Q_f.insert(u)
-                    yield Q_f, Q_b, 0            # for visualisation purposes
+                    yield VisualData(queue_f=Q_f, queue_b=Q_b)          # for visualisation purposes
                 elif u.state_f == "OPEN":
                     if v.d_f + w(v, u) < u.d_f:
                         u.d_f = v.d_f + w(v, u)
                         u.pi_f = v
                         Q_f.update(u) 
-                        yield Q_f, Q_b, 0       # for visualisation purposes
+                        yield VisualData(queue_f=Q_f, queue_b=Q_b)      # for visualisation purposes
                 if (u.state_b == "OPEN" or u.state_b == "CLOSED"):
                     NCPP(G, 1)
-                    yield Q_f, Q_b, 0
+                    yield VisualData(queue_f=Q_f, queue_b=Q_b)          # for visualisation purposes
                     return None
             fwd = not fwd
         else:
             v = Q_b.extractMin()
             v.state_b = "CLOSED"
-            yield Q_f, Q_b, 0                    # for visualisation purposes
+            yield VisualData(queue_f=Q_f, queue_b=Q_b)                  # for visualisation purposes
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
                 if u.state_b == "UNVISITED":
                     u.d_b = v.d_b + w(u, v)
                     u.state_b = "OPEN"
                     u.pi_b = v
                     Q_b.insert(u)
-                    yield Q_f, Q_b, 0            # for visualisation purposes
+                    yield VisualData(queue_f=Q_f, queue_b=Q_b)          # for visualisation purposes
                 elif u.state_b == "OPEN":
                     if v.d_b + w(u, v) < u.d_b:
                         u.d_b = v.d_b + w(u, v)
                         u.pi_b = v
                         Q_b.update(u) 
-                        yield Q_f, Q_b, 0       # for visualisation purposes
+                        yield VisualData(queue_f=Q_f, queue_b=Q_b)      # for visualisation purposes
                 if (u.state_f == "OPEN" or u.state_f == "CLOSED"):
                     NCPP(G, 1)
-                    yield Q_f, Q_b, 0
+                    yield VisualData(queue_f=Q_f, queue_b=Q_b)          # for visualisation purposes
                     return None
             fwd = not fwd
     return None
@@ -357,7 +360,7 @@ def bidirectional_Dijkstra_3(G, w, s, t):
     middle_vertex = None
     current_node_f = None
     current_node_b = None
-    yield Q_f, Q_b, mu                          # for visualisation purposes
+    yield VisualData(queue_f=Q_f, queue_b=Q_b, mu=mu)                          # for visualisation purposes
     while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
         if (fwd):
             v = Q_f.extractMin()
@@ -365,22 +368,22 @@ def bidirectional_Dijkstra_3(G, w, s, t):
             v.state_f = "CLOSED"
             if (current_node_b and current_node_f and current_node_f.d_f + current_node_b.d_b > mu):
                 NCPP(G, 2, middle_vertex)
-                yield Q_f, Q_b, mu
+                yield VisualData(queue_f=Q_f, queue_b=Q_b, mu=mu)               # for visualisation purposes
                 return None
-            yield Q_f, Q_b, mu                  # for visualisation purposes               
+            yield VisualData(queue_f=Q_f, queue_b=Q_b, mu=mu)                   # for visualisation purposes               
             for u in sorted(G.successors(v), key=lambda node: node.id):
                 if u.state_f == "UNVISITED":
                     u.d_f = v.d_f + w(v, u)
                     u.state_f = "OPEN"
                     u.pi_f = v
                     Q_f.insert(u)
-                    yield Q_f, Q_b, mu            # for visualisation purposes
+                    yield VisualData(queue_f=Q_f, queue_b=Q_b, mu=mu)            # for visualisation purposes
                 elif u.state_f == "OPEN":
                     if v.d_f + w(v, u) < u.d_f:
                         u.d_f = v.d_f + w(v, u)
                         u.pi_f = v
                         Q_f.update(u) 
-                        yield Q_f, Q_b, mu       # for visualisation purposes
+                        yield VisualData(queue_f=Q_f, queue_b=Q_b, mu=mu)        # for visualisation purposes
                 if (u.state_b == "CLOSED" and v.d_f + u.d_b + w(v, u) < mu):
                     middle_vertex = v
                     mu = v.d_f + u.d_b + w(v, u)
@@ -391,25 +394,84 @@ def bidirectional_Dijkstra_3(G, w, s, t):
             v.state_b = "CLOSED"
             if (current_node_f.d_f + current_node_b.d_b > mu):
                 NCPP(G, 2, middle_vertex)
-                yield Q_f, Q_b, mu
+                yield VisualData(queue_f=Q_f, queue_b=Q_b, mu=mu)                # for visualisation purposes
                 return None
-            yield Q_f, Q_b, mu                    # for visualisation purposes
+            yield VisualData(queue_f=Q_f, queue_b=Q_b, mu=mu)                    # for visualisation purposes
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
                 if u.state_b == "UNVISITED":
                     u.d_b = v.d_b + w(u, v)
                     u.state_b = "OPEN"
                     u.pi_b = v
                     Q_b.insert(u)
-                    yield Q_f, Q_b, mu            # for visualisation purposes
+                    yield VisualData(queue_f=Q_f, queue_b=Q_b, mu=mu)            # for visualisation purposes
                 elif u.state_b == "OPEN":
                     if v.d_b + w(u, v) < u.d_b:
                         u.d_b = v.d_b + w(u, v)
                         u.pi_b = v
                         Q_b.update(u) 
-                        yield Q_f, Q_b , mu      # for visualisation purposes
+                        yield VisualData(queue_f=Q_f, queue_b=Q_b, mu=mu)        # for visualisation purposes
                 if (u.state_f == "CLOSED" and v.d_b + u.d_f + w(u, v) < mu):
                     middle_vertex = v
                     mu = v.d_b + u.d_f + w(u, v)
+            fwd = not fwd
+    return None
+
+def bidirectional_Dijkstra_4(G, w, s, t):
+    """
+    Search = after one vertex \n
+    End = same vertex close
+    """
+    init(G, s, t)
+    Q_f = Queue()
+    Q_f.insert(s)
+    Q_b = Queue(False)
+    Q_b.insert(t)
+    fwd = True
+    yield VisualData(queue_f=Q_f, queue_b=Q_b)                      # for visualisation purposes
+    while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
+        if (fwd):
+            v = Q_f.extractMin()
+            v.state_f = "CLOSED"
+            yield VisualData(queue_f=Q_f, queue_b=Q_b)              # for visualisation purposes
+            if (v.state_b == "CLOSED"):
+                NCPP(G, 1)
+                yield VisualData(queue_f=Q_f, queue_b=Q_b)          # for visualisation purposes
+                return None                 
+            for u in sorted(G.successors(v), key=lambda node: node.id):
+                if u.state_f == "UNVISITED":
+                    u.d_f = v.d_f + w(v, u)
+                    u.state_f = "OPEN"
+                    u.pi_f = v
+                    Q_f.insert(u)
+                    yield VisualData(queue_f=Q_f, queue_b=Q_b)      # for visualisation purposes
+                elif u.state_f == "OPEN":
+                    if v.d_f + w(v, u) < u.d_f:
+                        u.d_f = v.d_f + w(v, u)
+                        u.pi_f = v
+                        Q_f.update(u) 
+                        yield VisualData(queue_f=Q_f, queue_b=Q_b)  # for visualisation purposes
+            fwd = not fwd
+        else:
+            v = Q_b.extractMin()
+            v.state_b = "CLOSED"
+            yield VisualData(queue_f=Q_f, queue_b=Q_b)              # for visualisation purposes
+            if (v.state_f == "CLOSED"):
+                NCPP(G, 1)
+                yield VisualData(queue_f=Q_f, queue_b=Q_b)
+                return None  
+            for u in sorted(G.predecessors(v), key=lambda node: node.id):
+                if u.state_b == "UNVISITED":
+                    u.d_b = v.d_b + w(u, v)
+                    u.state_b = "OPEN"
+                    u.pi_b = v
+                    Q_b.insert(u)
+                    yield VisualData(queue_f=Q_f, queue_b=Q_b)     # for visualisation purposes
+                elif u.state_b == "OPEN":
+                    if v.d_b + w(u, v) < u.d_b:
+                        u.d_b = v.d_b + w(u, v)
+                        u.pi_b = v
+                        Q_b.update(u) 
+                        yield VisualData(queue_f=Q_f, queue_b=Q_b) # for visualisation purposes
             fwd = not fwd
     return None
 #endregion
@@ -425,18 +487,22 @@ def visualise_algorithm(G, search, end):
     s = node_from_graph(G, -1) 
     t = node_from_graph(G, 0)
     w = partial(w_function, G)
-    if (search == "Dijkstra" or end == "Dijksta"): runner = Dijkstra(G, w, s, t)
-    elif (search == "one_vertex" and end == "same_vertex_closed"): runner = bidirectional_Dijkstra_1(G, w, s, t)
-    elif (search == "one_vertex" and end == "first_encounter"): runner = bidirectional_Dijkstra_2(G, w, s, t)
-    elif (search == "one_vertex" and end == "using_search_distance"): runner = bidirectional_Dijkstra_3(G, w, s, t)
-    else: runner = Dijkstra(G, w, s, t)
+    match (search, end):
+        case ("one_vertex", "same_vertex_closed"):
+            runner = bidirectional_Dijkstra_1(G, w, s, t)
+        case ("one_vertex", "first_encounter"):
+            runner = bidirectional_Dijkstra_2(G, w, s, t)
+        case ("one_vertex", "using_search_distance"):
+            runner = bidirectional_Dijkstra_3(G, w, s, t)
+        case _:
+            runner = Dijkstra(G, w, s, t)
     result = []
-    for queue_f, queue_b, mu in runner:
+    for yielded in runner:
         data = {
             "graph": graph_to_json(G),
-            "queue_f": queue_to_json(queue_f, True),
-            "queue_b": queue_to_json(queue_b, False),
-            "mu": mu
+            "queue_f": queue_to_json(yielded.queue_f, True),
+            "queue_b": queue_to_json(yielded.queue_b, False),
+            "mu": str(yielded.mu)
         } 
         result.append(json.dumps(data))
     res =  {

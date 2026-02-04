@@ -3,7 +3,7 @@ import edgehandles from 'cytoscape-edgehandles';
 cytoscape.use(edgehandles);
 import { layout, style } from './cy_style_script.js';
 import * as graphs from './graphs.js';
-import { setText } from './other_functions_script.js'
+import { setText, update_queues } from './other_functions_script.js'
 
 const container1 = document.getElementById('graph_container1');
 const container2 = document.getElementById('graph_container2');
@@ -15,6 +15,7 @@ let cy1 = cytoscape({
     wheelSensitivity: 0.1
 });
 let eh1 = cy1.edgehandles();
+cy1.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge));
 let first_graph = null;
 let first_graph_list = [];
 let first_graph_n = 0;
@@ -29,6 +30,7 @@ let cy2 = cytoscape({
     wheelSensitivity: 0.1
 });
 let eh2 = cy2.edgehandles();
+cy2.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge));
 let second_graph = null;
 let second_graph_list = [];
 let second_graph_n = 0;
@@ -58,9 +60,6 @@ function add_edge(addedEdge)
         addedEdge.remove();
     }
 }
-
-cy1.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge));
-cy2.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge));
 
 function find_new_vertex_id(cy) 
 {
@@ -129,53 +128,6 @@ function clean_data(cy)
         edges: edges
     };
     return graph;
-}
-
-function createGraph(cy, elements) 
-{ 
-    let nodes = JSON.parse(elements.nodes);
-    let edges = JSON.parse(elements.edges);
-    
-    cy.remove(cy.elements());
-    cy.add(nodes);
-    cy.add(edges);
-    cy.layout(layout).run();
-    cy.fit();
-    
-    update_queues();
-}
-
-function toUper(num) {
-    const uper = {
-        '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
-        '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹',
-    };
-    return num.toString().split('').map(char => uper[char] || char).join('');
-}
-
-function queue_to_text(Q)
-{
-    let text = "";
-    if (Q) {
-        Q.queue.sort((x, y) => x[0] - y[0]).forEach(tuple => {
-            let [priority, id] = tuple;
-            let label = id.toString();
-            if (id == -1) label = 'S';
-            if (id == 0) label = 'T';
-            let priorityTxt = toUper(priority);
-            text += label + priorityTxt + "   "
-        });
-    }
-    return text
-}
-
-function update_queues()
-{
-    setText('Qf1_text', queue_to_text(first_graph_q_f[first_graph_n]));
-    setText('Qb1_text', queue_to_text(first_graph_q_b[first_graph_n]));
-
-    setText('Qf2_text', queue_to_text(second_graph_q_f[second_graph_n]));
-    setText('Qb2_text', queue_to_text(second_graph_q_b[second_graph_n]));
 }
 
 function reset_graphs()
@@ -362,7 +314,8 @@ export function move(next)
                 second_graph_n++;
                 update_graph(cy2, second_graph_list[second_graph_n], true);
             }
-            update_queues();
+            update_queues(first_graph_q_f[first_graph_n], first_graph_q_b[first_graph_n],
+                second_graph_q_f[second_graph_n], second_graph_q_b[second_graph_n]);
         } catch (error) {
             alert(error)
         }

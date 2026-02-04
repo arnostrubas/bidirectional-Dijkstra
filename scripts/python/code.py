@@ -960,16 +960,16 @@ def bidirectional_Dijkstra_12(G, w, s, t):
     current_node_b = None
 
     def forward_one_edge(G, Q_f):
-        nonlocal mu, middle_vertex
+        nonlocal mu, middle_vertex, current_node_b, current_node_f
         while (not Q_f.isEmpty()):
             v = Q_f.extractMin()
             v.state_f = "CLOSED"
             current_node_f = v
+            yield True   
             if (current_node_b and current_node_f and current_node_f.d_f + current_node_b.d_b > mu):
                 NCPP(G, 2, middle_vertex)
                 yield True               # for visualisation purposes
-                return None
-            yield True                
+                return None             
             for u in sorted(G.successors(v), key=lambda node: node.id):
                 if u.state_f == "UNVISITED":
                     u.d_f = v.d_f + w(v, u)
@@ -988,16 +988,16 @@ def bidirectional_Dijkstra_12(G, w, s, t):
                     mu = v.d_f + u.d_b + w(v, u)
     
     def backward_one_edge(G, Q_b):
-        nonlocal mu, middle_vertex
+        nonlocal mu, middle_vertex, current_node_b, current_node_f
         while (not Q_b.isEmpty()):
             v = Q_b.extractMin()
             v.state_b = "CLOSED"
             current_node_b = v
+            yield True
             if (current_node_b and current_node_f and current_node_f.d_f + current_node_b.d_b > mu):
                 NCPP(G, 2, middle_vertex)
                 yield True               # for visualisation purposes
                 return None
-            yield True
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
                 if u.state_b == "UNVISITED":
                     u.d_b = v.d_b + w(u, v)

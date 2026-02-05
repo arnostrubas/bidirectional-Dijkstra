@@ -5,7 +5,9 @@ The web app is for visualising the different versions of a bidirectional Dijkstr
 If you encounter any errors during the usage of the app or you have any ideas for improving the app, reach out to me via email: arnost.rubas@gmail.com
 ![screenshot of the app](image.png)
 1 - graphs
+
     the color of the node is split into two halfs. Left half represents forward search, right half represents backward search
+    
     gray - node is unvisited in forward/backward search
 
     yellow - node is open in the forward search
@@ -16,13 +18,16 @@ If you encounter any errors during the usage of the app or you have any ideas fo
     at the end of the algorithm, the final path (all its nodes and edges) is colored blue
 
 2 - priority queues
+
     forward and backward priority queues are shown here. The format is label with upper index, which means the priority of the vertex
 
 3 - part when you can select what version of the algorithm is used
+
     if Dijkstra algorithm is selected in atleast one of the strategies, Dijkstra algorithm is used
     when not using Dijkstra, these two are used
 
 4 - Main buttons.
+
     Start - calculates the algorithms and starts the visualisation. Once started, the Next/Previous buttons are enabled
 
     Reset - Resets the calculation, allows graph changes - see part 5
@@ -34,6 +39,7 @@ If you encounter any errors during the usage of the app or you have any ideas fo
     Step size - selection of the visualisation, user can either see the algorithm step by step, or just the full path
 
 5 - buttons and checkboxex that allow user to change the graph
+
     allowed only before starting the calculation
 
     checkbox add to both graphs - !!!NOT IMPLEMENTED!!!!

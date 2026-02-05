@@ -20,7 +20,6 @@ If you encounter any errors during the usage of the app or you have any ideas fo
 
 3 - part when you can select what version of the algorithm is used
     if Dijkstra algorithm is selected in atleast one of the strategies, Dijkstra algorithm is used
-    !!!CURENTLY ONLY SEARCH - 'AFTER ONE VERTEX' AND END - 'SAME VERTEX CLOSED' STRATEGIES ARE IMPLEMENTED!!!!!!
     when not using Dijkstra, these two are used
 
 4 - Main buttons.
@@ -32,7 +31,6 @@ If you encounter any errors during the usage of the app or you have any ideas fo
 
     Previous step - shows previous step
 
-    !!!! ONLY STEP BY STEP IS IMPLEMENTED!!!!
     Step size - selection of the visualisation, user can either see the algorithm step by step, or just the full path
 
 5 - buttons and checkboxex that allow user to change the graph

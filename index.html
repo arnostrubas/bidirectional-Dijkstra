@@ -13,10 +13,20 @@
     <py-config>
         packages = ["networkx"]
     </py-config>
+    
+    <script type="importmap">
+    {
+        "imports": {
+            "cytoscape": "https://esm.sh/cytoscape@3.28.1",
+            "cytoscape-edgehandles": "https://esm.sh/cytoscape-edgehandles@4.0.1"
+        }
+    }
+    </script>
 </head>
 
 <body>
     <script type="py" src="./scripts/python/code.py"></script>
+    <script type="module" src="./scripts/JS/script.js"></script>
     <div id="adding_removing">
         <div id="checkboxes">
             <label>
@@ -107,15 +117,6 @@
             <div class="priority_queue_b" id="Qb2"> Q<sub>b</sub>: <span id="Qb2_text"> Priority queue 2.2 </span> </div>
         </div>
     </div>
-    <script type="importmap">
-    {
-        "imports": {
-            "cytoscape": "https://esm.sh/cytoscape@3.28.1",
-            "cytoscape-edgehandles": "https://esm.sh/cytoscape-edgehandles@4.0.1"
-        }
-    }
-    </script>
-    <script type="module" src="./scripts/JS/script.js"></script>
 </body>
 
 </html>

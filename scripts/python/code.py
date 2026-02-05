@@ -849,7 +849,7 @@ def bidirectional_Dijkstra_10(G, w, s, t):
         while (not Q_f.isEmpty()):
             v = Q_f.extractMin()
             v.state_f = "CLOSED"
-            yield True
+            yield False
             if (v.state_b == "CLOSED"):
                 NCPP(G, 1)
                 yield False
@@ -860,19 +860,20 @@ def bidirectional_Dijkstra_10(G, w, s, t):
                     u.state_f = "OPEN"
                     u.pi_f = v
                     Q_f.insert(u)
-                    yield False
+                    yield True
                 elif u.state_f == "OPEN":
                     if v.d_f + w(v, u) < u.d_f:
                         u.d_f = v.d_f + w(v, u)
                         u.pi_f = v
                         Q_f.update(u) 
-                        yield False
+                        yield True
+        return None
     
     def backward_one_edge(G, Q_b):
         while (not Q_b.isEmpty()):
             v = Q_b.extractMin()
             v.state_b = "CLOSED"
-            yield True
+            yield False
             if (v.state_f == "CLOSED"):
                 NCPP(G, 1)
                 yield False
@@ -883,13 +884,14 @@ def bidirectional_Dijkstra_10(G, w, s, t):
                     u.state_b = "OPEN"
                     u.pi_b = v
                     Q_b.insert(u)
-                    yield False
+                    yield True
                 elif u.state_b == "OPEN":
                     if v.d_b + w(u, v) < u.d_b:
                         u.d_b = v.d_b + w(u, v)
                         u.pi_b = v
                         Q_b.update(u) 
-                        yield False
+                        yield True
+        return None
 
     init(G, s, t)
     Q_f = Queue()
@@ -903,17 +905,15 @@ def bidirectional_Dijkstra_10(G, w, s, t):
     while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
         if (fwd):
             try:
-                if (next(fwd_runner)): 
-                    yield VisualData(queue_f=Q_f, queue_b=Q_b)  # for visualisation purposes
-                    next(fwd_runner)
+                while(not next(fwd_runner)): 
+                    yield VisualData(queue_f=Q_f, queue_b=Q_b)
                 yield VisualData(queue_f=Q_f, queue_b=Q_b)      # for visualisation purposes
             except StopIteration:
                 return None
         else:
             try:
-                if (next(bck_runner)): 
-                    yield VisualData(queue_f=Q_f, queue_b=Q_b)  # for visualisation purposes
-                    next(bck_runner)
+                while(not next(bck_runner)): 
+                    yield VisualData(queue_f=Q_f, queue_b=Q_b)
                 yield VisualData(queue_f=Q_f, queue_b=Q_b)      # for visualisation purposes
             except StopIteration:
                 return None
@@ -930,47 +930,49 @@ def bidirectional_Dijkstra_11(G, w, s, t):
         while (not Q_f.isEmpty()):
             v = Q_f.extractMin()
             v.state_f = "CLOSED"
-            yield True                
+            yield False                
             for u in sorted(G.successors(v), key=lambda node: node.id):
                 if u.state_f == "UNVISITED":
                     u.d_f = v.d_f + w(v, u)
                     u.state_f = "OPEN"
                     u.pi_f = v
                     Q_f.insert(u)
-                    yield False
+                    yield True
                 elif u.state_f == "OPEN":
                     if v.d_f + w(v, u) < u.d_f:
                         u.d_f = v.d_f + w(v, u)
                         u.pi_f = v
                         Q_f.update(u) 
-                        yield False
+                        yield True
                 if (u.state_b == "OPEN" or u.state_b == "CLOSED"):
                     NCPP(G, 1)
-                    yield VisualData(queue_f=Q_f, queue_b=Q_b)          # for visualisation purposes
+                    yield False
                     return None
+        return None
     
     def backward_one_edge(G, Q_b):
         while (not Q_b.isEmpty()):
             v = Q_b.extractMin()
             v.state_b = "CLOSED"
-            yield True
+            yield False
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
                 if u.state_b == "UNVISITED":
                     u.d_b = v.d_b + w(u, v)
                     u.state_b = "OPEN"
                     u.pi_b = v
                     Q_b.insert(u)
-                    yield False
+                    yield True
                 elif u.state_b == "OPEN":
                     if v.d_b + w(u, v) < u.d_b:
                         u.d_b = v.d_b + w(u, v)
                         u.pi_b = v
                         Q_b.update(u) 
-                        yield False
+                        yield True
                 if (u.state_f == "OPEN" or u.state_f == "CLOSED"):
                     NCPP(G, 1)
-                    yield VisualData(queue_f=Q_f, queue_b=Q_b)          # for visualisation purposes
+                    yield False 
                     return None
+        return None
 
     init(G, s, t)
     Q_f = Queue()
@@ -984,17 +986,15 @@ def bidirectional_Dijkstra_11(G, w, s, t):
     while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
         if (fwd):
             try:
-                if (next(fwd_runner)): 
-                    yield VisualData(queue_f=Q_f, queue_b=Q_b)  # for visualisation purposes
-                    next(fwd_runner)
+                while(not next(fwd_runner)): 
+                    yield VisualData(queue_f=Q_f, queue_b=Q_b)
                 yield VisualData(queue_f=Q_f, queue_b=Q_b)      # for visualisation purposes
             except StopIteration:
                 return None
         else:
             try:
-                if (next(bck_runner)): 
-                    yield VisualData(queue_f=Q_f, queue_b=Q_b)  # for visualisation purposes
-                    next(bck_runner)
+                while(not next(bck_runner)): 
+                    yield VisualData(queue_f=Q_f, queue_b=Q_b) 
                 yield VisualData(queue_f=Q_f, queue_b=Q_b)      # for visualisation purposes
             except StopIteration:
                 return None

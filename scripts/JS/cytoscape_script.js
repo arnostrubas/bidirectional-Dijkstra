@@ -333,7 +333,8 @@ export function move(next)
                 second_graph_n--;
                 update_graph(cy2, second_graph_list[second_graph_n], false);
             }
-            update_queues();
+            update_queues(first_graph_q_f[first_graph_n], first_graph_q_b[first_graph_n],
+                second_graph_q_f[second_graph_n], second_graph_q_b[second_graph_n]);
         } catch (error) {
             alert(error)
         }

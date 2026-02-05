@@ -180,7 +180,7 @@ function update_graph(cy, elements, animate)
 */ 
 
 export function graphs_init() {
-    cy1.add(JSON.parse(JSON.stringify(graphs.graph_for_first_encounter)));
+    cy1.add(JSON.parse(JSON.stringify(graphs.start_graph)));
     cy1.layout(layout).run();
     cy1.fit();
     cy2.add(JSON.parse(JSON.stringify(graphs.start_graph)));

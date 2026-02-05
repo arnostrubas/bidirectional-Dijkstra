@@ -1,10 +1,7 @@
 export let layout = {
-    name: 'breadthfirst',
-    directed: true,   
-    spacingFactor: 1.75, 
-    animate: false,
-    padding: 30,
-    grid: false
+    name: 'preset',
+    padding: 50,
+    fit: true
 };
 export let style = [
     {

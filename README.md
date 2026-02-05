@@ -6,6 +6,8 @@ If you encounter any errors during the usage of the app or you have any ideas fo
 ![screenshot of the app](image.png)
 1 - graphs
 
+    you can rearrange the graph however you like, it wont be changed (unless you reload the page)
+
     the color of the node is split into two halfs. Left half represents forward search, right half represents backward search
     
     gray - node is unvisited in forward/backward search
@@ -19,14 +21,14 @@ If you encounter any errors during the usage of the app or you have any ideas fo
 
 2 - priority queues
 
-    forward and backward priority queues are shown here. The format is label with upper index, which means the priority of the vertex
+    forward and backward priority queues are shown here. The format is label with upper index, which indicates the priority of the vertex
 
 3 - part when you can select what version of the algorithm is used
 
     if Dijkstra algorithm is selected in atleast one of the strategies, Dijkstra algorithm is used
     when not using Dijkstra, these two are used
 
-4 - Main buttons.
+4 - Main buttons
 
     Start - calculates the algorithms and starts the visualisation. Once started, the Next/Previous buttons are enabled
 

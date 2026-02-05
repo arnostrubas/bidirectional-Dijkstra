@@ -22,17 +22,17 @@ export let start_graph = [
     { data: { id: '0', label: 'T' }, position: { x: 650, y: 250 } },
     { data: { id: '1', label: '1' }, position: { x: 340, y: 180 } },
     { data: { id: '2', label: '2' }, position: { x: 480, y: 350 } },
-    { data: { id: '3', label: '3' }, position: { x: 320, y: 430 } },
+    { data: { id: '3', label: '3' }, position: { x: 320, y: 350 } },
     { data: { id: '4', label: '4' }, position: { x: 180, y: 130 } },
     { data: { id: '5', label: '5' }, position: { x: 150, y: 350 } },
-    { data: { id: '6', label: '6' }, position: { x: 180, y: 500 } },
-    { data: { id: '7', label: '7' }, position: { x: 670, y: 400 } },
+    { data: { id: '6', label: '6' }, position: { x: 180, y: 450 } },
+    { data: { id: '7', label: '7' }, position: { x: 670, y: 370 } },
     { data: { id: '8', label: '8' }, position: { x: 550, y: 160 } },
     { data: { id: '9', label: '9' }, position: { x: 750, y: 130 } },
     { data: { id: '10', label: '10' }, position: { x: 800, y: 280 } },
-    { data: { id: '11', label: '11' }, position: { x: 800, y: 450 } },
-    { data: { id: '12', label: '12' }, position: { x: 400, y: 500 } },
-    { data: { id: '13', label: '13' }, position: { x: 580, y: 500 } },
+    { data: { id: '11', label: '11' }, position: { x: 800, y: 400 } },
+    { data: { id: '12', label: '12' }, position: { x: 400, y: 450 } },
+    { data: { id: '13', label: '13' }, position: { x: 580, y: 450 } },
     { data: { id: '14', label: '14' }, position: { x: 420, y: 110 } },
 
     { data: { id: 'e1', source: '-1', target: '1', weight: 4 } },
@@ -41,7 +41,6 @@ export let start_graph = [
     { data: { id: 'e4', source: '-1', target: '3', weight: 5 } },
     { data: { id: 'e6', source: '1', target: '2', weight: 12 } },
     { data: { id: 'e7', source: '1', target: '8', weight: 4 } },
-    { data: { id: 'e8', source: '2', target: '0', weight: 8 } },
     { data: { id: 'e9', source: '2', target: '7', weight: 2 } },
     { data: { id: 'e10', source: '3', target: '2', weight: 12 } },
     { data: { id: 'e11', source: '4', target: '1', weight: 3 } },
@@ -59,7 +58,7 @@ export let start_graph = [
     { data: { id: 'e23', source: '13', target: '2', weight: 4 } },
     { data: { id: 'e24', source: '14', target: '8', weight: 1 } },
     { data: { id: 'e25', source: '0', target: '8', weight: 4 } },
-    { data: { id: 'e26', source: '0', target: '9', weight: 3 } },
-{ data: { id: 'e27', source: '0', target: '7', weight: 7 } }
+    { data: { id: 'e26', source: '9', target: '0', weight: 7 } },
+    { data: { id: 'e27', source: '0', target: '7', weight: 7 } }
 ]
 

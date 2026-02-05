@@ -296,6 +296,21 @@ export function calculate(json)
     update_graph(cy2, second_graph_list[second_graph_n], false);
 }
 
+export function final_path_or_start(final)
+{
+    if (final) {
+        first_graph_n = first_graph_list.length - 1;
+        second_graph_n = second_graph_list.length - 1;
+        update_graph(cy1, first_graph_list[first_graph_n], false);
+        update_graph(cy2, second_graph_list[second_graph_n], false);
+    } else {
+        first_graph_n = 0;
+        second_graph_n = 0;
+        update_graph(cy1, first_graph_list[first_graph_n], false);
+        update_graph(cy2, second_graph_list[second_graph_n], false);
+    }
+}
+
 export function move(next)
 {
     if (next) {

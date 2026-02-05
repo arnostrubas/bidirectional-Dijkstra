@@ -1,4 +1,4 @@
-import { move, calculate, disableVertexAdding, enableVertexAdding, enableEdgeAdding, disableEdgeAdding, remove_edge, remove_vertex, reset } from './cytoscape_script.js'
+import { final_path_or_start, move, calculate, disableVertexAdding, enableVertexAdding, enableEdgeAdding, disableEdgeAdding, remove_edge, remove_vertex, reset } from './cytoscape_script.js'
 import { create_json_of_graphs } from './JS_json.js'
 
 const startBtn = document.getElementById('start');
@@ -18,6 +18,8 @@ const search_strat1 = document.getElementById('search_strategy_1');
 
 const end_strat2 = document.getElementById('end_strategy_2');
 const search_strat2 = document.getElementById('search_strategy_2');
+
+const move_size = document.getElementById('number_of_steps');
 
 function add_remove_disable() 
 {
@@ -119,7 +121,8 @@ addEdgeCheckBox.addEventListener('click', () => {
 
 nextBtn.addEventListener('click', () => {
     try {
-        move(true);
+        if (move_size.value == 'one_edge') move(true);
+        else final_path_or_start(true);
     }
     catch (error) {
         alert(error.message)
@@ -128,7 +131,8 @@ nextBtn.addEventListener('click', () => {
 
 prevBtn.addEventListener('click', () => {
     try {
-        move(false);
+        if (move_size.value == 'one_edge') move(false);
+        else final_path_or_start(false);
     }
     catch (error) {
         alert(error.message)

@@ -961,13 +961,13 @@ def bidirectional_Dijkstra_11(G, w, s, t):
                     u.state_b = "OPEN"
                     u.pi_b = v
                     Q_b.insert(u)
-                    yield True
+                    yield u.state_f == "OPEN" or u.state_f == "CLOSED"
                 elif u.state_b == "OPEN":
                     if v.d_b + w(u, v) < u.d_b:
                         u.d_b = v.d_b + w(u, v)
                         u.pi_b = v
                         Q_b.update(u) 
-                        yield True
+                        yield u.state_f == "OPEN" or u.state_f == "CLOSED"
                 if (u.state_f == "OPEN" or u.state_f == "CLOSED"):
                     NCPP(G, 1)
                     yield False 

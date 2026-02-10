@@ -35,19 +35,19 @@ export let style = [
     {
         selector: 'node[state_f = "PATH"][state_b = "PATH"]',
         style: {
-            'background-gradient-stop-colors': 'blue blue',
+            'background-gradient-stop-colors': 'green green',
         }
     },
     {
         selector: 'node[state_f = "UNVISITED"][state_b = "OPEN"]',
         style: {
-            'background-gradient-stop-colors': 'gray green', 
+            'background-gradient-stop-colors': 'gray #31c8fa', 
         }
     },
     {
         selector: 'node[state_f = "UNVISITED"][state_b = "CLOSED"]',
         style: {
-            'background-gradient-stop-colors': 'gray purple', 
+            'background-gradient-stop-colors': 'gray #0006a5', 
         }
     },
     {
@@ -59,13 +59,13 @@ export let style = [
     {
         selector: 'node[state_f = "OPEN"][state_b = "OPEN"]',
         style: {
-            'background-gradient-stop-colors': 'orange green', 
+            'background-gradient-stop-colors': 'orange #31c8fa', 
         }
     },
     {
         selector: 'node[state_f = "OPEN"][state_b = "CLOSED"]',
         style: {
-            'background-gradient-stop-colors': 'orange purple', 
+            'background-gradient-stop-colors': 'orange #0006a5', 
         }
     },
     {
@@ -77,13 +77,13 @@ export let style = [
     {
         selector: 'node[state_f = "CLOSED"][state_b = "OPEN"]',
         style: {
-            'background-gradient-stop-colors': 'red green', 
+            'background-gradient-stop-colors': 'red #31c8fa', 
         }
     },
     {
         selector: 'node[state_f = "CLOSED"][state_b = "CLOSED"]',
         style: {
-            'background-gradient-stop-colors': 'red purple', 
+            'background-gradient-stop-colors': 'red #0006a5', 
         }
     },
     {
@@ -121,8 +121,8 @@ export let style = [
     {
         selector: 'edge[state = "PATH"]',
         style: {
-            'line-color': '#2a0ce7',      
-            'target-arrow-color': '#2a0ce7', 
+            'line-color': 'green',      
+            'target-arrow-color': 'green', 
             'width': 4,                    
             'opacity': 1            
         }

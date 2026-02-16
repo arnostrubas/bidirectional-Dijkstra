@@ -27,7 +27,8 @@
 <body>
     <script type="py" src="./scripts/python/code.py"></script>
     <script type="module" src="./scripts/JS/script.js"></script>
-    <div id="adding_removing">
+    <div id="buttons_and_checkboxes">
+        <a href="https://github.com/arnostrubas/bidirectional-Dijsktra/blob/main/README.md">README</a>
         <div class="checkboxes">
             <label>
                 <input type="checkbox" id="add_vertex"> Add vertex (click on empty space)
@@ -44,27 +45,6 @@
                 <input type="checkbox" id="remove_edge"> Remove edge (click on edge)
             </label>
         </div> 
-        <a href="https://github.com/arnostrubas/bidirectional-Dijsktra/blob/main/README.md">README</a>
-    </div>
-    <div id="fill"></div>
-    <div id="above_containers">
-        <div id="strategies_select_1">
-            <div class="strategy_text">Search strategy</div>
-            <select class="select" id="search_strategy_1">
-                <option value="one_vertex">After one vertex</option>
-                <option value="one_edge">After one edge</option>
-                <option value="less_open_vertexes">Less open vertexes</option>
-                <option value="lower_queue_priority">Queue with lower priority</option>
-                <option value="Dijkstra">Dijkstra algorithm</option>
-            </select>
-            <div class="strategy_text">Ending strategy</div>
-            <select class="select" id="end_strategy_1">
-                <option value="same_vertex_closed">Same vertex closed</option>
-                <option value="using_search_distance">Distance of search</option>
-                <option value="first_encounter">First encounter</option>
-                <option value="Dijkstra">Dijkstra algorithm</option>
-            </select>
-        </div>
         <div class="empty"></div>
         <div id="start_reset">
             <button class="main_button" id="start" disabled>Python is loading</button>
@@ -82,23 +62,51 @@
                 <option value="end_result">Only shortest path</option>
             </select>
         </div>
-        <div class="empty"></div>
+    </div>
+    <div id="fill"></div>
+    <div id="above_containers">
+        <div id="strategies_select_1">
+            <div class="selects">
+                <div class="strategy_text">Search strategy</div>
+                <select class="select" id="search_strategy_1">
+                    <option value="one_vertex">After one vertex</option>
+                    <option value="one_edge">After one edge</option>
+                    <option value="less_open_vertexes">Less open vertexes</option>
+                    <option value="lower_queue_priority">Queue with lower priority</option>
+                    <option value="Dijkstra">Dijkstra algorithm</option>
+                </select>
+            </div>
+            <div class="selects">
+                <div class="strategy_text">Ending strategy</div>
+                <select class="select" id="end_strategy_1">
+                    <option value="same_vertex_closed">Same vertex closed</option>
+                    <option value="using_search_distance">Distance of search</option>
+                    <option value="first_encounter">First encounter</option>
+                    <option value="Dijkstra">Dijkstra algorithm</option>
+                </select>
+            </div>  
+        </div>
+        <div id="gap"></div>
         <div id="strategies_select_2">
-            <div class="strategy_text">Search strategy</div>
-            <select class="select" id="search_strategy_2">
-                <option value="one_vertex">After one vertex</option>
-                <option value="one_edge">After one edge</option>
-                <option value="less_open_vertexes">Less open vertexes</option>
-                <option value="lower_queue_priority">Queue with lower priority</option>
-                <option value="Dijkstra" selected>Dijkstra algorithm</option>
-            </select>
-            <div class="strategy_text">Ending strategy</div>
-            <select class="select" id="end_strategy_2">
-                <option value="same_vertex_closed">Same vertex closed</option>
-                <option value="using_search_distance">Distance of search</option>
-                <option value="first_encounter">First encounter</option>
-                <option value="Dijkstra" selected>Dijkstra algorithm</option>
-            </select>
+            <div class="selects">
+                <div class="strategy_text">Search strategy</div>
+                <select class="select" id="search_strategy_2">
+                    <option value="one_vertex">After one vertex</option>
+                    <option value="one_edge">After one edge</option>
+                    <option value="less_open_vertexes">Less open vertexes</option>
+                    <option value="lower_queue_priority">Queue with lower priority</option>
+                    <option value="Dijkstra" selected>Dijkstra algorithm</option>
+                </select>
+            </div>
+            <div class="selects">
+                <div class="strategy_text">Ending strategy</div>
+                <select class="select" id="end_strategy_2">
+                    <option value="same_vertex_closed">Same vertex closed</option>
+                    <option value="using_search_distance">Distance of search</option>
+                    <option value="first_encounter">First encounter</option>
+                    <option value="Dijkstra" selected>Dijkstra algorithm</option>
+                </select>
+            </div>
         </div>
     </div>
     <div id="graph_containers">

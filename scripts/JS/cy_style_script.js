@@ -12,7 +12,7 @@ export let style = [
             'height': '50px',
             'text-valign': 'center',
             'text-halign': 'center',
-            'font-size': '12px',
+            'font-size': '11px',
             'border-width': 2,
             'border-color': '#555',
             'background-opacity': 0.5,
@@ -92,6 +92,13 @@ export let style = [
             'border-width': 4,     
             'border-color': '#2a0ce7',
             'border-opacity': 1
+        }
+    },
+    {
+        selector: 'node[label = "START"], node[label = "TARGET"]',
+        style: {
+            'font-weight': 'bold',
+            'color': '#9f4848',
         }
     },
     {

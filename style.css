@@ -75,9 +75,14 @@ html, body {
 
 #strategies_select_1, #strategies_select_2 {
     display: flex;
+    gap: 10px;
+    width: 50%;
+}
+
+#selects {
+    display: flex;
     flex-direction: column;
-    gap: 5px;
-    width: 15%;
+    width: 50%;
 }
 
 #strategy_text {
@@ -130,9 +135,9 @@ html, body {
 
 #start_reset {
     display: flex;
-    flex-direction: column;
     gap: 10px;
     width: 17%;
+    height: 60%;
 }
 
 .empty {
@@ -140,7 +145,7 @@ html, body {
 }
 
 #middle {
-    width: 6%;
+    width: 3%;
 }
 
 #steps_buttons {
@@ -154,12 +159,12 @@ html, body {
     ADD/REMOVE 
     ====================================================================================
 */
-#adding_removing {
+#buttons_and_checkboxes {
     display: flex;
     flex-direction: row;
     padding: 10px;
     gap: 20px;
-    height: 5%;
+    height: 15%;
 }
 
 .add_remove_button {
@@ -185,4 +190,8 @@ html, body {
 .add_remove_button:disabled {
     background-color: #929292;
     cursor: not-allowed;
+}
+
+#gap {
+    width: 6%;
 }

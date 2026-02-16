@@ -430,7 +430,7 @@ def bidirectional_Dijkstra_3(G, w, s, t):
             v = Q_f.extractMin()
             current_node_f = v
             v.state_f = "CLOSED"
-            if (current_node_b and current_node_f and current_node_f.d_f + current_node_b.d_b > mu):
+            if (current_node_b and current_node_f and current_node_f.d_f + current_node_b.d_b >= mu):
                 NCPP(G, 2, middle_vertex)
                 yield VisualData(queue_f=Q_f, queue_b=Q_b, mu=mu)               # for visualisation purposes
                 return None
@@ -612,7 +612,7 @@ def bidirectional_Dijkstra_6(G, w, s, t):
             v = Q_f.extractMin()
             current_node_f = v
             v.state_f = "CLOSED"
-            if (current_node_b and current_node_f and current_node_f.d_f + current_node_b.d_b > mu):
+            if (current_node_b and current_node_f and current_node_f.d_f + current_node_b.d_b >= mu):
                 NCPP(G, 2, middle_vertex)
                 yield VisualData(queue_f=Q_f, queue_b=Q_b, mu=mu)               # for visualisation purposes
                 return None
@@ -792,7 +792,7 @@ def bidirectional_Dijkstra_9(G, w, s, t):
             v = Q_f.extractMin()
             current_node_f = v
             v.state_f = "CLOSED"
-            if (current_node_b and current_node_f and current_node_f.d_f + current_node_b.d_b > mu):
+            if (current_node_b and current_node_f and current_node_f.d_f + current_node_b.d_b >= mu):
                 NCPP(G, 2, middle_vertex)
                 yield VisualData(queue_f=Q_f, queue_b=Q_b, mu=mu)               # for visualisation purposes
                 return None

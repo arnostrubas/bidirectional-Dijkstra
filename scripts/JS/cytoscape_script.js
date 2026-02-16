@@ -154,6 +154,9 @@ function reset_graphs()
         n.data("state_f","UNVISITED");
         n.data("state_b","UNVISITED");
     });
+    cy1.edges().forEach(e => {
+        e.data("state", "");
+    });
     first_graph_list = [];
     first_graph_q_f = [];
     first_graph_q_b = [];
@@ -162,6 +165,9 @@ function reset_graphs()
     cy2.nodes().forEach(n => {
         n.data("state_f","UNVISITED");
         n.data("state_b","UNVISITED");
+    });
+    cy2.edges().forEach(e => {
+        e.data("state", "");
     });
     second_graph_list = [];
     second_graph_q_f = [];

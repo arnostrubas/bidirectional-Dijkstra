@@ -109,9 +109,9 @@ def graph_to_json(G):
     for node in G.nodes:
         label = str(node.id)
         if(node.id == -1):
-            label = "S"
+            label = "START"
         elif (node.id == 0):
-            label ="T"
+            label ="TARGET"
         nodes.append({
             "data": { 
                 "label": label,

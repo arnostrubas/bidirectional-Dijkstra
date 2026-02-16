@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <title>Bidirectional Dijkstra visualisation</title>
 
-    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
-    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+    <link rel="stylesheet" href="https://pyscript.net/releases/2026.2.1/core.css">
+    <script type="module" src="https://pyscript.net/releases/2026.2.1/core.js"></script>
 
     <link rel="stylesheet" href="style.css">
 
@@ -28,24 +28,22 @@
     <script type="py" src="./scripts/python/code.py"></script>
     <script type="module" src="./scripts/JS/script.js"></script>
     <div id="adding_removing">
-        <div id="checkboxes">
+        <div class="checkboxes">
             <label>
-                <input type="checkbox" id="both_graphs" checked> Add to both graphs (not working yet)
+                <input type="checkbox" id="add_vertex"> Add vertex (click on empty space)
             </label>
-            <div>When unchecked and one graph is updated, stops working</div>
+            <label>
+                <input type="checkbox" id="add_edge"> Add edge (hold & drag from vertex)
+            </label>
         </div>
-        <div id="checkboxes">
+        <div class="checkboxes">
             <label>
-                <input type="checkbox" id="add_vertex"> Vertex adding (click on empty space)
+                <input type="checkbox" id="remove_vertex"> Remove vertex (click on vertex)
             </label>
             <label>
-                <input type="checkbox" id="add_edge"> Edge adding (hold and drag from vertex)
+                <input type="checkbox" id="remove_edge"> Remove edge (click on edge)
             </label>
-        </div>        
-        <button class="add_remove_button" id="remove_vertex">Delete selected vertex</button>
-        <button class="add_remove_button" id="remove_edge">Delete selected edge</button>
-        <div id="python_ready" style="width: 30px; height: 30px; background-color: red; border-radius: 5px;"></div>
-        <div>python ready</div>
+        </div> 
         <a href="https://github.com/arnostrubas/bidirectional-Dijsktra/blob/main/README.md">README</a>
     </div>
     <div id="fill"></div>
@@ -69,7 +67,7 @@
         </div>
         <div class="empty"></div>
         <div id="start_reset">
-            <button class="main_button" id="start" disabled>Start</button>
+            <button class="main_button" id="start" disabled>Python is loading</button>
             <button class="main_button" id="reset" disabled>Reset</button>
         </div>
         <div id="middle"></div>

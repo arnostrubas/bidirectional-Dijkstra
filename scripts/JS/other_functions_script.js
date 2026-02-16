@@ -19,8 +19,8 @@ export function queue_to_text(Q)
         Q.queue.sort((x, y) => x[0] - y[0]).forEach(tuple => {
             let [priority, id] = tuple;
             let label = id.toString();
-            if (id == -1) label = 'S';
-            if (id == 0) label = 'T';
+            if (id == -1) label = 'START';
+            if (id == 0) label = 'TARGET';
             let priorityTxt = toUper(priority);
             text += label + priorityTxt + "   "
         });

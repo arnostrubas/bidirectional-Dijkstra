@@ -1,11 +1,11 @@
 export let graph_for_first_encounter = [
-    { data: { id: '-1', label: 'S'}, position: { x: 120, y: 350 } },
+    { data: { id: '-1', label: 'START'}, position: { x: 120, y: 350 } },
     { data: { id: '1', label: '1'}, position: { x: 150, y: 220 } },
     { data: { id: '2', label: '2'}, position: { x: 280, y: 120 } },
     { data: { id: '3', label: '3'}, position: { x: 400, y: 120 } },
     { data: { id: '4', label: '4'}, position: { x: 450, y: 230 } },
     { data: { id: '5', label: '5'}, position: { x: 550, y: 210 } },
-    { data: { id: '0', label: 'T'}, position: { x: 600, y: 350 } },
+    { data: { id: '0', label: 'TARGET'}, position: { x: 600, y: 350 } },
 
     { data: { id: 'e1', source: '-1', target: '1', weight: 1 } },
     { data: { id: 'e2', source: '-1', target: '0', weight: 1000 } },
@@ -18,8 +18,8 @@ export let graph_for_first_encounter = [
 ];
 
 export let start_graph = [
-    { data: { id: '-1', label: 'S' }, position: { x: 250, y: 250 } },
-    { data: { id: '0', label: 'T' }, position: { x: 650, y: 250 } },
+    { data: { id: '-1', label: 'START' }, position: { x: 250, y: 250 } },
+    { data: { id: '0', label: 'TARGET' }, position: { x: 650, y: 250 } },
     { data: { id: '1', label: '1' }, position: { x: 340, y: 180 } },
     { data: { id: '2', label: '2' }, position: { x: 480, y: 350 } },
     { data: { id: '3', label: '3' }, position: { x: 320, y: 350 } },

@@ -1,4 +1,4 @@
-import { final_path_or_start, move, calculate, disableVertexAdding, enableVertexAdding, enableEdgeAdding, disableEdgeAdding, remove_edge, remove_vertex, reset } from './cytoscape_script.js'
+import { final_path_or_start, move, calculate, disableVertexAdding, enableVertexAdding, enableEdgeAdding, disableEdgeAdding, disableVertexRemoving, enableVertexRemoving, enableEdgeRemoving, disableEdgeRemoving, reset } from './cytoscape_script.js'
 import { create_json_of_graphs } from './JS_json.js'
 
 const startBtn = document.getElementById('start');
@@ -7,9 +7,9 @@ const nextBtn = document.getElementById('next_step');
 const prevBtn = document.getElementById('prev_step')
 
 const addVertexCheckbox = document.getElementById('add_vertex');
-const removeVertexBtn = document.getElementById('remove_vertex');
+const removeVertexCheckbox = document.getElementById('remove_vertex');
 const addEdgeCheckBox = document.getElementById('add_edge');
-const removeEdgeBtn = document.getElementById('remove_edge');
+const removeEdgeCheckbox = document.getElementById('remove_edge');
 
 const bothGraphsCheckBox = document.getElementById('both_graphs');
 
@@ -23,8 +23,8 @@ const move_size = document.getElementById('number_of_steps');
 
 function add_remove_disable() 
 {
-    removeVertexBtn.disabled = true;
-    removeEdgeBtn.disabled = true;
+    removeVertexCheckbox.disabled = true;
+    removeEdgeCheckbox.disabled = true;
 
     addEdgeCheckBox.disabled = true;
     addEdgeCheckBox.checked = false;
@@ -37,8 +37,8 @@ function add_remove_disable()
 
 function add_remove_enable() 
 {
-    removeVertexBtn.disabled = false;
-    removeEdgeBtn.disabled = false;
+    removeVertexCheckbox.disabled = false;
+    removeEdgeCheckbox.disabled = false;
     addEdgeCheckBox.disabled = false;
     addVertexCheckbox.disabled = false;
 }
@@ -88,18 +88,20 @@ addVertexCheckbox.addEventListener('click', () => {
     }
 });
 
-removeVertexBtn.addEventListener('click', () => {
+removeVertexCheckbox.addEventListener('click', () => {
     try {
-        remove_vertex();
+        if (removeVertexCheckbox.checked) enableVertexRemoving();
+        else disableVertexRemoving();
     }
     catch (error) {
         alert(error.message)
     }
 });
 
-removeEdgeBtn.addEventListener('click', () => {
+removeEdgeCheckbox.addEventListener('click', () => {
     try {
-        remove_edge();
+        if (removeEdgeCheckbox.checked) enableEdgeRemoving();
+        else disableEdgeRemoving();
     }
     catch (error) {
         alert(error.message)

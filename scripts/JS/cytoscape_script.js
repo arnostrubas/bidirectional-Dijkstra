@@ -108,6 +108,24 @@ function add_vertex(event)
     }
 }
 
+function remove_vertex() 
+{
+    let selected_vertex1 = cy1.$('node:selected');
+    if (selected_vertex1) remove_from_selected_vertexes(selected_vertex1);
+
+    let selected_vertex2 = cy2.$('node:selected');
+    if (selected_vertex2) remove_from_selected_vertexes(selected_vertex2);
+}
+
+function remove_edge()
+{
+    let selected_edge1 = cy1.$('edge:selected');
+    if (selected_edge1) remove_from_selected_edges(selected_edge1);
+
+    let selected_edge2 = cy2.$('edge:selected');
+    if (selected_edge2) remove_from_selected_edges(selected_edge2);
+}
+
 function clean_data(cy)
 {
     let nodes = cy.nodes().map(node => {
@@ -200,22 +218,16 @@ export function disableVertexAdding()
     cy2.off('tap', add_vertex);
 }
 
-export function remove_vertex() 
+export function enableVertexRemoving()
 {
-    let selected_vertex1 = cy1.$('node:selected');
-    if (selected_vertex1) remove_from_selected_vertexes(selected_vertex1);
-
-    let selected_vertex2 = cy2.$('node:selected');
-    if (selected_vertex2) remove_from_selected_vertexes(selected_vertex2);
+    cy1.on('select', 'node', remove_vertex);
+    cy2.on('select', 'node', remove_vertex);
 }
 
-export function remove_edge()
+export function disableVertexRemoving()
 {
-    let selected_edge1 = cy1.$('edge:selected');
-    if (selected_edge1) remove_from_selected_edges(selected_edge1);
-
-    let selected_edge2 = cy2.$('edge:selected');
-    if (selected_edge2) remove_from_selected_edges(selected_edge2);
+    cy1.off('select', 'node', remove_vertex);
+    cy2.off('select', 'node', remove_vertex);
 }
 
 export function reset() {
@@ -241,6 +253,18 @@ export function enableEdgeAdding() {
 export function disableEdgeAdding() {
     eh1.disableDrawMode();
     eh2.disableDrawMode();
+}
+
+export function enableEdgeRemoving()
+{
+    cy1.on('select', 'edge', remove_edge);
+    cy2.on('select', 'edge', remove_edge);
+}
+
+export function disableEdgeRemoving()
+{
+    cy1.off('select', 'edge', remove_edge);
+    cy2.off('select', 'edge', remove_edge);
 }
 
 export function getcy1Elements() {

@@ -176,9 +176,10 @@ html, body {
     background-color: #80b2e4; 
 }
 
-#checkboxes {
+.checkboxes {
     display: flex;
     flex-direction: column;
+    font-size: large;
 }
 
 .add_remove_button:disabled {

@@ -150,11 +150,19 @@ function clean_data(cy)
 
 function reset_graphs()
 {
+    cy1.nodes().forEach(n => {
+        n.data("state_f","UNVISITED");
+        n.data("state_b","UNVISITED");
+    });
     first_graph_list = [];
     first_graph_q_f = [];
     first_graph_q_b = [];
     first_graph_n = 0;
 
+    cy2.nodes().forEach(n => {
+        n.data("state_f","UNVISITED");
+        n.data("state_b","UNVISITED");
+    });
     second_graph_list = [];
     second_graph_q_f = [];
     second_graph_q_b = [];
@@ -233,15 +241,8 @@ export function disableVertexRemoving()
 export function reset() {
     setText('Qf1_text', "");
     setText('Qb1_text', "");
-    cy1.remove(cy1.elements());
-    cy1.add(first_graph);
-    cy1.fit();
-
     setText('Qf2_text', "");
     setText('Qb2_text', "");
-    cy2.remove(cy2.elements());
-    cy2.add(second_graph);
-    cy2.fit();
     reset_graphs();
 }
 

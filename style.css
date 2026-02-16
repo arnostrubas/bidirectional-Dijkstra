@@ -1,92 +1,55 @@
-/*  ====================================================================================
-    GENERIC - html, body, etc....
-    ====================================================================================
-*/
+
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-}
-
-#fill {
-    height: 10%;
-}
-
-/*  ====================================================================================
-    GRAPH CONTAINERS
-    ====================================================================================
-*/
-#graph_containers {
     display: flex;
-    flex: 1;
-    height: 50%;
-    align-items: center; 
-    justify-content: space-between;
-    padding: 10px;
+    flex-direction: column;
 }
 
-#graph_container1, #graph_container2 {
-    width: 47%;
-    height: 100%;
-    border: 1px solid #000000;
-    box-sizing: border-box;
-}
-
-/*  ====================================================================================
-    QUEUES
-    ====================================================================================
-*/
-#first_queues, #second_queues {
+#buttons_and_checkboxes {
     display: flex;
-    flex: 1;
-    height: 5%;
-    padding: 5px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between; 
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+}
+
+.checkboxes {
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+}
+
+#start_reset {
+    display: flex;
     gap: 10px;
 }
 
-.priority_queue_f, .priority_queue_b {
-    flex: 1;
-    border: 1px solid #000000; 
-    padding: 10px;
-    align-items: center; 
-    justify-content: center;
-    font-family: sans-serif;
-    font-size: 1vw;
-}
-
-#queues {
+#steps {
     display: flex;
-    height: 100%;
-    gap: 5.4%;
-    padding-left: 5px;
-    padding-right: 5px;
+    flex-direction: column;
+    gap: 5px;
 }
 
-/*  ====================================================================================
-    SELECT, START, RESET
-    ====================================================================================
-*/
 #above_containers {
     display: flex;
     flex-direction: row;
-    padding: 10px;
-    gap: 10px;
+    padding: 10px 10px 0 10px;
+    gap: 20px;
 }
 
 #strategies_select_1, #strategies_select_2 {
     display: flex;
-    gap: 10px;
-    width: 50%;
+    flex: 1; 
+    gap: 15px;
 }
 
-#selects {
+.selects {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    width: 50%;
-}
-
-#strategy_text {
-    display: flex;
 }
 
 .select {
@@ -98,14 +61,47 @@ html, body {
     cursor: pointer;
 }
 
-.main_button {
+#graph_containers {
+    display: flex;
     flex: 1;
-    font-size: 1.5vw; 
+    padding: 10px;
+    gap: 20px;
+}
+
+#graph_container1, #graph_container2 {
+    flex: 1; 
+    border: 1px solid #000000;
+    box-sizing: border-box;
+}
+
+#queues {
+    display: flex;
+    padding: 10px;
+    gap: 20px;
+}
+
+#first_queues, #second_queues {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+}
+
+.priority_queue_f, .priority_queue_b {
+    flex: 1;
+    border: 1px solid #000000; 
+    padding: 10px;
+    font-family: sans-serif;
+    font-size: 0.9vw;
+    min-height: 20px;
+}
+
+.main_button {
+    font-size: 1.2vw; 
     background-color: #648cfa;
     cursor: pointer; 
     border: none; 
     border-radius: 5px; 
-    padding: 10px;
+    padding: 10px 15px;
 }
 
 .main_button:hover { 
@@ -115,83 +111,4 @@ html, body {
 .main_button:disabled {
     background-color: #929292;
     cursor: not-allowed;
-}
-
-#steps {
-    display: flex;
-    flex-direction: column;
-    width: 17%;
-}
-
-#number_of_steps {
-    display: flex;
-    height: 48%;
-}
-
-#steps_text {
-    display: flex;
-    height: 20%;
-}
-
-#start_reset {
-    display: flex;
-    gap: 10px;
-    width: 17%;
-    height: 60%;
-}
-
-.empty {
-    width: 15%;
-}
-
-#middle {
-    width: 3%;
-}
-
-#steps_buttons {
-    flex-direction: row;
-    display: flex;
-    gap: 10px;
-    font-size: 1vw;
-}
-
-/*  ====================================================================================
-    ADD/REMOVE 
-    ====================================================================================
-*/
-#buttons_and_checkboxes {
-    display: flex;
-    flex-direction: row;
-    padding: 10px;
-    gap: 20px;
-    height: 15%;
-}
-
-.add_remove_button {
-    width: 15%;
-    font-size: 1vw; 
-    background-color: #7093f3;
-    cursor: pointer; 
-    border: none; 
-    border-radius: 5px; 
-    padding: 10px;
-}
-
-.add_remove_button:hover { 
-    background-color: #80b2e4; 
-}
-
-.checkboxes {
-    display: flex;
-    flex-direction: column;
-    font-size: large;
-}
-
-.add_remove_button:disabled {
-    background-color: #929292;
-    cursor: not-allowed;
-}
-
-#gap {
-    width: 6%;
 }

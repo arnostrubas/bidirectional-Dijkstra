@@ -5,6 +5,5 @@ graphs_init();
 
 window.python_ready = function () 
 {
-    document.getElementById('start').textContent = "Start"
     document.getElementById('start').disabled = false;
 }

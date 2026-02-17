@@ -386,3 +386,15 @@ export function move(next)
         }
     }
 }
+
+export function copy(copy_right_to_left) {
+    if (copy_right_to_left) {
+        cy2.remove(cy2.elements());
+        cy2.add(cy1.elements());
+        cy2.fit();
+    } else {
+        cy1.remove(cy1.elements());
+        cy1.add(cy2.elements());
+        cy1.fit();
+    }
+}

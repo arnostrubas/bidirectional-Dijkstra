@@ -31,23 +31,30 @@
         <a href="https://github.com/arnostrubas/bidirectional-Dijsktra/blob/main/README.md">README</a>
         <div class="checkboxes">
             <label>
-                <input type="checkbox" id="add_vertex"> Add vertex (click on empty space)
+                <input class="checkbox" type="checkbox" id="add_vertex"> Add vertex (click on empty space)
             </label>
             <label>
-                <input type="checkbox" id="add_edge"> Add edge (hold & drag from vertex)
+                <input class="checkbox" type="checkbox" id="add_edge"> Add edge (hold & drag from vertex)
             </label>
         </div>
         <div class="checkboxes">
             <label>
-                <input type="checkbox" id="remove_vertex"> Remove vertex (click on vertex)
+                <input class="checkbox" type="checkbox" id="remove_vertex"> Remove vertex (click on vertex)
             </label>
             <label>
-                <input type="checkbox" id="remove_edge"> Remove edge (click on edge)
+                <input class="checkbox" type="checkbox" id="remove_edge"> Remove edge (click on edge)
             </label>
         </div> 
-        <div id="start_reset">
-            <button class="main_button" id="start" disabled>Python is loading</button>
-            <button class="main_button" id="reset" disabled>Reset</button>
+        <div class="copy">
+            <button class="copy_btn" id="copy_left">Copy left graph to the right</button>
+            <button class="copy_btn" id="copy_right">Copy right graph to the left</button>
+        </div>
+        <div class="empty"></div>
+        <div>
+            <div id="start_reset">
+                <button class="main_button" id="start" disabled>Start</button>
+                <button class="main_button" id="reset" disabled>Reset</button>
+            </div>
         </div>
         <div id="steps">
             <div id="steps_buttons">

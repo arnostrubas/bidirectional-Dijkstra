@@ -15,7 +15,7 @@ let cy1 = cytoscape({
     wheelSensitivity: 0.1
 });
 let eh1 = cy1.edgehandles();
-cy1.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge));
+cy1.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge, cy1));
 let first_graph_list = [];
 let first_graph_n = 0;
 let first_graph_q_f = [];
@@ -29,7 +29,7 @@ let cy2 = cytoscape({
     wheelSensitivity: 0.1
 });
 let eh2 = cy2.edgehandles();
-cy2.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge));
+cy2.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge, cy2));
 let second_graph_list = [];
 let second_graph_n = 0;
 let second_graph_q_f = [];
@@ -41,16 +41,19 @@ let second_graph_q_b = [];
 ==================================================================================
 */
 
-function add_edge(addedEdge) 
+function add_edge(addedEdge, cy) 
 {
     let input = prompt("Zadej váhu hrany (číslo mezi 1 a 999999 včetně):", "1");
     if (input !== null) {
         let weight = Number(input);
-
         if (!isNaN(weight) && weight >= 1 && weight <= 999999) {
+            if (cy.edges(`edge[source = "${addedEdge.source().id()}"][target = "${addedEdge.target().id()}"]`).length > 1) {
+                alert("Cannot create a multigraph");
+                addedEdge.remove();
+            }
             addedEdge.data('weight', weight);
         } else {
-            alert("To není platné číslo!");
+            alert("Not a valid number");
             addedEdge.remove();
         }
     }
@@ -292,9 +295,6 @@ export function getcy2Elements() {
 
 export function calculate(json)
 {
-    first_graph = cy1.elements().clone();
-    second_graph = cy2.elements().clone();
-
     let result = window.run(json);
     const data = JSON.parse(result);
 

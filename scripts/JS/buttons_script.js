@@ -27,7 +27,12 @@ const move_size = document.getElementById('number_of_steps');
 function add_remove_disable() 
 {
     removeVertexCheckbox.disabled = true;
+    removeVertexCheckbox.checked = false;
+    disableVertexRemoving();
+
     removeEdgeCheckbox.disabled = true;
+    removeEdgeCheckbox.checked = false;
+    disableEdgeRemoving();
 
     addEdgeCheckBox.disabled = true;
     addEdgeCheckBox.checked = false;

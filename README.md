@@ -26,7 +26,7 @@ If you encounter any errors during the usage of the app or you have any ideas fo
 3 - part when you can select what version of the algorithm is used
 
     if Dijkstra algorithm is selected in atleast one of the strategies, Dijkstra algorithm is used
-    when not using Dijkstra, these two are used
+    when not using Dijkstra, the two selected strategies are used
 
 4 - Main buttons
 

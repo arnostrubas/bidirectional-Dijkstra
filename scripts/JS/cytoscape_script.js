@@ -16,7 +16,6 @@ let cy1 = cytoscape({
 });
 let eh1 = cy1.edgehandles();
 cy1.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge));
-let first_graph = null;
 let first_graph_list = [];
 let first_graph_n = 0;
 let first_graph_q_f = [];
@@ -31,7 +30,6 @@ let cy2 = cytoscape({
 });
 let eh2 = cy2.edgehandles();
 cy2.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge));
-let second_graph = null;
 let second_graph_list = [];
 let second_graph_n = 0;
 let second_graph_q_f = [];
@@ -205,6 +203,14 @@ function update_graph(cy, elements, animate)
     update_queues();
 }
 
+function unselect()
+{
+    cy1.nodes().unselect();
+    cy2.nodes().unselect();
+    cy1.edges().unselect();
+    cy2.edges().unselect();
+}
+
 /*
 ==================================================================================
                             EXPORT FUNCTIONS
@@ -234,6 +240,7 @@ export function disableVertexAdding()
 
 export function enableVertexRemoving()
 {
+    unselect();
     cy1.on('select', 'node', remove_vertex);
     cy2.on('select', 'node', remove_vertex);
 }
@@ -264,6 +271,7 @@ export function disableEdgeAdding() {
 
 export function enableEdgeRemoving()
 {
+    unselect();
     cy1.on('select', 'edge', remove_edge);
     cy2.on('select', 'edge', remove_edge);
 }

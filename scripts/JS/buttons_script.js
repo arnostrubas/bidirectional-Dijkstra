@@ -26,6 +26,14 @@ const move_size = document.getElementById('number_of_steps');
 
 function add_remove_disable() 
 {
+    
+    startBtn.disabled = true;
+    nextBtn.disabled = false;
+    prevBtn.disabled = false;
+    resetBtn.disabled = false;
+    rightCopyBtn.disabled = true;
+    leftCopyBtn.disabled = true;
+
     removeVertexCheckbox.disabled = true;
     removeVertexCheckbox.checked = false;
     disableVertexRemoving();
@@ -41,19 +49,21 @@ function add_remove_disable()
     addVertexCheckbox.disabled = true;
     addVertexCheckbox.checked = false;
     disableVertexAdding();
-
-    rightCopyBtn.disabled = true;
-    leftCopyBtn.disabled = true;
 }
 
 function add_remove_enable() 
 {
+    resetBtn.disabled = true;
+    nextBtn.disabled = true;
+    prevBtn.disabled = true;
+    startBtn.disabled = false;
+    rightCopyBtn.disabled = false;
+    leftCopyBtn.disabled = false;
+
     removeVertexCheckbox.disabled = false;
     removeEdgeCheckbox.disabled = false;
     addEdgeCheckBox.disabled = false;
     addVertexCheckbox.disabled = false;
-    rightCopyBtn.disabled = false;
-    leftCopyBtn.disabled = false;
 }
 
 // =============================
@@ -67,10 +77,6 @@ startBtn.addEventListener('click', () => {
                 alert("vyberte všechny strategie");
         }
         else {
-            startBtn.disabled = true;
-            nextBtn.disabled = false;
-            prevBtn.disabled = false;
-            resetBtn.disabled = false;
             add_remove_disable();
             let json = create_json_of_graphs(search_strat1, search_strat2, end_strat1, end_strat2);
             calculate(json);
@@ -83,10 +89,6 @@ startBtn.addEventListener('click', () => {
 
 resetBtn.addEventListener('click', () => {
     try {
-        resetBtn.disabled = true;
-        nextBtn.disabled = true;
-        prevBtn.disabled = true;
-        startBtn.disabled = false;
         add_remove_enable();
         reset();
     }

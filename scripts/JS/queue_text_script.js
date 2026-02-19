@@ -11,7 +11,6 @@ export function toUper(num) {
     return num.toString().split('').map(char => uper[char] || char).join('');
 }
 
-
 export function queue_to_text(Q)
 {
     let text = "";

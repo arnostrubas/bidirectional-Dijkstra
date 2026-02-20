@@ -267,7 +267,7 @@ def Dijkstra(G, w, s, t):
     init(G, s)
     Q = Queue()
     Q.insert(s)
-    yield VisualData(queue_f=Q)
+    yield VisualData(queue_f=Q)                         # for visualisation purposes
     while not Q.isEmpty():
         v = Q.extractMin()
         v.state_f = "CLOSED"
@@ -1105,7 +1105,7 @@ def bidirectional_Dijkstra_12(G, w, s, t):
     return None
 #endregion
 
-#region visualisation functions
+#region visualisation functions main
 def visualise_algorithm(G, search, end):
     '''
     visualises algorithm with `search` and `end` strategies on graph `G`

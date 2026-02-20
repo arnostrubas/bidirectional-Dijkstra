@@ -3,7 +3,7 @@ import edgehandles from 'cytoscape-edgehandles';
 cytoscape.use(edgehandles);
 import { layout, style } from './cy_style_script.js';
 import * as graphs from './graphs.js';
-import { setText, update_queues } from './other_functions_script.js'
+import { setText, update_queues } from './queue_text_script.js'
 
 const container1 = document.getElementById('graph_container1');
 const container2 = document.getElementById('graph_container2');

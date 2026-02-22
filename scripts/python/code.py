@@ -9,8 +9,9 @@ class Node:
     '''
     Custom class representing node of the graph.
     '''
-    def __init__(self, id, d_f = None, pi_f = None, state_f = None, d_b = None, pi_b = None, state_b = None):
+    def __init__(self, id, label, d_f = None, pi_f = None, state_f = None, d_b = None, pi_b = None, state_b = None):
         self.id = id
+        self.label = label
         self.d_f = d_f
         self.pi_f = pi_f
         self.state_f = state_f
@@ -93,7 +94,7 @@ class VisualData:
     '''
     class used for the visualisation
     '''
-    def __init__(self, queue_f = Queue(), queue_b = Queue(), mu = 0, text = ""):
+    def __init__(self, text="", queue_f = Queue(), queue_b = Queue(), mu = 0):
         self.queue_f = queue_f
         self.queue_b = queue_b
         self.mu = mu
@@ -223,6 +224,7 @@ def NCPP(G, end, v = None):
             node_on_path(pred)
             if (pred.pi_b): edge_on_path(G, pred.id, pred.pi_b.id)
             pred = pred.pi_b
+        return minimum
     
     "search distance"
     if end == 2:
@@ -268,14 +270,14 @@ def Dijkstra(G, w, s, t):
     init(G, s)
     Q = Queue()
     Q.insert(s)
-    yield VisualData(queue_f=Q)                         # for visualisation purposes
+    yield VisualData("init " + s.label, queue_f=Q)                         # for visualisation purposes
     while not Q.isEmpty():
         v = Q.extractMin()
         v.state_f = "CLOSED"
-        yield VisualData(queue_f=Q)                     # for visualisation purposes
+        yield VisualData("Extracted and closed " + v.label, queue_f=Q)                     # for visualisation purposes
         if (v == t):
             NCPP(G, 0)
-            yield VisualData(queue_f=Q, text="Length of shortest path is " + str(t.d_f))                 # for visualisation purposes
+            yield VisualData("Length of shortest path is " + str(t.d_f), queue_f=Q)                 # for visualisation purposes
             return 
         for u in sorted(G.successors(v), key=lambda node: node.id):
             if u.state_f == "UNVISITED":
@@ -283,13 +285,14 @@ def Dijkstra(G, w, s, t):
                 u.state_f = "OPEN"
                 u.pi_f = v
                 Q.insert(u)
-                yield VisualData(queue_f=Q)             # for visualisation purposes
+                yield VisualData("Added " + u.label + " to priority queue" ,queue_f=Q)             # for visualisation purposes
             elif u.state_f == "OPEN":
                 if v.d_f + w(v, u) < u.d_f:
                     u.d_f = v.d_f + w(v, u)
                     u.pi_f = v
                     Q.update(u) 
-                    yield VisualData(queue_f=Q)         # for visualisation purposes
+                    yield VisualData("Changed priority of " + u.label + " to " + str(u.d_f),queue_f=Q)         # for visualisation purposes
+    yield VisualData("no path found", queue_f=Q)
     return 
 
 def bidirectional_Dijkstra_1(G, w, s, t):
@@ -303,15 +306,16 @@ def bidirectional_Dijkstra_1(G, w, s, t):
     Q_b = Queue(False)
     Q_b.insert(t)
     fwd = True
-    yield VisualData(queue_f=Q_f, queue_b=Q_b)                      # for visualisation purposes
+    yield VisualData("fwd init " + s.label + ", bwd init " + t.label, queue_f=Q_f, queue_b=Q_b)                      # for visualisation purposes
     while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
         if (fwd):
             v = Q_f.extractMin()
             v.state_f = "CLOSED"
-            yield VisualData(queue_f=Q_f, queue_b=Q_b)              # for visualisation purposes
+            yield VisualData("fwd: Extracted and closed " + v.label ,queue_f=Q_f, queue_b=Q_b)              # for visualisation purposes
             if (v.state_b == "CLOSED"):
-                NCPP(G, 1)
-                yield VisualData(queue_f=Q_f, queue_b=Q_b)          # for visualisation purposes
+                yield VisualData(v.label + " is closed in both searches" ,queue_f=Q_f, queue_b=Q_b)          # for visualisation purposes
+                min = NCPP(G, 1)
+                yield VisualData("Length of shortest path is " + str(min) ,queue_f=Q_f, queue_b=Q_b)
                 return                 
             for u in sorted(G.successors(v), key=lambda node: node.id):
                 if u.state_f == "UNVISITED":
@@ -319,37 +323,39 @@ def bidirectional_Dijkstra_1(G, w, s, t):
                     u.state_f = "OPEN"
                     u.pi_f = v
                     Q_f.insert(u)
-                    yield VisualData(queue_f=Q_f, queue_b=Q_b)      # for visualisation purposes
+                    yield VisualData("fwd: Added " + u.label + " to priority queue",queue_f=Q_f, queue_b=Q_b)      # for visualisation purposes
                 elif u.state_f == "OPEN":
                     if v.d_f + w(v, u) < u.d_f:
                         u.d_f = v.d_f + w(v, u)
                         u.pi_f = v
                         Q_f.update(u) 
-                        yield VisualData(queue_f=Q_f, queue_b=Q_b)  # for visualisation purposes
+                        yield VisualData("fwd: Changed priority of " + u.label + " to " + str(u.d_f), queue_f=Q_f, queue_b=Q_b)  # for visualisation purposes
             fwd = not fwd
         else:
             v = Q_b.extractMin()
             v.state_b = "CLOSED"
-            yield VisualData(queue_f=Q_f, queue_b=Q_b)              # for visualisation purposes
+            yield VisualData("bwd: Extracted and closed " + v.label, queue_f=Q_f, queue_b=Q_b)              # for visualisation purposes
             if (v.state_f == "CLOSED"):
-                NCPP(G, 1)
-                yield VisualData(queue_f=Q_f, queue_b=Q_b)
-                return  
+                yield VisualData(v.label + " is closed in both searches" ,queue_f=Q_f, queue_b=Q_b)          # for visualisation purposes
+                min = NCPP(G, 1)
+                yield VisualData("Length of shortest path is " + str(min) ,queue_f=Q_f, queue_b=Q_b)
+                return   
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
                 if u.state_b == "UNVISITED":
                     u.d_b = v.d_b + w(u, v)
                     u.state_b = "OPEN"
                     u.pi_b = v
                     Q_b.insert(u)
-                    yield VisualData(queue_f=Q_f, queue_b=Q_b)     # for visualisation purposes
+                    yield VisualData("bwd: Added " + u.label + " to priority queue",queue_f=Q_f, queue_b=Q_b)     # for visualisation purposes
                 elif u.state_b == "OPEN":
                     if v.d_b + w(u, v) < u.d_b:
                         u.d_b = v.d_b + w(u, v)
                         u.pi_b = v
                         Q_b.update(u) 
-                        yield VisualData(queue_f=Q_f, queue_b=Q_b) # for visualisation purposes
+                        yield VisualData("bwd: Changed priority of " + u.label + " to " + str(u.d_b)) # for visualisation purposes
             fwd = not fwd
-    return
+    yield VisualData("no path found", queue_f=Q_f, queue_b=Q_b)
+    return 
 
 def bidirectional_Dijkstra_2(G, w, s, t):
     """
@@ -362,53 +368,56 @@ def bidirectional_Dijkstra_2(G, w, s, t):
     Q_b = Queue(False)
     Q_b.insert(t)
     fwd = True
-    yield VisualData(queue_f=Q_f, queue_b=Q_b)                          # for visualisation purposes
+    yield VisualData("fwd init " + s.label + ", bwd init " + t.label, queue_f=Q_f, queue_b=Q_b)                                      # for visualisation purposes
     while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
         if (fwd):
             v = Q_f.extractMin()
             v.state_f = "CLOSED"
-            yield VisualData(queue_f=Q_f, queue_b=Q_b)                  # for visualisation purposes               
+            yield VisualData("fwd: Extracted and closed " + v.label, queue_f=Q_f, queue_b=Q_b)                                      # for visualisation purposes               
             for u in sorted(G.successors(v), key=lambda node: node.id):
                 if u.state_f == "UNVISITED":
                     u.d_f = v.d_f + w(v, u)
                     u.state_f = "OPEN"
                     u.pi_f = v
                     Q_f.insert(u)
-                    yield VisualData(queue_f=Q_f, queue_b=Q_b)          # for visualisation purposes
+                    yield VisualData("fwd: Added " + u.label + " to priority queue", queue_f=Q_f, queue_b=Q_b)                      # for visualisation purposes
                 elif u.state_f == "OPEN":
                     if v.d_f + w(v, u) < u.d_f:
                         u.d_f = v.d_f + w(v, u)
                         u.pi_f = v
                         Q_f.update(u) 
-                        yield VisualData(queue_f=Q_f, queue_b=Q_b)      # for visualisation purposes
+                        yield VisualData("fwd: Changed priority of " + u.label + " to " + str(u.d_f), queue_f=Q_f, queue_b=Q_b)     # for visualisation purposes
                 if (u.state_b == "OPEN" or u.state_b == "CLOSED"):
+                    yield VisualData("Both searches encountered " + u.label,queue_f=Q_f, queue_b=Q_b) 
                     NCPP(G, 1)
-                    yield VisualData(queue_f=Q_f, queue_b=Q_b)          # for visualisation purposes
-                    return None
+                    yield VisualData("Length of found path is " + u.d_f + u.b_f, queue_f=Q_f, queue_b=Q_b)                          # for visualisation purposes
+                    return 
             fwd = not fwd
         else:
             v = Q_b.extractMin()
             v.state_b = "CLOSED"
-            yield VisualData(queue_f=Q_f, queue_b=Q_b)                  # for visualisation purposes
+            yield VisualData("bwd: Extracted and closed " + v.label, queue_f=Q_f, queue_b=Q_b)                  # for visualisation purposes
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
                 if u.state_b == "UNVISITED":
                     u.d_b = v.d_b + w(u, v)
                     u.state_b = "OPEN"
                     u.pi_b = v
                     Q_b.insert(u)
-                    yield VisualData(queue_f=Q_f, queue_b=Q_b)          # for visualisation purposes
+                    yield VisualData("bwd: Added " + u.label + " to priority queue", queue_f=Q_f, queue_b=Q_b)          # for visualisation purposes
                 elif u.state_b == "OPEN":
                     if v.d_b + w(u, v) < u.d_b:
                         u.d_b = v.d_b + w(u, v)
                         u.pi_b = v
                         Q_b.update(u) 
-                        yield VisualData(queue_f=Q_f, queue_b=Q_b)      # for visualisation purposes
+                        yield VisualData("bwd: Changed priority of " + u.label + " to " + str(u.d_b), queue_f=Q_f, queue_b=Q_b)      # for visualisation purposes
                 if (u.state_f == "OPEN" or u.state_f == "CLOSED"):
+                    yield VisualData("Both searches encountered " + u.label,queue_f=Q_f, queue_b=Q_b) 
                     NCPP(G, 1)
-                    yield VisualData(queue_f=Q_f, queue_b=Q_b)          # for visualisation purposes
-                    return None
+                    yield VisualData("Length of found path is " + u.d_f + u.b_f, queue_f=Q_f, queue_b=Q_b)          # for visualisation purposes
+                    return 
             fwd = not fwd
-    return None
+    yield VisualData("no path found", queue_f=Q_f, queue_b=Q_b)
+    return 
 
 def bidirectional_Dijkstra_3(G, w, s, t):
     """
@@ -1167,7 +1176,7 @@ def run_algorithm(graph_dict):
 
     G = nx.DiGraph()
     for node in nodes:
-        n = Node(int(node["id"]))
+        n = Node(int(node["id"]), node["label"])
         G.add_node(n)
     for edge in edges:
         u_id = edge["source"]

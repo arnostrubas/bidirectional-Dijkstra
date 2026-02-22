@@ -27,7 +27,7 @@ export function queue_to_text(Q)
     return text
 }
 
-export function update_texts(Qf1, Qb1, Qf2, Qb2, text1, text2)
+export function update_texts(Qf1, Qb1, Qf2, Qb2, text1="", text2="")
 {
     setText('Qf1_text', queue_to_text(Qf1));
     setText('Qb1_text', queue_to_text(Qb1));

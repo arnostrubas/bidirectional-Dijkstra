@@ -133,12 +133,12 @@ function clean_data(cy)
 {
     let nodes = cy.nodes().map(node => {
         return {
+            label: node.data('label'),
             id: node.id(),
         }
     });
     let edges = cy.edges().map(edge => {
         return {
-            label: edge.data('label'),
             id: edge.data('id'),
             source: edge.source().id(),
             target: edge.target().id(),
@@ -208,7 +208,6 @@ function update_graph(cy, elements, animate)
         let changed_edge = cy.$('#' + edge.data.id);
         if (changed_edge.data.state != edge.data.state) changed_edge.data(edge.data);
     });
-    update_texts();
 }
 
 function unselect()
@@ -340,6 +339,10 @@ export function calculate(json)
         second_graph_text.push(data.text);
     });
     update_graph(cy2, second_graph_list[second_graph_n], false);
+
+    update_texts(first_graph_q_f[first_graph_n], first_graph_q_b[first_graph_n],
+                second_graph_q_f[second_graph_n], second_graph_q_b[second_graph_n],
+                first_graph_text[first_graph_n], second_graph_text[second_graph_n]);
 }
 
 export function final_path_or_start(final)
@@ -397,7 +400,7 @@ export function move(next)
             }
             update_texts(first_graph_q_f[first_graph_n], first_graph_q_b[first_graph_n],
                 second_graph_q_f[second_graph_n], second_graph_q_b[second_graph_n],
-                first_graph_text[first_graph_n], second_graph_text[second_graph_text]);
+                first_graph_text[first_graph_n], second_graph_text[second_graph_n]);
         } catch (error) {
             alert(error)
         }

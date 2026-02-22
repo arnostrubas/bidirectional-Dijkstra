@@ -42,7 +42,21 @@ html, body {
     gap: 20px;
 }
 
-#strategies_select_1, #strategies_select_2 {
+.above_containers_part {
+    display: flex;
+    padding: 10px 0px 10px 0px;
+    flex-direction: column;
+    flex: 1;
+    gap: 5px;
+}
+
+.explanation_container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+.strategies_select {
     display: flex;
     flex: 1; 
     gap: 15px;
@@ -64,11 +78,11 @@ html, body {
 }
 
 #explain_text1, #explain_text2 {
-    flex: 1;
     border: 1px solid #000000;
-    font-size: 1vw;
+    font-size: 0.9vw;
     padding: 5px;
     overflow: hidden;
+    height: 20px;
 }
 
 #graph_containers {

@@ -3,7 +3,7 @@ import edgehandles from 'cytoscape-edgehandles';
 cytoscape.use(edgehandles);
 import { layout, style } from './cy_style_script.js';
 import * as graphs from './graphs.js';
-import { setText, update_queues } from './queue_text_script.js'
+import { setText, update_texts } from './queue_text_script.js'
 
 const container1 = document.getElementById('graph_container1');
 const container2 = document.getElementById('graph_container2');
@@ -20,6 +20,7 @@ let first_graph_list = [];
 let first_graph_n = 0;
 let first_graph_q_f = [];
 let first_graph_q_b = [];
+let first_graph_text = [];
 
 
 let cy2 = cytoscape({
@@ -34,6 +35,7 @@ let second_graph_list = [];
 let second_graph_n = 0;
 let second_graph_q_f = [];
 let second_graph_q_b = [];
+let second_graph_text = [];
 
 /* 
 ==================================================================================
@@ -136,6 +138,7 @@ function clean_data(cy)
     });
     let edges = cy.edges().map(edge => {
         return {
+            label: edge.data('label'),
             id: edge.data('id'),
             source: edge.source().id(),
             target: edge.target().id(),
@@ -161,6 +164,7 @@ function reset_graphs()
     first_graph_list = [];
     first_graph_q_f = [];
     first_graph_q_b = [];
+    first_graph_text = [];
     first_graph_n = 0;
 
     cy2.nodes().forEach(n => {
@@ -173,6 +177,7 @@ function reset_graphs()
     second_graph_list = [];
     second_graph_q_f = [];
     second_graph_q_b = [];
+    second_graph_text = [];
     second_graph_n = 0;
 }
 
@@ -203,7 +208,7 @@ function update_graph(cy, elements, animate)
         let changed_edge = cy.$('#' + edge.data.id);
         if (changed_edge.data.state != edge.data.state) changed_edge.data(edge.data);
     });
-    update_queues();
+    update_texts();
 }
 
 function unselect()
@@ -259,6 +264,8 @@ export function reset() {
     setText('Qb1_text', "");
     setText('Qf2_text', "");
     setText('Qb2_text', "");
+    setText('explain_text1', "");
+    setText('explain_text2', "");
     reset_graphs();
 }
 
@@ -311,12 +318,12 @@ export function calculate(json)
         let graph = JSON.parse(data.graph);
         let queue_f = JSON.parse(data.queue_f);
         let queue_b = JSON.parse(data.queue_b);
-        let mu = JSON.parse(data.mu);
         
         let elements = graph.elements;
         first_graph_list.push(elements)
         first_graph_q_f.push(queue_f);
         first_graph_q_b.push(queue_b);
+        first_graph_text.push(data.text);
     });
     update_graph(cy1, first_graph_list[first_graph_n], false);
 
@@ -325,12 +332,12 @@ export function calculate(json)
         let graph = JSON.parse(data.graph);
         let queue_f = JSON.parse(data.queue_f);
         let queue_b = JSON.parse(data.queue_b);
-        let mu = JSON.parse(data.mu);
         
         let elements = graph.elements;
         second_graph_list.push(elements)
         second_graph_q_f.push(queue_f);
         second_graph_q_b.push(queue_b);
+        second_graph_text.push(data.text);
     });
     update_graph(cy2, second_graph_list[second_graph_n], false);
 }
@@ -368,8 +375,9 @@ export function move(next)
                 second_graph_n++;
                 update_graph(cy2, second_graph_list[second_graph_n], true);
             }
-            update_queues(first_graph_q_f[first_graph_n], first_graph_q_b[first_graph_n],
-                second_graph_q_f[second_graph_n], second_graph_q_b[second_graph_n]);
+            update_texts(first_graph_q_f[first_graph_n], first_graph_q_b[first_graph_n],
+                second_graph_q_f[second_graph_n], second_graph_q_b[second_graph_n],
+                first_graph_text[first_graph_n], second_graph_text[second_graph_n]);
         } catch (error) {
             alert(error)
         }
@@ -387,8 +395,9 @@ export function move(next)
                 second_graph_n--;
                 update_graph(cy2, second_graph_list[second_graph_n], false);
             }
-            update_queues(first_graph_q_f[first_graph_n], first_graph_q_b[first_graph_n],
-                second_graph_q_f[second_graph_n], second_graph_q_b[second_graph_n]);
+            update_texts(first_graph_q_f[first_graph_n], first_graph_q_b[first_graph_n],
+                second_graph_q_f[second_graph_n], second_graph_q_b[second_graph_n],
+                first_graph_text[first_graph_n], second_graph_text[second_graph_text]);
         } catch (error) {
             alert(error)
         }

@@ -93,10 +93,11 @@ class VisualData:
     '''
     class used for the visualisation
     '''
-    def __init__(self, queue_f = Queue(), queue_b = Queue(), mu = 0):
+    def __init__(self, queue_f = Queue(), queue_b = Queue(), mu = 0, text = ""):
         self.queue_f = queue_f
         self.queue_b = queue_b
         self.mu = mu
+        self.text = text
 
 #endregion
 
@@ -274,8 +275,8 @@ def Dijkstra(G, w, s, t):
         yield VisualData(queue_f=Q)                     # for visualisation purposes
         if (v == t):
             NCPP(G, 0)
-            yield VisualData(queue_f=Q)                 # for visualisation purposes
-            return
+            yield VisualData(queue_f=Q, text="Length of shortest path is " + str(t.d_f))                 # for visualisation purposes
+            return 
         for u in sorted(G.successors(v), key=lambda node: node.id):
             if u.state_f == "UNVISITED":
                 u.d_f = v.d_f + w(v, u)
@@ -289,7 +290,7 @@ def Dijkstra(G, w, s, t):
                     u.pi_f = v
                     Q.update(u) 
                     yield VisualData(queue_f=Q)         # for visualisation purposes
-    return None
+    return 
 
 def bidirectional_Dijkstra_1(G, w, s, t):
     """
@@ -311,7 +312,7 @@ def bidirectional_Dijkstra_1(G, w, s, t):
             if (v.state_b == "CLOSED"):
                 NCPP(G, 1)
                 yield VisualData(queue_f=Q_f, queue_b=Q_b)          # for visualisation purposes
-                return None                 
+                return                 
             for u in sorted(G.successors(v), key=lambda node: node.id):
                 if u.state_f == "UNVISITED":
                     u.d_f = v.d_f + w(v, u)
@@ -333,7 +334,7 @@ def bidirectional_Dijkstra_1(G, w, s, t):
             if (v.state_f == "CLOSED"):
                 NCPP(G, 1)
                 yield VisualData(queue_f=Q_f, queue_b=Q_b)
-                return None  
+                return  
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
                 if u.state_b == "UNVISITED":
                     u.d_b = v.d_b + w(u, v)
@@ -348,7 +349,7 @@ def bidirectional_Dijkstra_1(G, w, s, t):
                         Q_b.update(u) 
                         yield VisualData(queue_f=Q_f, queue_b=Q_b) # for visualisation purposes
             fwd = not fwd
-    return None
+    return
 
 def bidirectional_Dijkstra_2(G, w, s, t):
     """
@@ -1148,7 +1149,8 @@ def visualise_algorithm(G, search, end):
             "graph": graph_to_json(G),
             "queue_f": queue_to_json(yielded.queue_f),
             "queue_b": queue_to_json(yielded.queue_b),
-            "mu": str(yielded.mu)
+            "mu": str(yielded.mu),
+            "text": yielded.text
         } 
         result.append(json.dumps(data))
     res =  {

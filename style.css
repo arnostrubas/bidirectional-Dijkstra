@@ -63,6 +63,14 @@ html, body {
     cursor: pointer;
 }
 
+#explain_text1, #explain_text2 {
+    flex: 1;
+    border: 1px solid #000000;
+    font-size: 1vw;
+    padding: 5px;
+    overflow: hidden;
+}
+
 #graph_containers {
     display: flex;
     flex: 1;

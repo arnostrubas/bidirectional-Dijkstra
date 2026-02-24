@@ -169,3 +169,22 @@ html, body {
 .empty {
     flex: 0.6;
 }
+
+.fit {
+    display: flex;
+    padding: 10px;
+    flex-direction: column; 
+    gap: 10px;
+}
+
+.fit_btn {
+    background-color: #648cfa;
+    cursor: pointer; 
+    border: none; 
+    border-radius: 5px; 
+    padding: 10px 15px;
+}
+
+.fit_btn:hover { 
+    background-color: #0056b3; 
+}

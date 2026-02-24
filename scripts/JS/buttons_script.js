@@ -1,4 +1,4 @@
-import { copy, final_path_or_start, move, calculate, disableVertexAdding, enableVertexAdding, enableEdgeAdding, disableEdgeAdding, disableVertexRemoving, enableVertexRemoving, enableEdgeRemoving, disableEdgeRemoving, reset } from './cytoscape_script.js'
+import { fit, copy, final_path_or_start, move, calculate, disableVertexAdding, enableVertexAdding, enableEdgeAdding, disableEdgeAdding, disableVertexRemoving, enableVertexRemoving, enableEdgeRemoving, disableEdgeRemoving, reset } from './cytoscape_script.js'
 import { create_json_of_graphs } from './JS_json.js'
 
 const startBtn = document.getElementById('start');
@@ -7,6 +7,8 @@ const nextBtn = document.getElementById('next_step');
 const prevBtn = document.getElementById('prev_step');
 const leftCopyBtn = document.getElementById('copy_left');
 const rightCopyBtn = document.getElementById('copy_right');
+const leftFitBtn = document.getElementById('fit_left');
+const rightFitBtn = document.getElementById('fit_right');
 
 const addVertexCheckbox = document.getElementById('add_vertex');
 const removeVertexCheckbox = document.getElementById('remove_vertex');
@@ -129,6 +131,24 @@ leftCopyBtn.addEventListener('click', () => {
 rightCopyBtn.addEventListener('click', () => {
     try {
         copy(false);
+    }
+    catch (error) {
+        alert(error.message);
+    }
+});
+
+rightFitBtn.addEventListener('click', () => {
+    try {
+        fit(true);
+    }
+    catch (error) {
+        alert(error.message);
+    }
+});
+
+leftFitBtn.addEventListener('click', () => {
+    try {
+        fit(false);
     }
     catch (error) {
         alert(error.message);

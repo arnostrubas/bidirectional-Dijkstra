@@ -418,3 +418,8 @@ export function copy(copy_right_to_left) {
         cy1.fit();
     }
 }
+
+export function fit(fit_right) {
+    if (fit_right) cy2.fit();
+    else cy1.fit();
+}

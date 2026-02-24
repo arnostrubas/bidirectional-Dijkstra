@@ -28,7 +28,6 @@
     <script type="py" src="./scripts/python/code.py"></script>
     <script type="module" src="./scripts/JS/script.js"></script>
     <div id="buttons_and_checkboxes">
-        <a href="https://github.com/arnostrubas/bidirectional-Dijsktra/blob/main/README.md">README</a>
         <div class="checkboxes">
             <label>
                 <input class="checkbox" type="checkbox" id="add_vertex"> Add vertex (click on empty space)
@@ -45,14 +44,8 @@
                 <input class="checkbox" type="checkbox" id="remove_edge"> Remove edge (click on edge)
             </label>
         </div> 
-        <div class="copy">
-            <button class="copy_btn" id="copy_left">Copy left to right</button>
-            <button class="copy_btn" id="copy_right">Copy right to left</button>
-        </div>
-        <div class="fit">
-            <button class="fit_btn" id="fit_left">Fit left</button>
-            <button class="fit_btn" id="fit_right">Fit right</button>
-        </div>
+        <div class="empty"></div>   
+        <a href="https://github.com/arnostrubas/bidirectional-Dijsktra/blob/main/README.md">README</a>
         <div class="empty"></div>
         <div>
             <div id="start_reset">
@@ -61,20 +54,24 @@
             </div>
         </div>
         <div id="steps">
+            <div id="step_size">
+                <div id="steps_text">Select step size</div>
+                <select id="number_of_steps">
+                    <option value="one_edge">1 edge</option>
+                    <option value="end_result">Only shortest path</option>
+                </select>
+            </div>
             <div id="steps_buttons">
                 <button class="main_button" id="prev_step" disabled>Previous step</button>
                 <button class="main_button" id="next_step" disabled>Next step</button>
             </div>
-            <div id="steps_text">Step size</div>
-            <select id="number_of_steps">
-                <option value="one_edge">1 edge</option>
-                <option value="end_result">Only shortest path</option>
-            </select>
         </div>
     </div>
     <div id="above_containers">
         <div class="above_containers_part">
             <div class="strategies_select">
+                <button class="fit_btn" id="fit_left">Fit to container</button>
+                <button class="copy_btn" id="copy_left">Copy from right</button>
                 <div class="selects">
                     <div class="strategy_text">Search strategy</div>
                     <select class="select" id="search_strategy_1">
@@ -121,6 +118,8 @@
                         <option value="Dijkstra" selected>Dijkstra algorithm</option>
                     </select>
                 </div> 
+                <button class="fit_btn" id="fit_right">Fit container</button>
+                <button class="copy_btn" id="copy_right">Copy from left</button>
             </div>
             <div class="explanation_container">
                 <div class="strategy_text">Step explanation</div>

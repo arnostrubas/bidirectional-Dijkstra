@@ -26,9 +26,8 @@ const move_size = document.getElementById('number_of_steps');
 //    ENABLE/DISABLE functions
 // =============================
 
-function add_remove_disable() 
+function btn_disable() 
 {
-    
     startBtn.disabled = true;
     nextBtn.disabled = false;
     prevBtn.disabled = false;
@@ -51,9 +50,14 @@ function add_remove_disable()
     addVertexCheckbox.disabled = true;
     addVertexCheckbox.checked = false;
     disableVertexAdding();
+
+    end_strat1.disabled = true;
+    end_strat2.disabled = true;
+    search_strat1.disabled = true;
+    search_strat2.disabled = true;
 }
 
-function add_remove_enable() 
+function btn_enable() 
 {
     resetBtn.disabled = true;
     nextBtn.disabled = true;
@@ -66,6 +70,11 @@ function add_remove_enable()
     removeEdgeCheckbox.disabled = false;
     addEdgeCheckBox.disabled = false;
     addVertexCheckbox.disabled = false;
+
+    end_strat1.disabled = false;
+    end_strat2.disabled = false;
+    search_strat1.disabled = false;
+    search_strat2.disabled = false;
 }
 
 // =============================
@@ -79,7 +88,7 @@ startBtn.addEventListener('click', () => {
                 alert("vyberte všechny strategie");
         }
         else {
-            add_remove_disable();
+            btn_disable();
             let json = create_json_of_graphs(search_strat1, search_strat2, end_strat1, end_strat2);
             calculate(json);
         }
@@ -91,7 +100,7 @@ startBtn.addEventListener('click', () => {
 
 resetBtn.addEventListener('click', () => {
     try {
-        add_remove_enable();
+        btn_enable();
         reset();
     }
     catch (error) {
@@ -121,7 +130,8 @@ prevBtn.addEventListener('click', () => {
 
 leftCopyBtn.addEventListener('click', () => {
     try {
-        copy(true);
+        const confirm = window.confirm("Do you really want to copy right graph to the left container?");
+        if (confirm) copy(false);
     }
     catch (error) {
         alert(error.message);
@@ -130,7 +140,8 @@ leftCopyBtn.addEventListener('click', () => {
 
 rightCopyBtn.addEventListener('click', () => {
     try {
-        copy(false);
+        const confirm = window.confirm("Do you really want to copy left graph to the right container?");
+        if (confirm) copy(true);
     }
     catch (error) {
         alert(error.message);

@@ -87,14 +87,6 @@ export let style = [
         }
     },
     {
-        selector: 'node:selected',
-        style: {
-            'border-width': 4,     
-            'border-color': '#2a0ce7',
-            'border-opacity': 1
-        }
-    },
-    {
         selector: 'node[label = "START"], node[label = "TARGET"]',
         style: {
             'font-weight': 'bold',
@@ -114,15 +106,6 @@ export let style = [
             'color': '#555',
             'text-background-color': 'white',
             'text-background-opacity': 0.8
-        }
-    },
-    {
-        selector: 'edge:selected',
-        style: {
-            'line-color': '#2a0ce7',      
-            'target-arrow-color': '#2a0ce7', 
-            'width': 4,                    
-            'opacity': 1                   
         }
     },
     {

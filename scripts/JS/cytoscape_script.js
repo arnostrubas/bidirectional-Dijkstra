@@ -352,11 +352,17 @@ export function final_path_or_start(final)
         second_graph_n = second_graph_list.length - 1;
         update_graph(cy1, first_graph_list[first_graph_n], false);
         update_graph(cy2, second_graph_list[second_graph_n], false);
+        update_texts(first_graph_q_f[first_graph_n], first_graph_q_b[first_graph_n],
+                second_graph_q_f[second_graph_n], second_graph_q_b[second_graph_n],
+                first_graph_text[first_graph_n], second_graph_text[second_graph_n]);
     } else {
         first_graph_n = 0;
         second_graph_n = 0;
         update_graph(cy1, first_graph_list[first_graph_n], false);
         update_graph(cy2, second_graph_list[second_graph_n], false);
+        update_texts(first_graph_q_f[first_graph_n], first_graph_q_b[first_graph_n],
+                second_graph_q_f[second_graph_n], second_graph_q_b[second_graph_n],
+                first_graph_text[first_graph_n], second_graph_text[second_graph_n]);
     }
 }
 
@@ -407,8 +413,8 @@ export function move(next)
     }
 }
 
-export function copy(copy_right_to_left) {
-    if (copy_right_to_left) {
+export function copy(copy_left_to_right) {
+    if (copy_left_to_right) {
         cy2.remove(cy2.elements());
         cy2.add(cy1.elements());
         cy2.fit();

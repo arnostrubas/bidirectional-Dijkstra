@@ -366,6 +366,11 @@ export function final_path_or_start(final)
     }
 }
 
+export function cy_export()
+{
+    cy1.jpg();
+}
+
 export function move(next)
 {
     if (next) {

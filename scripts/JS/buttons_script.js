@@ -11,7 +11,8 @@ const leftCopyBtn = document.getElementById('copy_left');
 const rightCopyBtn = document.getElementById('copy_right');
 const leftFitBtn = document.getElementById('fit_left');
 const rightFitBtn = document.getElementById('fit_right');
-const exportBtn = document.getElementById('export');
+const leftExportBtn = document.getElementById('export_left');
+const rightExportBtn = document.getElementById('export_right');
 
 const addVertexCheckbox = document.getElementById('add_vertex');
 const removeVertexCheckbox = document.getElementById('remove_vertex');
@@ -169,9 +170,18 @@ leftFitBtn.addEventListener('click', () => {
     }
 });
 
-exportBtn.addEventListener('click', () => {
+leftExportBtn.addEventListener('click', () => {
     try {
-        cy_export();
+        cy_export(false);
+    }
+    catch (error) {
+        alert(error.message);
+    }
+});
+
+rightExportBtn.addEventListener('click', () => {
+    try {
+        cy_export(true);
     }
     catch (error) {
         alert(error.message);

@@ -366,9 +366,28 @@ export function final_path_or_start(final)
     }
 }
 
-export function cy_export()
+export function cy_export(export_right)
 {
-    cy1.jpg();
+    let jpgData = null;
+    if (export_right) {
+        jpgData = cy2.jpg({
+            full: true,
+            quality: 0.9 
+        });
+    } else {
+        jpgData = cy1.jpg({
+            full: true,
+            quality: 0.9 
+        });
+    }
+
+    const downloadLink = document.createElement('a');
+    downloadLink.href = jpgData;
+    downloadLink.download = 'graph_export.jpg';
+
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
 }
 
 export function move(next)

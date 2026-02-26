@@ -482,3 +482,23 @@ export function fit(fit_right) {
     if (fit_right) cy2.fit();
     else cy1.fit();
 }
+
+export function load_graph(graph_to_load) {
+    let graph = null;
+    if (graph_to_load == 'start_graph') {
+        graph = graphs.start_graph;
+    } else if (graph_to_load == 'first_encounter') {
+        graph = graphs.first_encounter;
+    } else if (graph_to_load == 'path') {
+        graph = graphs.path;
+    } else if (graph_to_load == 'dijkstra_faster') {
+        graph = graphs.dijkstra_faster;
+    } else if (graph_to_load == 'huge_graph') {
+        graph = graphs.huge_graph;
+    }
+    if (graph != null) {
+        cy1.remove(cy1.elements());
+        cy1.add(graph);
+        cy1.fit();
+    }
+}

@@ -1,22 +1,3 @@
-export let first_encounter = [
-    { data: { id: '-1', label: 'START'}, position: { x: 120, y: 350 } },
-    { data: { id: '1', label: '1'}, position: { x: 150, y: 220 } },
-    { data: { id: '2', label: '2'}, position: { x: 280, y: 120 } },
-    { data: { id: '3', label: '3'}, position: { x: 400, y: 120 } },
-    { data: { id: '4', label: '4'}, position: { x: 450, y: 230 } },
-    { data: { id: '5', label: '5'}, position: { x: 550, y: 210 } },
-    { data: { id: '0', label: 'TARGET'}, position: { x: 600, y: 350 } },
-
-    { data: { id: 'e1', source: '-1', target: '1', weight: 1 } },
-    { data: { id: 'e2', source: '-1', target: '0', weight: 1000 } },
-    { data: { id: 'e3', source: '-1', target: '4', weight: 40 } },
-    { data: { id: 'e4', source: '1', target: '2', weight: 1 } },
-    { data: { id: 'e5', source: '2', target: '3', weight: 1 } },
-    { data: { id: 'e6', source: '3', target: '4', weight: 1 } },
-    { data: { id: 'e7', source: '4', target: '5', weight: 1 } },
-    { data: { id: 'e8', source: '5', target: '0', weight: 1 } },
-];
-
 export let start_graph = [
     { data: { id: '-1', label: 'START' }, position: { x: 250, y: 250 } },
     { data: { id: '0', label: 'TARGET' }, position: { x: 650, y: 250 } },
@@ -62,34 +43,61 @@ export let start_graph = [
     { data: { id: 'e27', source: '0', target: '7', weight: 7 } }
 ]
 
+export let first_encounter = [
+    { data: { id: '-1', label: 'START'}, position: { x: 120, y: 350 } },
+    { data: { id: '1', label: '1'}, position: { x: 150, y: 220 } },
+    { data: { id: '2', label: '2'}, position: { x: 280, y: 120 } },
+    { data: { id: '3', label: '3'}, position: { x: 400, y: 120 } },
+    { data: { id: '4', label: '4'}, position: { x: 450, y: 230 } },
+    { data: { id: '5', label: '5'}, position: { x: 550, y: 210 } },
+    { data: { id: '0', label: 'TARGET'}, position: { x: 600, y: 350 } },
+
+    { data: { id: 'e1', source: '-1', target: '1', weight: 1 } },
+    { data: { id: 'e2', source: '-1', target: '0', weight: 1000 } },
+    { data: { id: 'e3', source: '-1', target: '4', weight: 40 } },
+    { data: { id: 'e4', source: '1', target: '2', weight: 1 } },
+    { data: { id: 'e5', source: '2', target: '3', weight: 1 } },
+    { data: { id: 'e6', source: '3', target: '4', weight: 1 } },
+    { data: { id: 'e7', source: '4', target: '5', weight: 1 } },
+    { data: { id: 'e8', source: '5', target: '0', weight: 1 } },
+];
+
 export let path = [
     { data: { id: '-1', label: 'START' }, position: { x: 159, y: 237 } },
     { data: { id: '0', label: 'TARGET' }, position: { x: 701, y: 234 } },
-    { data: { id: '1', label: '1' }, position: { x: 316, y: 180 } },
-    { data: { id: '2', label: '2' }, position: { x: 403, y: 287 } },
-    { data: { id: '3', label: '3' }, position: { x: 540, y: 208 } },
+    { data: { id: '1', label: '1' }, position: { x: 306, y: 119 } },
+    { data: { id: '2', label: '2' }, position: { x: 243, y: 352 } },
+    { data: { id: '3', label: '3' }, position: { x: 412, y: 230 } },
+    { data: { id: '4', label: '4' }, position: { x: 420, y: 356 } },
+    { data: { id: '5', label: '5' }, position: { x: 542, y: 105 } },
+    { data: { id: '6', label: '6' }, position: { x: 608, y: 199 } },
+    { data: { id: '7', label: '7' }, position: { x: 554, y: 334 } },
 
     { data: { id: 'e1', source: '-1', target: '1', weight: 5 } },
-    { data: { id: 'e2', source: '3', target: '0', weight: 2 } },
+    { data: { id: 'e2', source: '1', target: '2', weight: 4 } },
     { data: { id: 'e3', source: '2', target: '3', weight: 8 } },
-    { data: { id: 'e4', source: '1', target: '2', weight: 4 } }
+    { data: { id: 'e4', source: '3', target: '4', weight: 5 } },
+    { data: { id: 'e5', source: '4', target: '5', weight: 2 } },
+    { data: { id: 'e6', source: '5', target: '6', weight: 3 } },
+    { data: { id: 'e7', source: '6', target: '7', weight: 7 } },
+    { data: { id: 'e8', source: '7', target: '0', weight: 2 } }
 ]
 
 export let dijkstra_faster = [
     { data: { id: '-1', label: 'START' }, position: { x: 192, y: 254 } },
-    { data: { id: '0', label: 'TARGET' }, position: { x: 650, y: 250 } },
-    { data: { id: '1', label: '1' }, position: { x: 278, y: 139 } },
-    { data: { id: '2', label: '2' }, position: { x: 389, y: 262 } },
-    { data: { id: '3', label: '3' }, position: { x: 391, y: 152 } },
-    { data: { id: '4', label: '4' }, position: { x: 571, y: 137 } },
-    { data: { id: '5', label: '5' }, position: { x: 699, y: 96 } },
-    { data: { id: '6', label: '6' }, position: { x: 785, y: 210 } },
-    { data: { id: '7', label: '7' }, position: { x: 798, y: 359 } },
+    { data: { id: '0', label: 'TARGET' }, position: { x: 616, y: 244 } },
+    { data: { id: '1', label: '1' }, position: { x: 240, y: 145 } },
+    { data: { id: '2', label: '2' }, position: { x: 241, y: 447 } },
+    { data: { id: '3', label: '3' }, position: { x: 369, y: 112 } },
+    { data: { id: '4', label: '4' }, position: { x: 537, y: 98 } },
+    { data: { id: '5', label: '5' }, position: { x: 761, y: 98 } },
+    { data: { id: '6', label: '6' }, position: { x: 779, y: 259 } },
     { data: { id: '8', label: '8' }, position: { x: 777, y: 461 } },
-    { data: { id: '9', label: '9' }, position: { x: 510, y: 445 } },
-    { data: { id: '10', label: '10' }, position: { x: 650, y: 388 } },
-    { data: { id: '11', label: '11' }, position: { x: 528, y: 246 } },
+    { data: { id: '9', label: '9' }, position: { x: 403, y: 455 } },
+    { data: { id: '10', label: '10' }, position: { x: 625, y: 398 } },
+    { data: { id: '11', label: '11' }, position: { x: 425, y: 253 } },
 
+    { data: { id: 'e18', source: '5', target: '4', weight: 4 } },
     { data: { id: 'e1', source: '-1', target: '1', weight: 2 } },
     { data: { id: 'e2', source: '1', target: '3', weight: 5 } },
     { data: { id: 'e3', source: '-1', target: '2', weight: 8 } },
@@ -99,16 +107,14 @@ export let dijkstra_faster = [
     { data: { id: 'e7', source: '11', target: '0', weight: 7 } },
     { data: { id: 'e8', source: '10', target: '0', weight: 2 } },
     { data: { id: 'e9', source: '8', target: '0', weight: 6 } },
-    { data: { id: 'e10', source: '7', target: '0', weight: 4 } },
+    { data: { id: 'e19', source: '5', target: '6', weight: 6 } },
     { data: { id: 'e11', source: '6', target: '0', weight: 5 } },
     { data: { id: 'e12', source: '4', target: '0', weight: 6 } },
     { data: { id: 'e13', source: '0', target: '5', weight: 4 } },
     { data: { id: 'e14', source: '0', target: '9', weight: 3 } },
     { data: { id: 'e15', source: '9', target: '8', weight: 4 } },
     { data: { id: 'e16', source: '10', target: '9', weight: 5 } },
-    { data: { id: 'e17', source: '11', target: '9', weight: 8 } },
-    { data: { id: 'e18', source: '5', target: '4', weight: 4 } },
-    { data: { id: 'e19', source: '5', target: '6', weight: 6 } }
+    { data: { id: 'e17', source: '11', target: '9', weight: 8 } }
 ]
 
 export let huge_graph = [

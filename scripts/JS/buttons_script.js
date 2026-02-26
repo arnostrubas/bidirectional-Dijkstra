@@ -1,4 +1,4 @@
-import { data_export, cy_export, fit, copy, final_path_or_start, move, calculate, reset,
+import { load_graph, data_export, cy_export, fit, copy, final_path_or_start, move, calculate, reset,
     disableVertexAdding, enableVertexAdding, enableEdgeAdding, disableEdgeAdding, 
     disableVertexRemoving, enableVertexRemoving, enableEdgeRemoving, disableEdgeRemoving } from './cytoscape_script.js'
 import { create_json_of_graphs } from './JS_json.js'
@@ -24,6 +24,7 @@ const end_strat1 = document.getElementById('end_strategy_1');
 const search_strat1 = document.getElementById('search_strategy_1');
 const end_strat2 = document.getElementById('end_strategy_2');
 const search_strat2 = document.getElementById('search_strategy_2');
+const load_graph_select = document.getElementById('load_graph');
 
 const move_size = document.getElementById('number_of_steps');
 
@@ -239,6 +240,15 @@ addEdgeCheckBox.addEventListener('click', () => {
         } else {
             disableEdgeAdding();
         }
+    }
+    catch (error) {
+        alert(error.message);
+    }
+});
+
+load_graph_select.addEventListener('change', () => {
+    try {
+        load_graph(load_graph_select.value);
     }
     catch (error) {
         alert(error.message);

@@ -849,7 +849,7 @@ def bidirectional_Dijkstra_9(G, w, s, t):
             v = Q_b.extractMin()
             current_node_b = v
             v.state_b = "CLOSED"
-            if (current_node_f.d_f + current_node_b.d_b > mu):
+            if (current_node_f.d_f + current_node_b.d_b >= mu):
                 NCPP(G, 2, middle_vertex)
                 yield VisualData(queue_f=Q_f, queue_b=Q_b, mu=mu)                # for visualisation purposes
                 return None
@@ -979,13 +979,13 @@ def bidirectional_Dijkstra_11(G, w, s, t):
                     u.state_f = "OPEN"
                     u.pi_f = v
                     Q_f.insert(u)
-                    yield (not (u.state_f == "OPEN" or u.state_f == "CLOSED"), "fwd: Added " + u.label + " to priority queue")
+                    yield (not (u.state_b == "OPEN" or u.state_b == "CLOSED"), "fwd: Added " + u.label + " to priority queue")
                 elif u.state_f == "OPEN":
                     if v.d_f + w(v, u) < u.d_f:
                         u.d_f = v.d_f + w(v, u)
                         u.pi_f = v
                         Q_f.update(u) 
-                        yield (not (u.state_f == "OPEN" or u.state_f == "CLOSED"), "bwd: Changed priority of " + u.label + " to " + str(u.d_f),)
+                        yield (not (u.state_b == "OPEN" or u.state_b == "CLOSED"), "bwd: Changed priority of " + u.label + " to " + str(u.d_f),)
                 if (u.state_b == "OPEN" or u.state_b == "CLOSED"):
                     yield (False, "Both searches encountered " + u.label) 
                     NCPP(G, 1)

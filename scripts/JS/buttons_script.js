@@ -1,4 +1,4 @@
-import { load_graph, data_export, cy_export, fit, copy, final_path_or_start, move, calculate, reset,
+import { load_graph, cy_export, fit, copy, final_path_or_start, move, calculate, reset,
     disableVertexAdding, enableVertexAdding, enableEdgeAdding, disableEdgeAdding, 
     disableVertexRemoving, enableVertexRemoving, enableEdgeRemoving, disableEdgeRemoving } from './cytoscape_script.js'
 import { create_json_of_graphs } from './JS_json.js'
@@ -13,7 +13,6 @@ const leftFitBtn = document.getElementById('fit_left');
 const rightFitBtn = document.getElementById('fit_right');
 const leftExportBtn = document.getElementById('export_left');
 const rightExportBtn = document.getElementById('export_right');
-const rightDataExportBtn = document.getElementById('export_data_right');
 
 const addVertexCheckbox = document.getElementById('add_vertex');
 const removeVertexCheckbox = document.getElementById('remove_vertex');
@@ -189,15 +188,6 @@ rightExportBtn.addEventListener('click', () => {
         alert(error.message);
     }
 });
-
-rightDataExportBtn.addEventListener('click', () => {
-    try {
-        data_export();
-    }
-    catch (error) {
-        alert(error.message);
-    }
-})
 
 // =============================
 //          CHECKBOXES

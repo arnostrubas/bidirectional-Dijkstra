@@ -80,7 +80,7 @@ function find_new_vertex_id(cy)
 function remove_from_selected_vertexes(cy)
 {
     cy.forEach(v => {
-        if (v.id() === '0' || v.id() === '-1') alert("Nelze odstranit počáteční/koncový vrchol");
+        if (v.id() === '0' || v.id() === '-1') alert("Cannot remove START/TARGET vertex");
         else {
             v.remove();
         }
@@ -390,33 +390,6 @@ export function cy_export(export_right)
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
-}
-
-export function data_export()
-{
-    let data = clean_data(cy1); 
-
-    // 2. Převod objektu na formátovaný JSON řetězec
-    const jsonString = JSON.stringify(data); 
-
-    // 3. Vytvoření Blobu (souboru v paměti prohlížeče)
-    const blob = new Blob([jsonString], { type: 'application/json' });
-
-    // 4. Vytvoření dočasné URL pro tento Blob
-    const url = URL.createObjectURL(blob);
-
-    // 5. Vytvoření stahovacího odkazu
-    const downloadLink = document.createElement('a');
-    downloadLink.href = url;
-    downloadLink.download = 'export.json'; // Změnil jsem příponu na .json
-
-    // 6. Simulace kliknutí a vyčištění
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    
-    // 7. Důležité: uvolnění paměti a odstranění odkazu
-    document.body.removeChild(downloadLink);
-    URL.revokeObjectURL(url);
 }
 
 export function move(next)

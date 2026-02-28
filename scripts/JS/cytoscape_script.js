@@ -1,5 +1,5 @@
-import cytoscape from 'cytoscape';
-import edgehandles from 'cytoscape-edgehandles';
+import cytoscape from 'https://esm.sh/cytoscape@3.28.1';
+import edgehandles from 'https://esm.sh/cytoscape-edgehandles@4.0.1';
 cytoscape.use(edgehandles);
 import { layout, style } from './cy_style_script.js';
 import * as graphs from './graphs.js';

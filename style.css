@@ -84,10 +84,10 @@ html, body {
 
 #explain_text1, #explain_text2 {
     border: 1px solid #000000;
-    font-size: 0.9vw;
+    font-size: 1.2vw;
     padding: 5px;
     overflow: hidden;
-    height: 20px;
+    height: 30px;
 }
 
 #graph_containers {
@@ -193,8 +193,6 @@ html, body {
 }
 
 .export_btn {
-    margin-top: auto;
-    height: 70%;
     background-color: #648cfa;
     cursor: pointer; 
     border: none; 
@@ -204,4 +202,10 @@ html, body {
 
 .export_btn:hover { 
     background-color: #0056b3; 
+}
+
+.export_change_buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }

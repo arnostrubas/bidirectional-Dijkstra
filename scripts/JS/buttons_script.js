@@ -23,7 +23,8 @@ const end_strat1 = document.getElementById('end_strategy_1');
 const search_strat1 = document.getElementById('search_strategy_1');
 const end_strat2 = document.getElementById('end_strategy_2');
 const search_strat2 = document.getElementById('search_strategy_2');
-const load_graph_select = document.getElementById('load_graph');
+const load_graph_left = document.getElementById('load_graph_left');
+const load_graph_right = document.getElementById('load_graph_right');
 
 const move_size = document.getElementById('number_of_steps');
 
@@ -236,9 +237,18 @@ addEdgeCheckBox.addEventListener('click', () => {
     }
 });
 
-load_graph_select.addEventListener('change', () => {
+load_graph_left.addEventListener('change', () => {
     try {
-        load_graph(load_graph_select.value);
+        load_graph(load_graph_left.value, false);
+    }
+    catch (error) {
+        alert(error.message);
+    }
+});
+
+load_graph_right.addEventListener('change', () => {
+    try {
+        load_graph(load_graph_right.value, true);
     }
     catch (error) {
         alert(error.message);

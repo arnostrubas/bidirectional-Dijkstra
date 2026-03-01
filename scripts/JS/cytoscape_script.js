@@ -456,8 +456,11 @@ export function fit(fit_right) {
     else cy1.fit();
 }
 
-export function load_graph(graph_to_load) {
+export function load_graph(graph_to_load, right_load) {
     let graph = null;
+    let cy = null;
+    if (right_load) cy = cy2;
+    else cy = cy1;
     if (graph_to_load == 'start_graph') {
         graph = graphs.start_graph;
     } else if (graph_to_load == 'first_encounter') {
@@ -470,8 +473,8 @@ export function load_graph(graph_to_load) {
         graph = graphs.huge_graph;
     }
     if (graph != null) {
-        cy1.remove(cy1.elements());
-        cy1.add(graph);
-        cy1.fit();
+        cy.remove(cy.elements());
+        cy.add(graph);
+        cy.fit();
     }
 }

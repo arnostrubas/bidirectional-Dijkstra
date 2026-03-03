@@ -224,6 +224,39 @@ function unselect()
     cy2.edges().unselect();
 }
 
+function switch_vertexes(cy, old_id, new_id)
+{
+    let old_vertex = cy.getElementById(old_id);
+    let new_vertex = cy.getElementById(new_id);
+    if (old_vertex.length <= 0 || new_vertex.length <= 0) alert("Invalid input/Vertex with that index doesnt exist!")
+    else {
+        let temp_position = { ...old_vertex.position() };
+        old_vertex.position(new_vertex.position());
+        new_vertex.position(temp_position);
+        cy.edges().forEach(edge => {
+            let data = edge.data();
+            let changing = false;
+            if (edge.source().id() == old_id) {
+                data.source = new_id;
+                changing = true;
+            } else if (edge.source().id() == new_id) {
+                data.source = old_id;
+                changing = true;
+            } else if (edge.target().id() == old_id) {
+                data.target = new_id;
+                changing = true;
+            } else if (edge.target().id() == new_id) {
+                data.target = old_id;
+                changing = true;
+            }
+            if (changing) {
+                cy.remove(edge);
+                cy.add( {data: data} );
+            }
+        });
+    }
+}
+
 /*
 ==================================================================================
                             EXPORT FUNCTIONS
@@ -297,12 +330,9 @@ export function disableEdgeRemoving()
     cy2.off('select', 'edge', remove_edge);
 }
 
-export function getcy1Elements() {
-    return clean_data(cy1);
-}
-
-export function getcy2Elements() {
-    return clean_data(cy2);
+export function getcyElements(getcy1) {
+    if (getcy1) return clean_data(cy1);
+    else return clean_data(cy2);
 }
 
 export function calculate(json)
@@ -480,5 +510,24 @@ export function load_graph(graph_to_load, right_load) {
         cy.remove(cy.elements());
         cy.add(graph);
         cy.fit();
+    }
+}
+
+export function start_target_change(is_start, change_right)
+{
+    let cy = cy1;
+    let txt = "TARGET";
+    let old_index = 0;
+    if (is_start) {
+        txt = "START";
+        old_index = -1;
+    } 
+    if (change_right) {
+        cy = cy2;
+    }
+    let input = prompt("Enter id of vertex to become " + txt, "1");
+    if (input !== null) {
+        let index = Number(input);
+        if (index && index > 0) switch_vertexes(cy, old_index, index);
     }
 }

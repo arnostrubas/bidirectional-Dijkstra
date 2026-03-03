@@ -7,22 +7,28 @@ const startBtn = document.getElementById('start');
 const resetBtn = document.getElementById('reset');
 const nextBtn = document.getElementById('next_step');
 const prevBtn = document.getElementById('prev_step');
+
 const leftCopyBtn = document.getElementById('copy_left');
 const rightCopyBtn = document.getElementById('copy_right');
 const leftFitBtn = document.getElementById('fit_left');
 const rightFitBtn = document.getElementById('fit_right');
-const leftExportBtn = document.getElementById('export_left');
-const rightExportBtn = document.getElementById('export_right');
+
+const leftExportImageBtn = document.getElementById('export_image_left');
+const rightExportImageBtn = document.getElementById('export_image_right');
+const leftExportDataBtn = document.getElementById('export_data_left');
+const rightExportDataBtn = document.getElementById('export_data_right');
+const leftImportDataBtn = document.getElementById('import_data_left');
+const rightImportDataBtn = document.getElementById('import_data_right');
 
 const addVertexCheckbox = document.getElementById('add_vertex');
 const removeVertexCheckbox = document.getElementById('remove_vertex');
 const addEdgeCheckBox = document.getElementById('add_edge');
 const removeEdgeCheckbox = document.getElementById('remove_edge');
 
-const end_strat1 = document.getElementById('end_strategy_1');
-const search_strat1 = document.getElementById('search_strategy_1');
-const end_strat2 = document.getElementById('end_strategy_2');
-const search_strat2 = document.getElementById('search_strategy_2');
+const end_strat_left = document.getElementById('end_strategy_left');
+const search_strat_left = document.getElementById('search_strategy_left');
+const end_strat_right = document.getElementById('end_strategy_right');
+const search_strat_right = document.getElementById('search_strategy_right');
 const load_graph_left = document.getElementById('load_graph_left');
 const load_graph_right = document.getElementById('load_graph_right');
 
@@ -57,10 +63,17 @@ function btn_disable()
     addVertexCheckbox.checked = false;
     disableVertexAdding();
 
-    end_strat1.disabled = true;
-    end_strat2.disabled = true;
-    search_strat1.disabled = true;
-    search_strat2.disabled = true;
+    end_strat_left.disabled = true;
+    end_strat_right.disabled = true;
+    search_strat_left.disabled = true;
+    search_strat_right.disabled = true;
+    load_graph_left.disabled = true;
+    load_graph_right.disabled = true;
+
+    leftExportDataBtn.disabled = true;
+    leftImportDataBtn.disabled = true;
+    rightExportDataBtn.disabled = true;
+    rightImportDataBtn.disabled = true;
 }
 
 function btn_enable() 
@@ -77,10 +90,17 @@ function btn_enable()
     addEdgeCheckBox.disabled = false;
     addVertexCheckbox.disabled = false;
 
-    end_strat1.disabled = false;
-    end_strat2.disabled = false;
-    search_strat1.disabled = false;
-    search_strat2.disabled = false;
+    end_strat_left.disabled = false;
+    end_strat_right.disabled = false;
+    search_strat_left.disabled = false;
+    search_strat_right.disabled = false;
+    load_graph_left.disabled = true;
+    load_graph_right.disabled = true;
+
+    leftExportDataBtn.disabled = false;
+    leftImportDataBtn.disabled = false;
+    rightExportDataBtn.disabled = false;
+    rightImportDataBtn.disabled = false;
 }
 
 // =============================
@@ -89,13 +109,13 @@ function btn_enable()
 
 startBtn.addEventListener('click', () => {
     try { 
-        if (search_strat1.value === 'default' || search_strat2.value === 'default' ||
-            end_strat1.value === 'default' || end_strat2.value === 'default') {
+        if (search_strat_left.value === 'default' || search_strat_right.value === 'default' ||
+            end_strat_left.value === 'default' || end_strat_right.value === 'default') {
                 alert("vyberte všechny strategie");
         }
         else {
             btn_disable();
-            let json = create_json_of_graphs(search_strat1, search_strat2, end_strat1, end_strat2);
+            let json = create_json_of_graphs(search_strat_left, search_strat_right, end_strat_left, end_strat_right);
             calculate(json);
         }
     }
@@ -172,7 +192,7 @@ leftFitBtn.addEventListener('click', () => {
     }
 });
 
-leftExportBtn.addEventListener('click', () => {
+leftExportImageBtn.addEventListener('click', () => {
     try {
         cy_export(false);
     }
@@ -181,7 +201,7 @@ leftExportBtn.addEventListener('click', () => {
     }
 });
 
-rightExportBtn.addEventListener('click', () => {
+rightExportImageBtn.addEventListener('click', () => {
     try {
         cy_export(true);
     }

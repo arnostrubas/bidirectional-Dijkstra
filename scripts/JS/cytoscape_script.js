@@ -12,7 +12,9 @@ let cy1 = cytoscape({
     container: container1,
     layout: layout,
     style: style,
-    wheelSensitivity: 0.1
+    wheelSensitivity: 0.1,
+    minZoom: 0.4,
+    maxZoom: 3.0,
 });
 let eh1 = cy1.edgehandles();
 cy1.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge, cy1));
@@ -27,7 +29,9 @@ let cy2 = cytoscape({
     container: container2,
     layout: layout,
     style: style,
-    wheelSensitivity: 0.1
+    wheelSensitivity: 0.1,
+    minZoom: 0.4,
+    maxZoom: 3.0,
 });
 let eh2 = cy2.edgehandles();
 cy2.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge, cy2));

@@ -78,6 +78,11 @@ function btn_disable()
     leftImportDataBtn.disabled = true;
     rightExportDataBtn.disabled = true;
     rightImportDataBtn.disabled = true;
+
+    leftChangeStartBtn.disabled = true;
+    rightChangeStartBtn.disabled = true;
+    leftChangeTargetBtn.disabled = true;
+    rightChangeTargetBtn.disabled = true;
 }
 
 function btn_enable() 
@@ -105,6 +110,11 @@ function btn_enable()
     leftImportDataBtn.disabled = false;
     rightExportDataBtn.disabled = false;
     rightImportDataBtn.disabled = false;
+    
+    leftChangeStartBtn.disabled = false;
+    rightChangeStartBtn.disabled = false;
+    leftChangeTargetBtn.disabled = false;
+    rightChangeTargetBtn.disabled = false;
 }
 
 // =============================

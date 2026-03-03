@@ -462,15 +462,15 @@ export function load_graph(graph_to_load, right_load) {
     if (right_load) cy = cy2;
     else cy = cy1;
     if (graph_to_load == 'start_graph') {
-        graph = graphs.start_graph;
+        graph = JSON.parse(JSON.stringify(graphs.start_graph));
     } else if (graph_to_load == 'first_encounter') {
-        graph = graphs.first_encounter;
+        graph = JSON.parse(JSON.stringify(graphs.first_encounter));
     } else if (graph_to_load == 'path') {
-        graph = graphs.path;
+        graph = JSON.parse(JSON.stringify(graphs.path));
     } else if (graph_to_load == 'dijkstra_faster') {
-        graph = graphs.dijkstra_faster;
+        graph = JSON.parse(JSON.stringify(graphs.dijkstra_faster));
     } else if (graph_to_load == 'huge_graph') {
-        graph = graphs.huge_graph;
+        graph = JSON.parse(JSON.stringify(graphs.huge_graph));
     }
     if (graph != null) {
         cy.remove(cy.elements());

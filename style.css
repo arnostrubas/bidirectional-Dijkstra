@@ -55,7 +55,7 @@ html, body {
     flex-direction: column;
 }
 
-.strategies_select {
+.button_selects {
     display: flex;
     flex: 1; 
     gap: 15px;
@@ -205,6 +205,12 @@ html, body {
 }
 
 .export_change_buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.strategy_select {
     display: flex;
     flex-direction: column;
     gap: 10px;

@@ -220,3 +220,26 @@ html, body {
     flex-direction: column;
     gap: 10px;
 }
+
+.start_target_change {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.start_target_change_btn {
+    background-color: #648cfa;
+    cursor: pointer; 
+    border: none; 
+    border-radius: 5px; 
+    padding: 10px 15px;
+}
+
+.start_target_change_btn:hover { 
+    background-color: #0056b3; 
+}
+
+.start_target_change_btn:disabled {
+    background-color: #929292;
+    cursor: not-allowed;
+}

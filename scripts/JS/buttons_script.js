@@ -103,8 +103,8 @@ function btn_enable()
     end_strat_right.disabled = false;
     search_strat_left.disabled = false;
     search_strat_right.disabled = false;
-    load_graph_left.disabled = true;
-    load_graph_right.disabled = true;
+    load_graph_left.disabled = false;
+    load_graph_right.disabled = false;
 
     leftExportDataBtn.disabled = false;
     leftImportDataBtn.disabled = false;
@@ -325,3 +325,9 @@ load_graph_right.addEventListener('change', () => {
         alert(error.message);
     }
 });
+
+export function set_graph_select_to_default(rightSelect)
+{
+    if (rightSelect) load_graph_right.value = 'default';
+    else load_graph_left.value = 'default';
+}

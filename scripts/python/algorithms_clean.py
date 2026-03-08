@@ -17,7 +17,7 @@ def bidirectional_Dijkstra_1(G, w, s, t):
     Q_f.insert(s)
     Q_b = Queue(False)
     Q_b.insert(t)
-    fwd = True                     # for visualisation purposes
+    fwd = True                     
     while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
         if (fwd):
             v = Q_f.extractMin()

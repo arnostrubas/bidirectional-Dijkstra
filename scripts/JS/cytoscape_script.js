@@ -7,6 +7,7 @@ import { layout, style } from './cy_style_script.js';
 import * as graphs from './graphs.js';
 import { setText, update_text_containers } from './queue_text_script.js'
 import { set_graph_select_to_default } from './buttons_script.js'
+import { export_as_jpg, export_as_txt, import_txt } from './cytoscape_im-export.js'
 
 const container1 = document.getElementById('graph_container1');
 const container2 = document.getElementById('graph_container2');
@@ -332,17 +333,6 @@ function update_texts()
                 first_graph_text[first_graph_n], second_graph_text[second_graph_n]);
 }
 
-function generic_export(data, file_name)
-{
-    const downloadLink = document.createElement('a');
-    downloadLink.href = data;
-    downloadLink.download = file_name;
-
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-}
-
 /*
 ==================================================================================
                             EXPORT FUNCTIONS
@@ -484,23 +474,6 @@ export function final_path_or_start(final)
     }
 }
 
-export function export_image(export_right)
-{
-    let jpgData = null;
-    if (export_right) {
-        jpgData = cy_right.jpg({
-            full: true,
-            quality: 0.9 
-        });
-    } else {
-        jpgData = cy_left.jpg({
-            full: true,
-            quality: 0.9 
-        });
-    }
-    generic_export(jpgData, 'graph_export.jpg');
-}
-
 export function move(next)
 {
     if (next) {
@@ -584,49 +557,17 @@ export function load_graph(graph_to_load, load_right) {
     cy_right.on('add remove', (event) => set_graph_select_to_default(true));
 }
 
+export function export_image(export_right)
+{
+    export_as_jpg(export_right ? cy_right : cy_left);
+}
+
 export function export_data(export_right)
 {
-    let cy = export_right ? cy_right : cy_left;
-
-    const jsonString = JSON.stringify(clean_data(cy), null, 4);
-    const blob = new Blob([jsonString], {type: 'text/plans'});
-    const url = URL.createObjectURL(blob);
-    generic_export(url, 'graph_data_export.txt')
+    export_as_txt(export_right ? cy_right : cy_left);
 }
 
 export function import_data(event, import_right)
 {
-    let cy = import_right ? cy_right : cy_left;
-
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-            const content = e.target.result;
-            const data = JSON.parse(content);
-            cy.batch(() => {
-                cy.elements().remove(); 
-
-                data.nodes.forEach(n => {
-                    cy.add({
-                        group: 'nodes',
-                        data: { id: n.id, label: n.label },
-                        position: { x: n.x, y: n.y }
-                    });
-                });
-
-                data.edges.forEach(e => {
-                    cy.add({
-                        group: 'edges',
-                        data: { id: e.id, source: e.source, target: e.target, weight: e.weight }
-                    });
-                });
-            });
-        };
-
-        reader.readAsText(file);
-
-        event.target.value = '';
-    }
+    import_txt(event, import_right ? cy_right : cy_left);
 }

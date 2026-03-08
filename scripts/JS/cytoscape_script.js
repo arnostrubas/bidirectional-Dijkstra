@@ -407,9 +407,9 @@ export function disableEdgeRemoving()
     cy_right.off('select', 'edge', remove_edge);
 }
 
-export function getcyElements(getcy1) {
-    if (getcy1) return clean_data(cy_left);
-    else return clean_data(cy_right);
+export function getcyElements(get_cy_right) {
+    if (get_cy_right) return clean_data(cy_right);
+    else return clean_data(cy_left);
 }
 
 export function calculate(json)
@@ -564,7 +564,7 @@ export function export_image(export_right)
 
 export function export_data(export_right)
 {
-    export_as_txt(export_right ? cy_right : cy_left);
+    export_as_txt(export_right);
 }
 
 export function import_data(event, import_right)

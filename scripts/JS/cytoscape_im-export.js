@@ -1,3 +1,5 @@
+import { getcyElements } from './cytoscape_script.js'
+
 function generic_export(data, file_name)
 {
     const downloadLink = document.createElement('a');
@@ -19,9 +21,9 @@ export function export_as_jpg(cy)
     generic_export(jpgData, 'graph_export.jpg');
 }
 
-export function export_as_txt(cy)
+export function export_as_txt(export_right)
 {
-    const jsonString = JSON.stringify(clean_data(cy), null, 4);
+    const jsonString = JSON.stringify(getcyElements(export_right), null, 4);
     const blob = new Blob([jsonString], {type: 'text/plans'});
     const url = URL.createObjectURL(blob);
     generic_export(url, 'graph_data_export.txt')

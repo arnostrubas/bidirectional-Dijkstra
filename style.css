@@ -12,12 +12,14 @@ html, body {
     flex-direction: row;
     align-items: center;
     justify-content: space-between; 
-    padding: 10px 20px;
+    gap: 20px;
+    padding: 10px;
     background-color: #f0f0f0;
 }
 
 .checkboxes {
     display: flex;
+    flex: 1.6;
     flex-direction: column;
     font-size: 0.9vw;
     gap: 12px
@@ -25,14 +27,24 @@ html, body {
 
 #start_reset {
     display: flex;
+    flex: 2;
     gap: 10px;
     height: 80px;
 }
 
 #steps {
     display: flex;
+    flex: 2;
     flex-direction: column;
     gap: 5px;
+}
+
+.empty {
+    flex: 2.6;
+}
+
+.empty2 {
+    flex: 0.7;
 }
 
 #above_containers {
@@ -147,10 +159,6 @@ html, body {
 .main_button:disabled {
     background-color: #929292;
     cursor: not-allowed;
-}
-
-.empty {
-    flex: 0.3;
 }
 
 .fit_btn {

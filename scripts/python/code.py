@@ -893,11 +893,16 @@ def bidirectional_Dijkstra_10(G, w, s, t):
     Search = after one edge \n
     End = same vertex close
     """
+    current_node_f = None
+    current_node_b = None
+
     def forward_one_edge(G, Q_f):
+        nonlocal current_node_b, current_node_f
         while (not Q_f.isEmpty()):
             v = Q_f.extractMin()
             v.state_f = "CLOSED"
-            yield (False, "fwd: Extracted and closed " + v.label)
+            current_node_f = v
+            yield (False,"v_f: " + current_node_f.label + ", v_b: " + (current_node_b.label if current_node_b else "-") + ". " + "fwd: Extracted and closed " + v.label)
             if (v.state_b == "CLOSED"):
                 yield (False, v.label + " is closed in both searches")
                 yield (False, "Algorithm now has to find vertex with lowest sum")
@@ -910,21 +915,23 @@ def bidirectional_Dijkstra_10(G, w, s, t):
                     u.state_f = "OPEN"
                     u.pi_f = v
                     Q_f.insert(u)
-                    yield (True, "fwd: Added " + u.label + " to priority queue")
+                    yield (True, "v_f: " + current_node_f.label + ", v_b: " + (current_node_b.label if current_node_b else "-") + ". " + "fwd: Added " + u.label + " to priority queue")
                 elif u.state_f == "OPEN":
                     if v.d_f + w(v, u) < u.d_f:
                         u.d_f = v.d_f + w(v, u)
                         u.pi_f = v
                         Q_f.update(u) 
-                        yield (True, "fwd: Changed priority of " + u.label + " to " + str(u.d_f))
+                        yield (True, "v_f: " + current_node_f.label + ", v_b: " + (current_node_b.label if current_node_b else "-") + ". " + "fwd: Changed priority of " + u.label + " to " + str(u.d_f))
         yield (False, "No path found")
         return None
     
     def backward_one_edge(G, Q_b):
+        nonlocal current_node_b, current_node_f
         while (not Q_b.isEmpty()):
             v = Q_b.extractMin()
             v.state_b = "CLOSED"
-            yield (False, "bwd: Extracted and closed " + v.label)
+            current_node_b = v
+            yield (False, "v_f: " + current_node_f.label + ", v_b: " + current_node_b.label + ". " + "bwd: Extracted and closed " + v.label)
             if (v.state_f == "CLOSED"):
                 yield (False, v.label + " is closed in both searches")
                 yield (False, "Algorithm now has to find vertex with lowest sum")
@@ -937,13 +944,13 @@ def bidirectional_Dijkstra_10(G, w, s, t):
                     u.state_b = "OPEN"
                     u.pi_b = v
                     Q_b.insert(u)
-                    yield (True, "bwd: Added " + u.label + " to priority queue")
+                    yield (True, "v_f: " + current_node_f.label + ", v_b: " + current_node_b.label + ". " + "bwd: Added " + u.label + " to priority queue")
                 elif u.state_b == "OPEN":
                     if v.d_b + w(u, v) < u.d_b:
                         u.d_b = v.d_b + w(u, v)
                         u.pi_b = v
                         Q_b.update(u) 
-                        yield (True, "bwd: Changed priority of " + u.label + " to " + str(u.d_f))
+                        yield (True, "v_f: " + current_node_f.label + ", v_b: " + current_node_b.label + ". " + "bwd: Changed priority of " + u.label + " to " + str(u.d_f))
         yield (False, "No path found")
         return None
 
@@ -984,24 +991,29 @@ def bidirectional_Dijkstra_11(G, w, s, t):
     Search = after one edge \n
     End = first encounter
     """
+    current_node_f = None
+    current_node_b = None
+
     def forward_one_edge(G, Q_f):
+        nonlocal current_node_b, current_node_f
         while (not Q_f.isEmpty()):
             v = Q_f.extractMin()
             v.state_f = "CLOSED"
-            yield (False, "fwd: Extracted and closed " + v.label)                
+            current_node_f = v
+            yield (False, "v_f: " + current_node_f.label + ", v_b: " + (current_node_b.label if current_node_b else "-") + ". " + "fwd: Extracted and closed " + v.label)                
             for u in sorted(G.successors(v), key=lambda node: node.id):
                 if u.state_f == "UNVISITED":
                     u.d_f = v.d_f + w(v, u)
                     u.state_f = "OPEN"
                     u.pi_f = v
                     Q_f.insert(u)
-                    yield (not (u.state_b == "OPEN" or u.state_b == "CLOSED"), "fwd: Added " + u.label + " to priority queue")
+                    yield (not (u.state_b == "OPEN" or u.state_b == "CLOSED"), "v_f: " + current_node_f.label + ", v_b: " + (current_node_b.label if current_node_b else "-") + ". " + "fwd: Added " + u.label + " to priority queue")
                 elif u.state_f == "OPEN":
                     if v.d_f + w(v, u) < u.d_f:
                         u.d_f = v.d_f + w(v, u)
                         u.pi_f = v
                         Q_f.update(u) 
-                        yield (not (u.state_b == "OPEN" or u.state_b == "CLOSED"), "bwd: Changed priority of " + u.label + " to " + str(u.d_f),)
+                        yield (not (u.state_b == "OPEN" or u.state_b == "CLOSED"), "v_f: " + current_node_f.label + ", v_b: " + (current_node_b.label if current_node_b else "-") + ". " + "fwd: Changed priority of " + u.label + " to " + str(u.d_f),)
                 if (u.state_b == "OPEN" or u.state_b == "CLOSED"):
                     yield (False, "Both searches encountered " + u.label) 
                     NCPP(G, 1)
@@ -1011,23 +1023,25 @@ def bidirectional_Dijkstra_11(G, w, s, t):
         return None
     
     def backward_one_edge(G, Q_b):
+        nonlocal current_node_b, current_node_f
         while (not Q_b.isEmpty()):
             v = Q_b.extractMin()
             v.state_b = "CLOSED"
-            yield (False, "bwd: Extracted and closed " + v.label)
+            current_node_b = v
+            yield (False, "v_f: " + current_node_f.label + ", v_b: " + current_node_b.label + ". " + "bwd: Extracted and closed " + v.label)
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
                 if u.state_b == "UNVISITED":
                     u.d_b = v.d_b + w(u, v)
                     u.state_b = "OPEN"
                     u.pi_b = v
                     Q_b.insert(u)
-                    yield (not (u.state_f == "OPEN" or u.state_f == "CLOSED"), "bwd: Added " + u.label + " to priority queue",)
+                    yield (not (u.state_f == "OPEN" or u.state_f == "CLOSED"), "v_f: " + current_node_f.label + ", v_b: " + current_node_b.label + ". " + "bwd: Added " + u.label + " to priority queue",)
                 elif u.state_b == "OPEN":
                     if v.d_b + w(u, v) < u.d_b:
                         u.d_b = v.d_b + w(u, v)
                         u.pi_b = v
                         Q_b.update(u) 
-                        yield (not (u.state_f == "OPEN" or u.state_f == "CLOSED"), "bwd: Changed priority of " + u.label + " to " + str(u.d_f),)
+                        yield (not (u.state_f == "OPEN" or u.state_f == "CLOSED"), "v_f: " + current_node_f.label + ", v_b: " + current_node_b.label + ". " + "bwd: Changed priority of " + u.label + " to " + str(u.d_f),)
                 if (u.state_f == "OPEN" or u.state_f == "CLOSED"):
                     yield (False, "Both searches encountered " + u.label) 
                     NCPP(G, 1)

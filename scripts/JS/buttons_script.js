@@ -38,6 +38,9 @@ const load_graph_right = document.getElementById('load_graph_right');
 
 const move_size = document.getElementById('number_of_steps');
 
+const step_expl_left = document.getElementById('step_expl_left');
+const step_expl_right = document.getElementById('step_expl_right');
+
 // =============================
 //    ENABLE/DISABLE functions
 // =============================
@@ -107,6 +110,14 @@ function btn_enable()
     rightImportDataBtn.disabled = false;
 }
 
+function show_step_text_expl(search_strat_left, search_strat_right, end_strat_left, end_strat_right)
+{
+    if (search_strat_left === 'one_edge') step_expl_left.textContent += " ---- v_f and v_b are currently searched vertexes"
+    if (search_strat_right === 'one_edge') step_expl_right.textContent += " ---- v_f and v_b are currently searched vertexes"
+    if (end_strat_left === 'using_search_distance') step_expl_left.textContent += " ---- μ - length of shortest path found so far, vₛₜ vertex on this path"
+    if (end_strat_right === 'using_search_distance') step_expl_right.textContent += " ----  μ - length of shortest path found so far, vₛₜ vertex on this path"
+}
+
 // =============================
 //          BUTTONS
 // =============================
@@ -120,6 +131,7 @@ startBtn.addEventListener('click', () => {
         else {
             btn_disable();
             let json = create_json_of_graphs(search_strat_left, search_strat_right, end_strat_left, end_strat_right);
+            show_step_text_expl(search_strat_left.value, search_strat_right.value, end_strat_left.value, end_strat_right.value);
             calculate(json);
         }
     }
@@ -130,6 +142,8 @@ startBtn.addEventListener('click', () => {
 
 resetBtn.addEventListener('click', () => {
     try {
+        step_expl_left.textContent = "Step explanation";
+        step_expl_right.textContent = "Step explanation";
         btn_enable();
         reset();
     }

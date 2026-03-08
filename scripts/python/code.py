@@ -164,10 +164,8 @@ def node_from_graph(G, id):
     '''
     returns node with `id` in graph `G`, otherwise None
     '''
-    for node in G.nodes:
-        if node.id == id:
-            return node
-    return None
+    index = G.graph.get('nodes_by_id', {})
+    return index.get(id)
 
 def node_on_path(node):
     '''
@@ -1256,9 +1254,12 @@ def run_algorithm(graph_dict):
     edges = graph_dict["edges"]
 
     G = nx.DiGraph()
+    nodes_by_id = {}
     for node in nodes:
         n = Node(int(node["id"]), node["label"])
         G.add_node(n)
+        nodes_by_id[n.id] = n
+    G.graph['nodes_by_id'] = nodes_by_id
     for edge in edges:
         u_id = edge["source"]
         v_id = edge["target"]

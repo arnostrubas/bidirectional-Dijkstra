@@ -3,7 +3,7 @@ import edgehandles from 'https://esm.sh/cytoscape-edgehandles@4.0.1';
 cytoscape.use(edgehandles);
 import { layout, style } from './cy_style_script.js';
 import * as graphs from './graphs.js';
-import { setText, update_texts } from './queue_text_script.js'
+import { setText, update_text_containers } from './queue_text_script.js'
 import { set_graph_select_to_default } from './buttons_script.js'
 
 const container1 = document.getElementById('graph_container1');
@@ -148,7 +148,7 @@ function clean_data(cy)
     });
     let edges = cy.edges().map(edge => {
         return {
-            id: edge.data('id'),
+            id: edge.id(),
             source: edge.source().id(),
             target: edge.target().id(),
             weight: edge.data('weight')
@@ -259,6 +259,24 @@ function switch_vertexes(cy, old_id, new_id)
             }
         });
     }
+}
+
+function update_texts()
+{
+    update_text_containers(first_graph_q_f[first_graph_n], first_graph_q_b[first_graph_n],
+                second_graph_q_f[second_graph_n], second_graph_q_b[second_graph_n],
+                first_graph_text[first_graph_n], second_graph_text[second_graph_n]);
+}
+
+function generic_export(data, file_name)
+{
+    const downloadLink = document.createElement('a');
+    downloadLink.href = data;
+    downloadLink.download = file_name;
+
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
 }
 
 /*
@@ -380,9 +398,7 @@ export function calculate(json)
     });
     update_graph(cy_right, second_graph_list[second_graph_n], false);
 
-    update_texts(first_graph_q_f[first_graph_n], first_graph_q_b[first_graph_n],
-                second_graph_q_f[second_graph_n], second_graph_q_b[second_graph_n],
-                first_graph_text[first_graph_n], second_graph_text[second_graph_n]);
+    update_texts();
 }
 
 export function final_path_or_start(final)
@@ -392,21 +408,17 @@ export function final_path_or_start(final)
         second_graph_n = second_graph_list.length - 1;
         update_graph(cy_left, first_graph_list[first_graph_n], false);
         update_graph(cy_right, second_graph_list[second_graph_n], false);
-        update_texts(first_graph_q_f[first_graph_n], first_graph_q_b[first_graph_n],
-                second_graph_q_f[second_graph_n], second_graph_q_b[second_graph_n],
-                first_graph_text[first_graph_n], second_graph_text[second_graph_n]);
+        update_texts();
     } else {
         first_graph_n = 0;
         second_graph_n = 0;
         update_graph(cy_left, first_graph_list[first_graph_n], false);
         update_graph(cy_right, second_graph_list[second_graph_n], false);
-        update_texts(first_graph_q_f[first_graph_n], first_graph_q_b[first_graph_n],
-                second_graph_q_f[second_graph_n], second_graph_q_b[second_graph_n],
-                first_graph_text[first_graph_n], second_graph_text[second_graph_n]);
+        update_texts();
     }
 }
 
-export function cy_export(export_right)
+export function export_image(export_right)
 {
     let jpgData = null;
     if (export_right) {
@@ -420,14 +432,7 @@ export function cy_export(export_right)
             quality: 0.9 
         });
     }
-
-    const downloadLink = document.createElement('a');
-    downloadLink.href = jpgData;
-    downloadLink.download = 'graph_export.jpg';
-
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
+    generic_export(jpgData, 'graph_export.jpg');
 }
 
 export function move(next)
@@ -448,9 +453,7 @@ export function move(next)
                 second_graph_n++;
                 update_graph(cy_right, second_graph_list[second_graph_n], true);
             }
-            update_texts(first_graph_q_f[first_graph_n], first_graph_q_b[first_graph_n],
-                second_graph_q_f[second_graph_n], second_graph_q_b[second_graph_n],
-                first_graph_text[first_graph_n], second_graph_text[second_graph_n]);
+            update_texts();
         } catch (error) {
             alert(error)
         }
@@ -468,9 +471,7 @@ export function move(next)
                 second_graph_n--;
                 update_graph(cy_right, second_graph_list[second_graph_n], false);
             }
-            update_texts(first_graph_q_f[first_graph_n], first_graph_q_b[first_graph_n],
-                second_graph_q_f[second_graph_n], second_graph_q_b[second_graph_n],
-                first_graph_text[first_graph_n], second_graph_text[second_graph_n]);
+            update_texts();
         } catch (error) {
             alert(error)
         }
@@ -478,15 +479,12 @@ export function move(next)
 }
 
 export function copy(copy_left_to_right) {
-    if (copy_left_to_right) {
-        cy_right.remove(cy_right.elements());
-        cy_right.add(cy_left.elements());
-        cy_right.fit();
-    } else {
-        cy_left.remove(cy_left.elements());
-        cy_left.add(cy_right.elements());
-        cy_left.fit();
-    }
+    let cy = copy_left_to_right ? cy_right : cy_left;
+    let cy_other = copy_left_to_right ? cy_left : cy_right;
+    cy.remove(cy.elements());
+    cy.add(cy_other.elements());
+    cy.fit();
+    
 }
 
 export function fit(fit_right) {
@@ -494,13 +492,12 @@ export function fit(fit_right) {
     else cy_left.fit();
 }
 
-export function load_graph(graph_to_load, right_load) {
+export function load_graph(graph_to_load, load_right) {
     cy_left.off('add remove');
     cy_right.off('add remove');
+    
+    let cy = load_right ? cy_right : cy_left;
     let graph = null;
-    let cy = null;
-    if (right_load) cy = cy_right;
-    else cy = cy_left;
     if (graph_to_load == 'start_graph') {
         graph = JSON.parse(JSON.stringify(graphs.start_graph));
     } else if (graph_to_load == 'first_encounter') {
@@ -523,19 +520,60 @@ export function load_graph(graph_to_load, right_load) {
 
 export function start_target_change(is_start, change_right)
 {
-    let cy = cy_left;
-    let txt = "TARGET";
-    let old_index = 0;
-    if (is_start) {
-        txt = "START";
-        old_index = -1;
-    } 
-    if (change_right) {
-        cy = cy_right;
-    }
+    let cy = change_right ? cy_right : cy_left;
+    let txt = is_start ? "START" : "TARGET";
+    let old_index = is_start ? -1 : 0;
+
     let input = prompt("Enter id of vertex to become " + txt, "1");
     if (input !== null) {
         let index = Number(input);
         if (index && index > 0) switch_vertexes(cy, old_index, index);
+    }
+}
+
+export function export_data(export_right)
+{
+    let cy = export_right ? cy_right : cy_left;
+
+    const jsonString = JSON.stringify(clean_data(cy), null, 4);
+    const blob = new Blob([jsonString], {type: 'text/plans'});
+    const url = URL.createObjectURL(blob);
+    generic_export(url, 'graph_data_export.txt')
+}
+
+export function import_data(event, import_right)
+{
+    let cy = import_right ? cy_right : cy_left;
+
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const content = e.target.result;
+            const data = JSON.parse(content);
+            cy.batch(() => {
+                cy.elements().remove(); 
+
+                data.nodes.forEach(n => {
+                    cy.add({
+                        group: 'nodes',
+                        data: { id: n.id, label: n.label },
+                        position: { x: n.x, y: n.y }
+                    });
+                });
+
+                data.edges.forEach(e => {
+                    cy.add({
+                        group: 'edges',
+                        data: { id: e.id, source: e.source, target: e.target, weight: e.weight }
+                    });
+                });
+            });
+        };
+
+        reader.readAsText(file);
+
+        event.target.value = '';
     }
 }

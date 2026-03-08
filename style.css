@@ -94,6 +94,10 @@ html, body {
     opacity: 1;
 }
 
+.import {
+    display: none;
+}
+
 #explain_text1, #explain_text2 {
     border: 1px solid #000000;
     font-size: 1.2vw;

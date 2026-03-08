@@ -65,7 +65,7 @@
     <div id="above_containers">
         <div class="above_containers_part">
             <div class="button_selects">
-                <div class="selects">
+                <div class="graph_select">
                     <div>Select pre-made graph</div>
                     <select class="select" id="load_graph_left">
                         <option value="Default"></option>
@@ -75,19 +75,15 @@
                         <option value="dijkstra_faster">Dijkstra better</option>
                         <option value="huge_graph">Huge graph</option>
                     </select>
-                </div>
-                <div class="start_target_change">
-                    <button class="start_target_change_btn" id="start_change_left">Change START</button>
-                    <button class="start_target_change_btn" id="target_change_left">Change TARGET</button>
+                    <div class="fit_copy_buttons">
+                        <button class="fit_btn" id="fit_left">Fit to container</button>
+                        <button class="copy_btn" id="copy_left">Copy from right</button>
+                    </div>
                 </div>
                 <div class="export_change_buttons">
                     <button class="export_btn" id="export_image_left">Export image</button>
                     <button class="export_btn" id="export_data_left">Export data</button>
                     <button class="export_btn" id="import_data_left">Import data</button>
-                </div>
-                <div class="export_change_buttons">
-                    <button class="fit_btn" id="fit_left">Fit to container</button>
-                    <button class="copy_btn" id="copy_left">Copy from left</button>
                 </div>
                 <div class="strategy_select">
                     <div class="selects">
@@ -116,8 +112,28 @@
                 <div id="explain_text1"></div> 
             </div>
         </div>
-        <div class="above_containers_part">
-            <div class="button_selects">
+        <div class="above_containers_part" >
+            <div class="button_selects" id="above_right">
+                <div class="graph_select">
+                    <div>Select pre-made graph</div>
+                    <select class="select" id="load_graph_right">
+                        <option value="Default"></option>
+                        <option value="start_graph">Start graph</option>
+                        <option value="first_encounter">First encounter</option>
+                        <option value="path">Path</option>
+                        <option value="dijkstra_faster">Dijkstra better</option>
+                        <option value="huge_graph">Huge graph</option>
+                    </select>
+                    <div class="fit_copy_buttons">
+                        <button class="fit_btn" id="fit_right">Fit to container</button>
+                        <button class="copy_btn" id="copy_right">Copy from left</button>
+                    </div>
+                </div>
+                <div class="export_change_buttons">
+                    <button class="export_btn" id="export_image_right">Export image</button>
+                    <button class="export_btn" id="export_data_right">Export data</button>
+                    <button class="export_btn" id="import_data_right">Import data</button>
+                </div>
                 <div class="strategy_select">
                     <div class="selects">
                         <div class="strategy_text">Search strategy</div>
@@ -138,30 +154,6 @@
                             <option value="Dijkstra" selected>Dijkstra algorithm</option>
                         </select>
                     </div> 
-                </div>
-                <div class="start_target_change">
-                    <button class="start_target_change_btn" id="start_change_right">Change START</button>
-                    <button class="start_target_change_btn" id="target_change_right">Change TARGET</button>
-                </div>
-                <div class="export_change_buttons">
-                    <button class="export_btn" id="export_image_right">Export image</button>
-                    <button class="export_btn" id="export_data_right">Export data</button>
-                    <button class="export_btn" id="import_data_right">Import data</button>
-                </div>
-                <div class="export_change_buttons">
-                    <button class="fit_btn" id="fit_right">Fit to container</button>
-                    <button class="copy_btn" id="copy_right">Copy from left</button>
-                </div>
-                <div class="selects">
-                    <div>Select pre-made graph</div>
-                    <select class="select" id="load_graph_right">
-                        <option value="Default"></option>
-                        <option value="start_graph">Start graph</option>
-                        <option value="first_encounter">First encounter</option>
-                        <option value="path">Path</option>
-                        <option value="dijkstra_faster">Dijkstra better</option>
-                        <option value="huge_graph">Huge graph</option>
-                    </select>
                 </div>
             </div>
             <div class="explanation_container">

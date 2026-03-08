@@ -1,6 +1,8 @@
 import cytoscape from 'https://esm.sh/cytoscape@3.28.1';
 import edgehandles from 'https://esm.sh/cytoscape-edgehandles@4.0.1';
 cytoscape.use(edgehandles);
+import popper from 'https://esm.sh/cytoscape-popper@2.0.0';
+cytoscape.use(popper);
 import { layout, style } from './cy_style_script.js';
 import * as graphs from './graphs.js';
 import { setText, update_text_containers } from './queue_text_script.js'
@@ -8,6 +10,67 @@ import { set_graph_select_to_default } from './buttons_script.js'
 
 const container1 = document.getElementById('graph_container1');
 const container2 = document.getElementById('graph_container2');
+
+let running_visualisation = false;
+
+function show_popper(evt, cy)
+{
+    const getLabel = (id) => {
+        if (!id) return '-';
+        const n = cy.getElementById(id);
+        return n.length > 0 ? n.data('label') : '-';
+    };
+    const node = evt.target;
+
+    const div = document.createElement('div');
+    div.classList.add('popper');
+    div.innerHTML = `
+        <div style="font-weight: bold; margin-bottom: 5px; border-bottom: 1px solid #ccc;">
+            Uzel: ${node.data('label')}
+        </div>
+        <table style="border-spacing: 10px 2px; margin-left: -10px;">
+            <tr>
+                <td><strong>d<sub>f</sub>:</strong> ${node.data('d_f') === 999999999 ? '∞' : node.data('d_f')}</td>
+                <td><strong>d<sub>b</sub>:</strong> ${node.data('d_b') === 999999999 ? '∞' : node.data('d_b')}</td>
+            </tr>
+            <tr>
+                <td><strong>&pi;<sub>f</sub>:</strong> ${getLabel(node.data('pi_f'))}</td>
+                <td><strong>&pi;<sub>b</sub>:</strong> ${getLabel(node.data('pi_b'))}</td>
+            </tr>
+            <tr>
+                <td><strong>s<sub>f</sub>:</strong> ${node.data('state_f')}</td>
+                <td><strong>s<sub>b</sub>:</strong> ${node.data('state_b')}</td>
+            </tr>
+        </table>
+        <button class="popper_btn" id="start_change_btn">Nastavit jako START</button>
+        <button class="popper_btn" id="target_change_btn">Nastavit jako TARGET</button>
+    `;
+    document.body.appendChild(div);
+
+    if (running_visualisation || node.data('id') == -1) div.querySelector('#start_change_btn').disabled = true;
+    if (running_visualisation || node.data('id') == 0) div.querySelector('#target_change_btn').disabled = true;
+
+    div.querySelector('#start_change_btn').addEventListener('click', () => {
+        switch_vertexes(cy, -1, node.data('id'));
+        hide(); 
+    });
+    div.querySelector('#target_change_btn').addEventListener('click', () => {
+        switch_vertexes(cy, 0, node.data('id'));
+        hide(); 
+    });
+
+    const popper = node.popper({
+        content: div,
+        popper: { placement: 'top' }
+    });
+
+    const hide = () => {
+        div.remove();
+    };
+
+    cy.on('tap pan zoom cxttap add remove data', hide);
+    node.on('position', hide);
+}
 
 let cy_left = cytoscape({
     container: container1,
@@ -20,12 +83,12 @@ let cy_left = cytoscape({
 let eh1 = cy_left.edgehandles();
 cy_left.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge, cy_left));
 cy_left.on('add remove', (event) => set_graph_select_to_default(false));
+cy_left.on('cxttap', 'node', (event) => show_popper(event, cy_left));
 let first_graph_list = [];
 let first_graph_n = 0;
 let first_graph_q_f = [];
 let first_graph_q_b = [];
 let first_graph_text = [];
-
 
 let cy_right = cytoscape({
     container: container2,
@@ -38,6 +101,7 @@ let cy_right = cytoscape({
 let eh2 = cy_right.edgehandles();
 cy_right.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge, cy_right));
 cy_right.on('add remove', (event) => set_graph_select_to_default(true));
+cy_right.on('cxttap', 'node', (event) => show_popper(event, cy_right));
 let second_graph_list = [];
 let second_graph_n = 0;
 let second_graph_q_f = [];
@@ -327,6 +391,7 @@ export function reset() {
     setText('explain_text1', "");
     setText('explain_text2', "");
     reset_graphs();
+    running_visualisation = false;
 }
 
 export function enableEdgeAdding() {
@@ -359,6 +424,7 @@ export function getcyElements(getcy1) {
 
 export function calculate(json)
 {
+    running_visualisation = true;
     let result = window.run(json);
     const data = JSON.parse(result);
 
@@ -516,19 +582,6 @@ export function load_graph(graph_to_load, load_right) {
     }
     cy_left.on('add remove', (event) => set_graph_select_to_default(false));
     cy_right.on('add remove', (event) => set_graph_select_to_default(true));
-}
-
-export function start_target_change(is_start, change_right)
-{
-    let cy = change_right ? cy_right : cy_left;
-    let txt = is_start ? "START" : "TARGET";
-    let old_index = is_start ? -1 : 0;
-
-    let input = prompt("Enter id of vertex to become " + txt, "1");
-    if (input !== null) {
-        let index = Number(input);
-        if (index && index > 0) switch_vertexes(cy, old_index, index);
-    }
 }
 
 export function export_data(export_right)

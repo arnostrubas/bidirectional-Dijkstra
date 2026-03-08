@@ -1,4 +1,4 @@
-import { start_target_change, load_graph, fit, copy, final_path_or_start, move, calculate, reset,
+import { load_graph, fit, copy, final_path_or_start, move, calculate, reset,
     export_data, export_image, import_data,
     disableVertexAdding, enableVertexAdding, enableEdgeAdding, disableEdgeAdding, 
     disableVertexRemoving, enableVertexRemoving, enableEdgeRemoving, disableEdgeRemoving } from './cytoscape_script.js'
@@ -13,10 +13,6 @@ const leftCopyBtn = document.getElementById('copy_left');
 const rightCopyBtn = document.getElementById('copy_right');
 const leftFitBtn = document.getElementById('fit_left');
 const rightFitBtn = document.getElementById('fit_right');
-const leftChangeStartBtn = document.getElementById('start_change_left');
-const rightChangeStartBtn = document.getElementById('start_change_right');
-const leftChangeTargetBtn = document.getElementById('target_change_left');
-const rightChangeTargetBtn = document.getElementById('target_change_right');
 
 const leftExportImageBtn = document.getElementById('export_image_left');
 const rightExportImageBtn = document.getElementById('export_image_right');
@@ -82,11 +78,6 @@ function btn_disable()
     leftImportDataBtn.disabled = true;
     rightExportDataBtn.disabled = true;
     rightImportDataBtn.disabled = true;
-
-    leftChangeStartBtn.disabled = true;
-    rightChangeStartBtn.disabled = true;
-    leftChangeTargetBtn.disabled = true;
-    rightChangeTargetBtn.disabled = true;
 }
 
 function btn_enable() 
@@ -114,11 +105,6 @@ function btn_enable()
     leftImportDataBtn.disabled = false;
     rightExportDataBtn.disabled = false;
     rightImportDataBtn.disabled = false;
-    
-    leftChangeStartBtn.disabled = false;
-    rightChangeStartBtn.disabled = false;
-    leftChangeTargetBtn.disabled = false;
-    rightChangeTargetBtn.disabled = false;
 }
 
 // =============================
@@ -225,42 +211,6 @@ rightExportImageBtn.addEventListener('click', () => {
     }
     catch (error) {
         alert(error.message);
-    }
-});
-
-leftChangeStartBtn.addEventListener('click', () => {
-    try {
-        start_target_change(true, false);
-    }
-    catch (error) {
-        alert(error.message);    
-    }
-});
-
-rightChangeStartBtn.addEventListener('click', () => {
-    try {
-        start_target_change(true, true);
-    }
-    catch (error) {
-        alert(error.message);    
-    }
-});
-
-leftChangeTargetBtn.addEventListener('click', () => {
-    try {
-        start_target_change(false, false);
-    }
-    catch (error) {
-        alert(error.message);    
-    }
-});
-
-rightChangeTargetBtn.addEventListener('click', () => {
-    try {
-        start_target_change(false, true);
-    }
-    catch (error) {
-        alert(error.message);    
     }
 });
 

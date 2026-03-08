@@ -280,3 +280,8 @@ html, body {
     cursor: not-allowed;
     color: #464646;
 }
+
+.useful_links_texts {
+    flex: 0.5;
+    flex-direction: column;
+}

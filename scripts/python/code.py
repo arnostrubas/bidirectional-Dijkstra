@@ -187,7 +187,7 @@ def NCPP(G, end, v = None):
     highlights the shortest path found by (bi)directional Dijkstra
     
     :param G: graph to extract the shortest path from
-    :param end: 0 for Dijkstra, 1 for same vertex closed/first encounter, 2 for search distance
+    :param end: 0 for Dijkstra, 1 for same vertex closed, 2 for search distance/first encounter
     :param v: middle node, used only when end = 2, search distance
     '''
     "Dijkstra"
@@ -221,7 +221,7 @@ def NCPP(G, end, v = None):
             node_on_path(pred)
             if (pred.pi_b): edge_on_path(G, pred.id, pred.pi_b.id)
             pred = pred.pi_b
-        return minimum
+        return minimum, middle_node
     
     "search distance"
     if end == 2:
@@ -310,10 +310,10 @@ def bidirectional_Dijkstra_1(G, w, s, t):
             v.state_f = "CLOSED"
             yield VisualData("fwd: Extracted and closed " + v.label ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
             if (v.state_b == "CLOSED"):
-                yield VisualData(v.label + " is closed in both searches" ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
+                yield VisualData(v.label + " is closed in both searches", queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 yield VisualData("Algorithm now has to find vertex with lowest sum" ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
-                min = NCPP(G, 1)
-                yield VisualData("Length of shortest path is " + str(min) ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
+                min, mid = NCPP(G, 1)
+                yield VisualData("Vertex with lowest sum is: " + mid.label + ". Length of shortest path is " + str(min) ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 return min                
             for u in sorted(G.successors(v), key=lambda node: node.id):
                 if u.state_f == "UNVISITED":
@@ -336,8 +336,8 @@ def bidirectional_Dijkstra_1(G, w, s, t):
             if (v.state_f == "CLOSED"):
                 yield VisualData(v.label + " is closed in both searches" ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 yield VisualData("Algorithm now has to find vertex with lowest sum" ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
-                min = NCPP(G, 1)
-                yield VisualData("Length of shortest path is " + str(min) ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
+                min, mid = NCPP(G, 1)
+                yield VisualData("Vertex with lowest sum is: " + mid.label + ". Length of shortest path is " + str(min) ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 return min  
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
                 if u.state_b == "UNVISITED":
@@ -387,10 +387,10 @@ def bidirectional_Dijkstra_2(G, w, s, t):
                         Q_f.update(u) 
                         yield VisualData("fwd: Changed priority of " + u.label + " to " + str(u.d_f), queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 if (u.state_b == "OPEN" or u.state_b == "CLOSED"):
-                    yield VisualData("Both searches encountered " + u.label,queue_f=Q_f, queue_b=Q_b) # for visual purposes 
-                    NCPP(G, 1)
+                    yield VisualData("Both searches encountered " + u.label, queue_f=Q_f, queue_b=Q_b) # for visual purposes 
+                    NCPP(G, 2, u)
                     yield VisualData("Length of found path is " + str(u.d_f + u.d_b), queue_f=Q_f, queue_b=Q_b) # for visual purposes
-                    return 
+                    return u.d_f + u.d_b
             fwd = not fwd
         else:
             v = Q_b.extractMin()
@@ -411,12 +411,12 @@ def bidirectional_Dijkstra_2(G, w, s, t):
                         yield VisualData("bwd: Changed priority of " + u.label + " to " + str(u.d_b), queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 if (u.state_f == "OPEN" or u.state_f == "CLOSED"):
                     yield VisualData("Both searches encountered " + u.label,queue_f=Q_f, queue_b=Q_b) # for visual purposes 
-                    NCPP(G, 1)
+                    NCPP(G, 2, u)
                     yield VisualData("Length of found path is " + str(u.d_f + u.d_b), queue_f=Q_f, queue_b=Q_b) # for visual purposes
-                    return 
+                    return u.d_f + u.d_b
             fwd = not fwd
     yield VisualData("no path found", queue_f=Q_f, queue_b=Q_b) # for visual purposes
-    return 
+    return None
 
 def bidirectional_Dijkstra_3(G, w, s, t):
     """
@@ -445,7 +445,7 @@ def bidirectional_Dijkstra_3(G, w, s, t):
                 yield VisualData(mu_txt + current_node_b.label + ".d_b + " + current_node_f.label + ".d_f >= μ => ending the search", queue_f=Q_f, queue_b=Q_b, ) # for visual purposes
                 NCPP(G, 2, middle_vertex)
                 yield VisualData("Length of shortest path is " + str(mu), queue_f=Q_f, queue_b=Q_b, ) # for visual purposes
-                return              
+                return mu             
             for u in sorted(G.successors(v), key=lambda node: node.id):
                 if u.state_f == "UNVISITED":
                     u.d_f = v.d_f + w(v, u)
@@ -474,7 +474,7 @@ def bidirectional_Dijkstra_3(G, w, s, t):
                 yield VisualData(mu_txt + current_node_b.label + ".d_b + " + current_node_f.label + ".d_f >= μ => ending the search", queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 NCPP(G, 2, middle_vertex)
                 yield VisualData("Length of shortest path is " + str(mu), queue_f=Q_f, queue_b=Q_b) # for visual purposes
-                return           
+                return mu          
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
                 if u.state_b == "UNVISITED":
                     u.d_b = v.d_b + w(u, v)
@@ -494,7 +494,7 @@ def bidirectional_Dijkstra_3(G, w, s, t):
                     middle_vertex = v
                     mu = v.d_b + u.d_f + w(u, v)
             fwd = not fwd
-    return 
+    return None
 
 def bidirectional_Dijkstra_4(G, w, s, t):
     """
@@ -515,8 +515,8 @@ def bidirectional_Dijkstra_4(G, w, s, t):
             if (v.state_b == "CLOSED"):
                 yield VisualData(v.label + " is closed in both searches" ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 yield VisualData("Algorithm now has to find vertex with lowest sum" ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
-                min = NCPP(G, 1)
-                yield VisualData("Length of shortest path is " + str(min) ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
+                min, mid = NCPP(G, 1)
+                yield VisualData("Vertex with lowest sum is: " + mid.label + ". Length of shortest path is " + str(min) ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 return min                
             for u in sorted(G.successors(v), key=lambda node: node.id):
                 if u.state_f == "UNVISITED":
@@ -538,8 +538,8 @@ def bidirectional_Dijkstra_4(G, w, s, t):
             if (v.state_f == "CLOSED"):
                 yield VisualData(v.label + " is closed in both searches" ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 yield VisualData("Algorithm now has to find vertex with lowest sum" ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
-                min = NCPP(G, 1)
-                yield VisualData("Length of shortest path is " + str(min) ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
+                min, mid = NCPP(G, 1)
+                yield VisualData("Vertex with lowest sum is: " + mid.label + ". Length of shortest path is " + str(min) ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 return min   
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
                 if u.state_b == "UNVISITED":
@@ -588,9 +588,9 @@ def bidirectional_Dijkstra_5(G, w, s, t):
                         yield VisualData("fwd: Changed priority of " + u.label + " to " + str(u.d_f), queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 if (u.state_b == "OPEN" or u.state_b == "CLOSED"):
                     yield VisualData("Both searches encountered " + u.label,queue_f=Q_f, queue_b=Q_b) # for visual purposes 
-                    NCPP(G, 1)
+                    NCPP(G, 2, u)
                     yield VisualData("Length of found path is " + str(u.d_f + u.d_b), queue_f=Q_f, queue_b=Q_b) # for visual purposes
-                    return 
+                    return u.d_f + u.d_b
         else:
             v = Q_b.extractMin()
             v.state_b = "CLOSED"
@@ -610,9 +610,9 @@ def bidirectional_Dijkstra_5(G, w, s, t):
                         yield VisualData("bwd: Changed priority of " + u.label + " to " + str(u.d_b), queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 if (u.state_f == "OPEN" or u.state_f == "CLOSED"):
                     yield VisualData("Both searches encountered " + u.label,queue_f=Q_f, queue_b=Q_b) # for visual purposes 
-                    NCPP(G, 1)
+                    NCPP(G, 2, u)
                     yield VisualData("Length of found path is " + str(u.d_f + u.d_b), queue_f=Q_f, queue_b=Q_b) # for visual purposes
-                    return 
+                    return u.d_f + u.d_b
     yield VisualData("no path found", queue_f=Q_f, queue_b=Q_b) # for visual purposes
     return None
 
@@ -642,7 +642,7 @@ def bidirectional_Dijkstra_6(G, w, s, t):
                 yield VisualData(mu_txt + current_node_b.label + ".d_b + " + current_node_f.label + ".d_f >= μ => ending the search", queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 NCPP(G, 2, middle_vertex)
                 yield VisualData("Length of shortest path is " + str(mu), queue_f=Q_f, queue_b=Q_b) # for visual purposes
-                return              
+                return mu             
             for u in sorted(G.successors(v), key=lambda node: node.id):
                 if u.state_f == "UNVISITED":
                     u.d_f = v.d_f + w(v, u)
@@ -670,7 +670,7 @@ def bidirectional_Dijkstra_6(G, w, s, t):
                 yield VisualData(mu_txt + current_node_b.label + ".d_b + " + current_node_f.label + ".d_f >= μ => ending the search", queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 NCPP(G, 2, middle_vertex)
                 yield VisualData("Length of shortest path is " + str(mu), queue_f=Q_f, queue_b=Q_b) # for visual purposes
-                return           
+                return mu          
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
                 if u.state_b == "UNVISITED":
                     u.d_b = v.d_b + w(u, v)
@@ -689,7 +689,7 @@ def bidirectional_Dijkstra_6(G, w, s, t):
                     yield VisualData(u.label + " is closed in fwd and " + v.label + ".d_b + " + u.label + ".d_f + w(" + v.label + ", " + u.label  + ") < μ => " + mu_txt , queue_f=Q_f, queue_b=Q_b) # for visual purposes
                     middle_vertex = v
                     mu = v.d_b + u.d_f + w(u, v)
-    return 
+    return None
 
 def bidirectional_Dijkstra_7(G, w, s, t):
     """
@@ -710,8 +710,8 @@ def bidirectional_Dijkstra_7(G, w, s, t):
             if (v.state_b == "CLOSED"):
                 yield VisualData(v.label + " is closed in both searches" ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 yield VisualData("Algorithm now has to find vertex with lowest sum" ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
-                min = NCPP(G, 1)
-                yield VisualData("Length of shortest path is " + str(min) ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
+                min, mid = NCPP(G, 1)
+                yield VisualData("Vertex with lowest sum is: " + mid.label + ". Length of shortest path is " + str(min) ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 return min                  
             for u in sorted(G.successors(v), key=lambda node: node.id):
                 if u.state_f == "UNVISITED":
@@ -733,8 +733,8 @@ def bidirectional_Dijkstra_7(G, w, s, t):
             if (v.state_f == "CLOSED"):
                 yield VisualData(v.label + " is closed in both searches" ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 yield VisualData("Algorithm now has to find vertex with lowest sum" ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
-                min = NCPP(G, 1)
-                yield VisualData("Length of shortest path is " + str(min) ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
+                min, mid = NCPP(G, 1)
+                yield VisualData("Vertex with lowest sum is: " + mid.label + ". Length of shortest path is " + str(min) ,queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 return min  
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
                 if u.state_b == "UNVISITED":
@@ -783,9 +783,9 @@ def bidirectional_Dijkstra_8(G, w, s, t):
                         yield VisualData("fwd: Changed priority of " + u.label + " to " + str(u.d_f), queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 if (u.state_b == "OPEN" or u.state_b == "CLOSED"):
                     yield VisualData("Both searches encountered " + u.label,queue_f=Q_f, queue_b=Q_b) # for visual purposes 
-                    NCPP(G, 1)
+                    NCPP(G, 2, u)
                     yield VisualData("Length of found path is " + str(u.d_f + u.d_b), queue_f=Q_f, queue_b=Q_b) # for visual purposes
-                    return
+                    return u.d_f + u.d_b
         else:
             v = Q_b.extractMin()
             v.state_b = "CLOSED"
@@ -805,9 +805,9 @@ def bidirectional_Dijkstra_8(G, w, s, t):
                         yield VisualData("bwd: Changed priority of " + u.label + " to " + str(u.d_b), queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 if (u.state_f == "OPEN" or u.state_f == "CLOSED"):
                     yield VisualData("Both searches encountered " + u.label,queue_f=Q_f, queue_b=Q_b) # for visual purposes 
-                    NCPP(G, 1)
+                    NCPP(G, 2, u)
                     yield VisualData("Length of found path is " + str(u.d_f + u.d_b), queue_f=Q_f, queue_b=Q_b) # for visual purposes
-                    return
+                    return u.d_f + u.d_b
     yield VisualData("no path found", queue_f=Q_f, queue_b=Q_b) # for visual purposes
     return None
 
@@ -837,7 +837,7 @@ def bidirectional_Dijkstra_9(G, w, s, t):
                 yield VisualData(mu_txt + current_node_b.label + ".d_b + " + current_node_f.label + ".d_f >= μ => ending the search", queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 NCPP(G, 2, middle_vertex)
                 yield VisualData("Length of shortest path is " + str(mu), queue_f=Q_f, queue_b=Q_b) # for visual purposes
-                return              
+                return mu              
             for u in sorted(G.successors(v), key=lambda node: node.id):
                 if u.state_f == "UNVISITED":
                     u.d_f = v.d_f + w(v, u)
@@ -865,7 +865,7 @@ def bidirectional_Dijkstra_9(G, w, s, t):
                 yield VisualData(mu_txt + current_node_b.label + ".d_b + " + current_node_f.label + ".d_f >= μ => ending the search", queue_f=Q_f, queue_b=Q_b) # for visual purposes
                 NCPP(G, 2, middle_vertex)
                 yield VisualData("Length of shortest path is " + str(mu), queue_f=Q_f, queue_b=Q_b) # for visual purposes
-                return           
+                return mu          
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
                 if u.state_b == "UNVISITED":
                     u.d_b = v.d_b + w(u, v)
@@ -884,8 +884,7 @@ def bidirectional_Dijkstra_9(G, w, s, t):
                     yield VisualData(u.label + " is closed in fwd and " + v.label + ".d_b + " + u.label + ".d_f + w(" + v.label + ", " + u.label  + ") < μ => " + mu_txt , queue_f=Q_f, queue_b=Q_b) # for visual purposes
                     middle_vertex = v
                     mu = v.d_b + u.d_f + w(u, v)
-            fwd = not fwd
-    return 
+    return None
 
 def bidirectional_Dijkstra_10(G, w, s, t):
     """
@@ -905,8 +904,8 @@ def bidirectional_Dijkstra_10(G, w, s, t):
             if (v.state_b == "CLOSED"):
                 yield (False, v.label + " is closed in both searches") # for visual purposes
                 yield (False, "Algorithm now has to find vertex with lowest sum") # for visual purposes
-                min = NCPP(G, 1)
-                yield (False, "Length of shortest path is " + str(min)) # for visual purposes
+                min, mid = NCPP(G, 1)
+                yield (False, "Vertex with lowest sum is: " + mid.label + ". Length of shortest path is " + str(min)) # for visual purposes
                 return min                              
             for u in sorted(G.successors(v), key=lambda node: node.id):
                 if u.state_f == "UNVISITED":
@@ -934,8 +933,8 @@ def bidirectional_Dijkstra_10(G, w, s, t):
             if (v.state_f == "CLOSED"):
                 yield (False, v.label + " is closed in both searches") # for visual purposes
                 yield (False, "Algorithm now has to find vertex with lowest sum") # for visual purposes
-                min = NCPP(G, 1)
-                yield (False, "Length of shortest path is " + str(min)) # for visual purposes
+                min, mid = NCPP(G, 1)
+                yield (False, "Vertex with lowest sum is: " + mid.label + ". Length of shortest path is " + str(min)) # for visual purposes
                 return min       
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
                 if u.state_b == "UNVISITED":
@@ -1015,9 +1014,9 @@ def bidirectional_Dijkstra_11(G, w, s, t):
                         yield (not (u.state_b == "OPEN" or u.state_b == "CLOSED"), "v_f: " + current_node_f.label + ", v_b: " + (current_node_b.label if current_node_b else "-") + ". " + "fwd: Changed priority of " + u.label + " to " + str(u.d_f)) # for visual purposes
                 if (u.state_b == "OPEN" or u.state_b == "CLOSED"):
                     yield (False, "Both searches encountered " + u.label) # for visual purposes
-                    NCPP(G, 1)
+                    NCPP(G, 2, u)
                     yield (False, "Length of found path is " + str(u.d_f + u.d_b)) # for visual purposes
-                    return
+                    return u.d_f + u.d_b
         yield (False, "No path found")
         return None
     
@@ -1043,9 +1042,9 @@ def bidirectional_Dijkstra_11(G, w, s, t):
                         yield (not (u.state_f == "OPEN" or u.state_f == "CLOSED"), "v_f: " + current_node_f.label + ", v_b: " + current_node_b.label + ". " + "bwd: Changed priority of " + u.label + " to " + str(u.d_f)) # for visual purposes
                 if (u.state_f == "OPEN" or u.state_f == "CLOSED"):
                     yield (False, "Both searches encountered " + u.label) # for visual purposes
-                    NCPP(G, 1)
+                    NCPP(G, 2, u)
                     yield (False, "Length of found path is " + str(u.d_f + u.d_b)) # for visual purposes
-                    return
+                    return u.d_f + u.d_b
         yield (False, "No path found")
         return None
 
@@ -1107,7 +1106,7 @@ def bidirectional_Dijkstra_12(G, w, s, t):
                 yield (False, "v_f: " + current_node_f.label + ", v_b: " + current_node_b.label + ". " + mu_txt + current_node_b.label + ".d_b + " + current_node_f.label + ".d_f >= μ => ending the search") # for visual purposes
                 NCPP(G, 2, middle_vertex)
                 yield (False, "Length of shortest path is " + str(mu)) # for visual purposes              
-                return None             
+                return mu             
             for u in sorted(G.successors(v), key=lambda node: node.id):
                 if u.state_f == "UNVISITED":
                     u.d_f = v.d_f + w(v, u)
@@ -1140,7 +1139,7 @@ def bidirectional_Dijkstra_12(G, w, s, t):
                 yield(False, "v_f: " + current_node_f.label + ", v_b: " + current_node_b.label + ". " + mu_txt + current_node_b.label + ".d_b + " + current_node_f.label + ".d_f >= μ => ending the search") # for visual purposes
                 NCPP(G, 2, middle_vertex)
                 yield (False, "Length of shortest path is " + str(mu)) # for visual purposes          
-                return None
+                return mu
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
                 if u.state_b == "UNVISITED":
                     u.d_b = v.d_b + w(u, v)

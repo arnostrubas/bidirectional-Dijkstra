@@ -117,6 +117,27 @@ export let dijkstra_faster = [
     { data: { id: 'e17', source: '11', target: '9', weight: 8 } }
 ]
 
+export let empty_graph = [
+    { data: { id: '-1', label: 'START' }, position: { x: 0, y: 0 } },
+    { data: { id: '0', label: 'TARGET' }, position: { x: 600, y: 0 } }
+]
+
+export let same_vertex_closed_example = [
+    { data: { id: '-1', label: 'START' }, position: { x: 19, y: -48 } },
+    { data: { id: '0', label: 'TARGET' }, position: { x: 570, y: -45 } },
+    { data: { id: '1', label: '1' }, position: { x: 93, y: 73 } },
+    { data: { id: '2', label: '2' }, position: { x: 255, y: 127 } },
+    { data: { id: '3', label: '3' }, position: { x: 429, y: 84 } },
+    { data: { id: '4', label: '4' }, position: { x: 268, y: -146 } },
+
+    { data: { id: 'e1', source: '3', target: '0', weight: 3 } },
+    { data: { id: 'e2', source: '4', target: '0', weight: 6 } },
+    { data: { id: 'e3', source: '-1', target: '1', weight: 3 } },
+    { data: { id: 'e4', source: '1', target: '2', weight: 3 } },
+    { data: { id: 'e5', source: '2', target: '3', weight: 3 } },
+    { data: { id: 'e6', source: '-1', target: '4', weight: 5 } }
+]
+
 export let huge_graph = [
     { data: { id: '-1', label: 'START' }, position: { x: 34, y: 307 } },
     { data: { id: '0', label: 'TARGET' }, position: { x: 783, y: 307 } },

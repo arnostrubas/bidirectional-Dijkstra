@@ -538,17 +538,32 @@ export function load_graph(graph_to_load, load_right) {
     
     let cy = load_right ? cy_right : cy_left;
     let graph = null;
-    if (graph_to_load == 'start_graph') {
-        graph = JSON.parse(JSON.stringify(graphs.start_graph));
-    } else if (graph_to_load == 'first_encounter') {
-        graph = JSON.parse(JSON.stringify(graphs.first_encounter));
-    } else if (graph_to_load == 'path') {
-        graph = JSON.parse(JSON.stringify(graphs.path));
-    } else if (graph_to_load == 'dijkstra_faster') {
-        graph = JSON.parse(JSON.stringify(graphs.dijkstra_faster));
-    } else if (graph_to_load == 'huge_graph') {
-        graph = JSON.parse(JSON.stringify(graphs.huge_graph));
+    switch (graph_to_load) {
+        case "start_graph":
+            graph = JSON.parse(JSON.stringify(graphs.start_graph));
+            break; 
+        case "first_encounter":
+            graph = JSON.parse(JSON.stringify(graphs.first_encounter));
+            break;
+        case "path":
+            graph = JSON.parse(JSON.stringify(graphs.path));
+            break;
+        case "dijkstra_faster":
+            graph = JSON.parse(JSON.stringify(graphs.dijkstra_faster));
+            break;
+        case "huge_graph":
+            graph = JSON.parse(JSON.stringify(graphs.huge_graph));
+            break;
+        case "empty_graph":
+            graph = JSON.parse(JSON.stringify(graphs.empty_graph));
+            break;
+        case "same_vertex_closed":
+            graph = JSON.parse(JSON.stringify(graphs.same_vertex_closed_example));
+            break;
+        default:
+            break;
     }
+
     if (graph != null) {
         cy.remove(cy.elements());
         cy.add(graph);

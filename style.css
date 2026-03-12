@@ -123,12 +123,16 @@ html, body {
     flex: 1;
     padding: 10px;
     gap: 20px;
+    min-width: 0;
+    min-height: 0;
 }
 
 #graph_container1, #graph_container2 {
+    display: flex;
     flex: 1; 
     border: 1px solid #000000;
-    box-sizing: border-box;
+    min-width: 0;
+    min-height: 0;
 }
 
 #queues {

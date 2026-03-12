@@ -373,17 +373,6 @@ export function disableVertexRemoving()
     cy_right.off('select', 'node', remove_vertex);
 }
 
-export function reset() {
-    setText('Qf1_text', "");
-    setText('Qb1_text', "");
-    setText('Qf2_text', "");
-    setText('Qb2_text', "");
-    setText('explain_text1', "");
-    setText('explain_text2', "");
-    reset_graphs();
-    running_visualisation = false;
-}
-
 export function enableEdgeAdding() {
     eh1.enableDrawMode();
     eh2.enableDrawMode();
@@ -405,6 +394,18 @@ export function disableEdgeRemoving()
 {
     cy_left.off('select', 'edge', remove_edge);
     cy_right.off('select', 'edge', remove_edge);
+}
+
+
+export function reset() {
+    setText('Qf1_text', "");
+    setText('Qb1_text', "");
+    setText('Qf2_text', "");
+    setText('Qb2_text', "");
+    setText('explain_text1', "");
+    setText('explain_text2', "");
+    reset_graphs();
+    running_visualisation = false;
 }
 
 export function getcyElements(get_cy_right) {

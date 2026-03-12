@@ -4,10 +4,9 @@ cytoscape.use(edgehandles);
 import popper from 'https://esm.sh/cytoscape-popper@2.0.0';
 cytoscape.use(popper);
 import { layout, style } from './cy_style_script.js';
-import * as graphs from './graphs.js';
 import { setText, update_text_containers } from './queue_text_script.js'
 import { set_graph_select_to_default } from './buttons_script.js'
-import { export_as_jpg, export_as_txt, import_txt } from './cytoscape_im-export.js'
+import * as data_func from './cytoscape_data_script.js'
 
 const container1 = document.getElementById('graph_container1');
 const container2 = document.getElementById('graph_container2');
@@ -201,31 +200,6 @@ function remove_edge()
     if (selected_edge2) remove_from_selected_edges(selected_edge2);
 }
 
-function clean_data(cy)
-{
-    let nodes = cy.nodes().map(node => {
-        return {
-            label: node.data('label'),
-            id: node.id(),
-            x: node.position().x,
-            y: node.position().y
-        }
-    });
-    let edges = cy.edges().map(edge => {
-        return {
-            id: edge.id(),
-            source: edge.source().id(),
-            target: edge.target().id(),
-            weight: edge.data('weight')
-        };
-    });
-    let graph = {
-        nodes: nodes,
-        edges: edges
-    };
-    return graph;
-}
-
 function reset_graphs()
 {
     cy_left.nodes().forEach(n => {
@@ -340,12 +314,8 @@ function update_texts()
 */ 
 
 export function graphs_init() {
-    cy_left.add(JSON.parse(JSON.stringify(graphs.start_graph)));
-    cy_left.layout(layout).run();
-    cy_left.fit();
-    cy_right.add(JSON.parse(JSON.stringify(graphs.start_graph)));
-    cy_right.layout(layout).run();
-    cy_right.fit();
+    data_func.load_start_graph(cy_left);
+    data_func.load_start_graph(cy_right);
 }
 
 export function enableVertexAdding()
@@ -396,7 +366,6 @@ export function disableEdgeRemoving()
     cy_right.off('select', 'edge', remove_edge);
 }
 
-
 export function reset() {
     setText('Qf1_text', "");
     setText('Qb1_text', "");
@@ -409,8 +378,8 @@ export function reset() {
 }
 
 export function getcyElements(get_cy_right) {
-    if (get_cy_right) return clean_data(cy_right);
-    else return clean_data(cy_left);
+    if (get_cy_right) return data_func.clean_data(cy_right);
+    else return data_func.clean_data(cy_left);
 }
 
 export function calculate(json)
@@ -524,7 +493,6 @@ export function copy(copy_left_to_right) {
     cy.remove(cy.elements());
     cy.add(cy_other.elements());
     cy.fit();
-    
 }
 
 export function fit(fit_right) {
@@ -536,54 +504,23 @@ export function load_graph(graph_to_load, load_right) {
     cy_left.off('add remove');
     cy_right.off('add remove');
     
-    let cy = load_right ? cy_right : cy_left;
-    let graph = null;
-    switch (graph_to_load) {
-        case "start_graph":
-            graph = JSON.parse(JSON.stringify(graphs.start_graph));
-            break; 
-        case "first_encounter":
-            graph = JSON.parse(JSON.stringify(graphs.first_encounter));
-            break;
-        case "path":
-            graph = JSON.parse(JSON.stringify(graphs.path));
-            break;
-        case "dijkstra_faster":
-            graph = JSON.parse(JSON.stringify(graphs.dijkstra_faster));
-            break;
-        case "huge_graph":
-            graph = JSON.parse(JSON.stringify(graphs.huge_graph));
-            break;
-        case "empty_graph":
-            graph = JSON.parse(JSON.stringify(graphs.empty_graph));
-            break;
-        case "same_vertex_closed":
-            graph = JSON.parse(JSON.stringify(graphs.same_vertex_closed_example));
-            break;
-        default:
-            break;
-    }
-
-    if (graph != null) {
-        cy.remove(cy.elements());
-        cy.add(graph);
-        cy.fit();
-    }
+    data_func.load_premade_graph(load_right ? cy_right : cy_left, graph_to_load)
+    
     cy_left.on('add remove', (event) => set_graph_select_to_default(false));
     cy_right.on('add remove', (event) => set_graph_select_to_default(true));
 }
 
 export function export_image(export_right)
 {
-    export_as_jpg(export_right ? cy_right : cy_left);
+    data_func.export_as_jpg(export_right ? cy_right : cy_left);
 }
 
 export function export_data(export_right)
 {
-    export_as_txt(export_right);
+    data_func.export_as_txt(export_right ? cy_right : cy_left);
 }
 
 export function import_data(event, import_right)
 {
-    import_txt(event, import_right ? cy_right : cy_left);
+    data_func.import_txt(event, import_right ? cy_right : cy_left);
 }

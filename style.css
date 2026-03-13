@@ -7,6 +7,10 @@ html, body {
     overflow: hidden;
 }
 
+div, select, button {
+    border-radius: 10px; 
+}
+
 #buttons_and_checkboxes {
     display: flex;
     flex-direction: row;
@@ -15,6 +19,8 @@ html, body {
     gap: 20px;
     padding: 10px;
     background-color: #f0f0f0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); 
+    border: 1px solid #e0e0e0;
 }
 
 .checkboxes {
@@ -40,7 +46,7 @@ html, body {
 }
 
 .empty {
-    flex: 2.6;
+    flex: 2.3;
 }
 
 .empty2 {
@@ -168,7 +174,6 @@ html, body {
     background-color: #648cfa;
     cursor: pointer; 
     border: none; 
-    border-radius: 5px; 
     padding: 10px 15px;
 }
 
@@ -186,7 +191,6 @@ html, body {
     background-color: #648cfa;
     cursor: pointer; 
     border: none; 
-    border-radius: 5px; 
     padding: 10px;
 }
 
@@ -199,7 +203,6 @@ html, body {
     background-color: #648cfa;
     cursor: pointer; 
     border: none; 
-    border-radius: 5px; 
     padding: 10px 15px;
 }
 
@@ -228,7 +231,6 @@ html, body {
     background-color: #648cfa;
     cursor: pointer; 
     border: none; 
-    border-radius: 5px; 
     padding: 10px 15px;
 }
 
@@ -286,6 +288,6 @@ html, body {
 }
 
 .useful_links_texts {
-    flex: 0.5;
+    flex: 0.8;
     flex-direction: column;
 }

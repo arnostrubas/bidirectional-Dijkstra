@@ -129,13 +129,16 @@ export let same_vertex_closed_example = [
     { data: { id: '2', label: '2' }, position: { x: 255, y: 127 } },
     { data: { id: '3', label: '3' }, position: { x: 429, y: 84 } },
     { data: { id: '4', label: '4' }, position: { x: 268, y: -146 } },
+    { data: { id: '5', label: '5' }, position: { x: 350, y: 160 } },
 
     { data: { id: 'e1', source: '3', target: '0', weight: 3 } },
     { data: { id: 'e2', source: '4', target: '0', weight: 6 } },
     { data: { id: 'e3', source: '-1', target: '1', weight: 3 } },
     { data: { id: 'e4', source: '1', target: '2', weight: 3 } },
     { data: { id: 'e5', source: '2', target: '3', weight: 3 } },
-    { data: { id: 'e6', source: '-1', target: '4', weight: 5 } }
+    { data: { id: 'e6', source: '-1', target: '4', weight: 5 } },
+    { data: { id: 'e7', source: '2', target: '5', weight: 4 } },
+    { data: { id: 'e8', source: '5', target: '3', weight: 5 } },
 ]
 
 export let huge_graph = [

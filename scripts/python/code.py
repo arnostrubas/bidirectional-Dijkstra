@@ -1102,7 +1102,7 @@ def bidirectional_Dijkstra_12(G, w, s, t):
             v.state_f = "CLOSED"
             current_node_f = v
             yield (False, "v_f: " + current_node_f.label + ", v_b: " + (current_node_b.label if current_node_b else "-") + ". " + mu_txt + "fwd: Extracted and closed " + v.label) # for visual purposes  
-            if (current_node_b and current_node_f and current_node_f.d_f + current_node_b.d_b > mu):
+            if (current_node_b and current_node_f and current_node_f.d_f + current_node_b.d_b >= mu):
                 yield (False, "v_f: " + current_node_f.label + ", v_b: " + current_node_b.label + ". " + mu_txt + current_node_b.label + ".d_b + " + current_node_f.label + ".d_f >= μ => ending the search") # for visual purposes
                 NCPP(G, 2, middle_vertex)
                 yield (False, "Length of shortest path is " + str(mu)) # for visual purposes              

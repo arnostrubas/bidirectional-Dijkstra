@@ -163,7 +163,7 @@ function remove_edge(cy)
  * @param {*} text - step expl list
  * @param {*} n - current position in lists
  */
-function reset_graph(cy, list, q_f, q_b, text, n)
+function reset_graph(cy, list, q_f, q_b, text)
 {
     cy.nodes().forEach(n => {
         n.data("state_f","UNVISITED");
@@ -172,11 +172,11 @@ function reset_graph(cy, list, q_f, q_b, text, n)
     cy.edges().forEach(e => {
         e.data("state", "");
     });
+
     list = [];
     q_f = [];
     q_b = [];
     text = [];
-    n = 0;
 }
 
 /**
@@ -184,8 +184,10 @@ function reset_graph(cy, list, q_f, q_b, text, n)
  */
 function reset_graphs()
 {
-    reset_graph(cy_left, left_list, left_q_f, left_q_b, left_text, left_n);
-    reset_graph(cy_right, right_list, right_q_f, right_q_b, right_text, right_n);
+    reset_graph(cy_left, left_list, left_q_f, left_q_b, left_text);
+    reset_graph(cy_right, right_list, right_q_f, right_q_b, right_text);
+    left_n = 0;
+    right_n = 0;
 }
 
 /**
@@ -365,23 +367,27 @@ export function start_visualisation(json)
  */
 export function move(next)
 {
-    if (next) {
-        const first_done = left_n + 1 == left_list.length;
-        const second_done = right_n + 1 == right_list.length;
+    try {
+        if (next) {
+            const first_done = left_n + 1 == left_list.length;
+            const second_done = right_n + 1 == right_list.length;
 
-        if (first_done && second_done) throw "End of both algorithms";
-        if (!first_done) left_n++;
-        if (!second_done) right_n++;
-    } 
-    else {
-        const first_start = left_n == 0;
-        const second_start = right_n == 0;
+            if (first_done && second_done) throw "End of both algorithms";
+            if (!first_done) left_n++;
+            if (!second_done) right_n++;
+        } 
+        else {
+            const first_start = left_n == 0;
+            const second_start = right_n == 0;
 
-        if (first_start && second_start) throw "At the start of both algorithms";
-        if (!first_start && left_n >= right_n) left_n--;
-        if (!second_start && right_n >= left_n + 1) right_n--;
+            if (first_start && second_start) throw "At the start of both algorithms";
+            if (!first_start && left_n >= right_n) left_n--;
+            if (!second_start && right_n >= left_n + 1) right_n--;
+        }
+        update_graphs_and_texts(next); 
+    } catch (error) {
+        alert(error);
     }
-    update_graphs_and_texts(next); 
 }
 
 /**

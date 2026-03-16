@@ -1,3 +1,9 @@
+/**
+ * Switches ids of two vertexes. Also reroutes all edge leading in/from these vertexes so only the ids are changed
+ * @param {cytoscape.Core} cy - cytoscape in which vertexes should be switched  
+ * @param {*} old_id - id of first vertex
+ * @param {*} new_id - id of second vertex
+ */
 function switch_vertexes(cy, old_id, new_id)
 {
     let old_vertex = cy.getElementById(old_id);
@@ -32,6 +38,12 @@ function switch_vertexes(cy, old_id, new_id)
     }
 }
 
+/**
+ * Shows popper of node that has been clicked in {@link event}
+ * @param {*} evt 
+ * @param {cytoscape.Core} cy - cytoscape in which to show popper 
+ * @param {boolen} running_visualisation - whether cis is running, if true, buttons in popper are disabled
+ */
 export function show_popper(evt, cy, running_visualisation)
 {
     const getLabel = (id) => {

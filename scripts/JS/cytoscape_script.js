@@ -5,7 +5,7 @@ import popper from 'https://esm.sh/cytoscape-popper@2.0.0';
 cytoscape.use(popper);
 import { show_popper } from './popper_script.js';
 import { layout, style } from './cy_style_script.js';
-import { setText, update_text_containers } from './queue_text_script.js'
+import { reset_text_containers, update_text_containers } from './queue_text_script.js'
 import { set_graph_select_to_default } from './buttons_script.js'
 import * as data_func from './cytoscape_data_script.js'
 
@@ -26,6 +26,7 @@ let eh_left = cy_left.edgehandles();
 cy_left.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge, cy_left));
 cy_left.on('add remove', (event) => set_graph_select_to_default(false));
 cy_left.on('cxttap', 'node', (event) => show_popper(event, cy_left, running_visualisation));
+// Lists where graph, queue and steps explanation data are stored + current position in these lists
 let left_list = [];
 let left_n = 0;
 let left_q_f = [];
@@ -44,6 +45,7 @@ let eh_right = cy_right.edgehandles();
 cy_right.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge, cy_right));
 cy_right.on('add remove', (event) => set_graph_select_to_default(true));
 cy_right.on('cxttap', 'node', (event) => show_popper(event, cy_right, running_visualisation));
+// Lists where graph, queue and steps explanation data are stored + current position in these lists
 let right_list = [];
 let right_n = 0;
 let right_q_f = [];
@@ -56,12 +58,46 @@ let right_text = [];
 ==================================================================================
 */
 
+/**
+ * Finds lowest positive number that can be used as vertex id
+ * @param {cytoscape.Core} cy - cytoscape for which the new id is to be found
+ * @returns {int} - lowest positive number that isnt used as vertex id
+ */
+function find_new_vertex_id(cy) 
+{
+    const sortedVertexes = cy.nodes().sort((a, b) => {
+        return a.id().localeCompare(b.id(), undefined, {numeric: true, sensitivity: 'base'});
+    });
+    let new_index = -1;
+    sortedVertexes.forEach(v => {
+        if (v.id() != new_index) return new_index;
+        new_index++;
+    });
+    return new_index;
+}
+
+/**
+ * Unselects all selected nodes and edges
+ */
+function unselect()
+{
+    cy_left.nodes().unselect();
+    cy_right.nodes().unselect();
+    cy_left.edges().unselect();
+    cy_right.edges().unselect();
+}
+
+/**
+ * Extends edgehandles. Adds weight (inputed by user) to {@link addedEdge}. Prevents multigraph creation
+ * @param {cytoscape.EdgeSingular} addedEdge - edge added by edgehandles
+ * @param {cytoscape.Core} cy - cytoscape in which the edge was added
+ */
 function add_edge(addedEdge, cy) 
 {
-    let input = prompt("Zadej váhu hrany (číslo mezi 1 a 999999 včetně):", "1");
+    let input = prompt("Zadej váhu hrany (číslo mezi 1 a 1000 včetně):", "1");
     if (input !== null) {
         let weight = Number(input);
-        if (!isNaN(weight) && weight >= 1 && weight <= 999999) {
+        if (!isNaN(weight) && weight >= 1 && weight <= 1000) {
             if (cy.edges(`edge[source = "${addedEdge.source().id()}"][target = "${addedEdge.target().id()}"]`).length > 1) {
                 alert("Cannot create a multigraph");
                 addedEdge.remove();
@@ -77,19 +113,10 @@ function add_edge(addedEdge, cy)
     }
 }
 
-function find_new_vertex_id(cy) 
-{
-    const sortedVertexes = cy.nodes().sort((a, b) => {
-        return a.id().localeCompare(b.id(), undefined, {numeric: true, sensitivity: 'base'});
-    });
-    let new_index = -1;
-    sortedVertexes.forEach(v => {
-        if (v.id() != new_index) return new_index;
-        new_index++;
-    });
-    return new_index;
-}
-
+/**
+ * Add vertex to cytoscape in which {@link event} (click) occured
+ * @param {cytoscape.EventObject} event - click event
+ */
 function add_vertex(event)
 {  
     const cy = event.cy;
@@ -107,53 +134,66 @@ function add_vertex(event)
     }
 }
 
-function remove_vertex() 
+/**
+ * Removes vertex selected in {@link cy}
+ * @param {cytoscape.Core} cy 
+ */
+function remove_vertex(cy) 
 {
-    let selected_vertex1 = cy_left.$('node:selected');
-    if (selected_vertex1) selected_vertex1.remove();
-
-    let selected_vertex2 = cy_right.$('node:selected');
-    if (selected_vertex2) selected_vertex2.remove();
+    let selected_vertex = cy.$('node:selected');
+    if (selected_vertex) selected_vertex.remove();
 }
 
-function remove_edge()
+/**
+ * Removes edge selected in {@link cy}
+ * @param {cytoscape.Core} cy 
+ */
+function remove_edge(cy)
 {
-    let selected_edge1 = cy_left.$('edge:selected');
-    if (selected_edge1) selected_edge1.remove();
-
-    let selected_edge2 = cy_right.$('edge:selected');
-    if (selected_edge2) selected_edge2.remove();
+    let selected_edge = cy.$('edge:selected');
+    if (selected_edge) selected_edge.remove();
 }
 
+/**
+ * Resets graph in {@link cy} and all its lists
+ * @param {cytoscape.Core} cy 
+ * @param {*} list - graph data list
+ * @param {*} q_f - fwd queue list
+ * @param {*} q_b - bwd queue list
+ * @param {*} text - step expl list
+ * @param {*} n - current position in lists
+ */
+function reset_graph(cy, list, q_f, q_b, text, n)
+{
+    cy.nodes().forEach(n => {
+        n.data("state_f","UNVISITED");
+        n.data("state_b","UNVISITED");
+    });
+    cy.edges().forEach(e => {
+        e.data("state", "");
+    });
+    list = [];
+    q_f = [];
+    q_b = [];
+    text = [];
+    n = 0;
+}
+
+/**
+ * Resets both graphs
+ */
 function reset_graphs()
 {
-    cy_left.nodes().forEach(n => {
-        n.data("state_f","UNVISITED");
-        n.data("state_b","UNVISITED");
-    });
-    cy_left.edges().forEach(e => {
-        e.data("state", "");
-    });
-    left_list = [];
-    left_q_f = [];
-    left_q_b = [];
-    left_text = [];
-    left_n = 0;
-
-    cy_right.nodes().forEach(n => {
-        n.data("state_f","UNVISITED");
-        n.data("state_b","UNVISITED");
-    });
-    cy_right.edges().forEach(e => {
-        e.data("state", "");
-    });
-    right_list = [];
-    right_q_f = [];
-    right_q_b = [];
-    right_text = [];
-    right_n = 0;
+    reset_graph(cy_left, left_list, left_q_f, left_q_b, left_text, left_n);
+    reset_graph(cy_right, right_list, right_q_f, right_q_b, right_text, right_n);
 }
 
+/**
+ * Updates {@link cy} graph with data stored in {@link elements}
+ * @param {cytoscape.Core} cy - cytoscape to change
+ * @param {Object} elements - object containing data as JSON
+ * @param {boolean} animate - wheter to animate the updates 
+ */
 function update_graph(cy, elements, animate)
 {
     let nodes = JSON.parse(elements.nodes);
@@ -183,6 +223,10 @@ function update_graph(cy, elements, animate)
     });
 }
 
+/**
+ * Updates both graphs and all text containers
+ * @param {boolean} animate - whether to animate changes made to graph 
+ */
 function update_graphs_and_texts(animate)
 {
     update_graph(cy_left, left_list[left_n], animate);
@@ -191,91 +235,15 @@ function update_graphs_and_texts(animate)
                 right_q_f[right_n], right_q_b[right_n],
                 left_text[left_n], right_text[right_n]);
 }
-
-function unselect()
-{
-    cy_left.nodes().unselect();
-    cy_right.nodes().unselect();
-    cy_left.edges().unselect();
-    cy_right.edges().unselect();
-}
-
-/*
-==================================================================================
-                            EXPORT FUNCTIONS
-==================================================================================
-*/ 
-
-export function graphs_init() {
-    data_func.load_start_graph(cy_left);
-    data_func.load_start_graph(cy_right);
-}
-
-export function enableVertexAdding()
-{
-    cy_left.on('tap', add_vertex);
-    cy_right.on('tap', add_vertex);
-}
-
-export function disableVertexAdding()
-{
-    cy_left.off('tap', add_vertex);
-    cy_right.off('tap', add_vertex);
-}
-
-export function enableVertexRemoving()
-{
-    unselect();
-    cy_left.on('select', 'node', remove_vertex);
-    cy_right.on('select', 'node', remove_vertex);
-}
-
-export function disableVertexRemoving()
-{
-    cy_left.off('select', 'node', remove_vertex);
-    cy_right.off('select', 'node', remove_vertex);
-}
-
-export function enableEdgeAdding() {
-    eh_left.enableDrawMode();
-    eh_right.enableDrawMode();
-}
-
-export function disableEdgeAdding() {
-    eh_left.disableDrawMode();
-    eh_right.disableDrawMode();
-}
-
-export function enableEdgeRemoving()
-{
-    unselect();
-    cy_left.on('select', 'edge', remove_edge);
-    cy_right.on('select', 'edge', remove_edge);
-}
-
-export function disableEdgeRemoving()
-{
-    cy_left.off('select', 'edge', remove_edge);
-    cy_right.off('select', 'edge', remove_edge);
-}
-
-export function reset() {
-    setText('Qf1_text', "");
-    setText('Qb1_text', "");
-    setText('Qf2_text', "");
-    setText('Qb2_text', "");
-    setText('explain_text1', "");
-    setText('explain_text2', "");
-    reset_graphs();
-    running_visualisation = false;
-}
-
-export function getcyElements(get_cy_right) {
-    if (get_cy_right) return data_func.clean_data(cy_right);
-    else return data_func.clean_data(cy_left);
-}
-
-function load_from_py(part, list, q_f, q_b, text, cy)
+/**
+ * Loads data from JSON {@link part} into lists
+ * @param {Object} part - object with stored data
+ * @param {*} list - will contain graph data
+ * @param {*} q_f - will contain fwd queue data
+ * @param {*} q_b - will contain bwd queue data
+ * @param {*} text - will contain step expl data
+ */
+function load_from_py(part, list, q_f, q_b, text)
 {
     const steps = JSON.parse(part.steps);
     const graph_data = steps.data;
@@ -294,7 +262,92 @@ function load_from_py(part, list, q_f, q_b, text, cy)
     });
 }
 
-export function calculate(json)
+/*
+==================================================================================
+                            EXPORT FUNCTIONS
+==================================================================================
+*/ 
+
+/**
+ * Initialises both graphs with starting graph
+ */
+export function graphs_init() {
+    data_func.load_start_graph(cy_left);
+    data_func.load_start_graph(cy_right);
+}
+
+/**
+ * Resets both graphs and all text containers
+ */
+export function reset() {
+    reset_text_containers();
+    reset_graphs();
+    running_visualisation = false;
+}
+
+export function enableVertexAdding()
+{
+    cy_left.on('tap', add_vertex);
+    cy_right.on('tap', add_vertex);
+}
+
+export function disableVertexAdding()
+{
+    cy_left.off('tap', add_vertex);
+    cy_right.off('tap', add_vertex);
+}
+
+export function enableVertexRemoving()
+{
+    unselect();
+    cy_left.on('select', 'node', _ => remove_vertex(cy_left));
+    cy_right.on('select', 'node',  _ => remove_vertex(cy_right));
+}
+
+export function disableVertexRemoving()
+{
+    cy_left.off('select', 'node');
+    cy_right.off('select', 'node');
+}
+
+export function enableEdgeAdding() {
+    eh_left.enableDrawMode();
+    eh_right.enableDrawMode();
+}
+
+export function disableEdgeAdding() {
+    eh_left.disableDrawMode();
+    eh_right.disableDrawMode();
+}
+
+export function enableEdgeRemoving()
+{
+    unselect();
+    cy_left.on('select', 'edge', _ => remove_edge(cy_left));
+    cy_right.on('select', 'edge', _ => remove_edge(cy_right));
+}
+
+export function disableEdgeRemoving()
+{
+    cy_left.off('select', 'edge');
+    cy_right.off('select', 'edge');
+}
+
+/**
+ * Returns data of requested cytoscape
+ * @param {boolean} get_cy_right - true for right cytoscape data, false for left cytoscape data
+ * @returns cytoscape elements data
+ */
+export function getcyElements(get_cy_right) {
+    if (get_cy_right) return data_func.clean_data(cy_right);
+    else return data_func.clean_data(cy_left);
+}
+
+/**
+ * Runs python script with parameters from {@link json} and loads data returned by it
+ * @param {Object} json - json containing data set by user
+ */
+export function start_visualisation(json)
 {
     running_visualisation = true;
     let result = window.run(json);
@@ -306,7 +359,36 @@ export function calculate(json)
     update_graphs_and_texts(false);
 }
 
-export function final_path_or_start(final)
+/**
+ * Shows new step of the algorithm
+ * @param {boolean} next - true to show next step of algorithm, false for previous step 
+ */
+export function move(next)
+{
+    if (next) {
+        const first_done = left_n + 1 == left_list.length;
+        const second_done = right_n + 1 == right_list.length;
+
+        if (first_done && second_done) throw "End of both algorithms";
+        if (!first_done) left_n++;
+        if (!second_done) right_n++;
+    } 
+    else {
+        const first_start = left_n == 0;
+        const second_start = right_n == 0;
+
+        if (first_start && second_start) throw "At the start of both algorithms";
+        if (!first_start && left_n >= right_n) left_n--;
+        if (!second_start && right_n >= left_n + 1) right_n--;
+    }
+    update_graphs_and_texts(next); 
+}
+
+/**
+ * Version of move function that shows only the final path
+ * @param {boolean} final - true to show final path, false to show init step of algortihm 
+ */
+export function move_final_path_or_start(final)
 {
     if (final) {
         left_n = left_list.length - 1;
@@ -318,31 +400,10 @@ export function final_path_or_start(final)
     update_graphs_and_texts(false);
 }
 
-export function move(next)
-{
-    try {
-        if (next) {
-            const first_done = left_n + 1 == left_list.length;
-            const second_done = right_n + 1 == right_list.length;
-
-            if (first_done && second_done) throw "End of both algorithms";
-            if (!first_done) left_n++;
-            if (!second_done) right_n++;
-        } 
-        else {
-            const first_start = left_n == 0;
-            const second_start = right_n == 0;
-
-            if (first_start && second_start) throw "At the start of both algorithms";
-            if (!first_start && left_n >= right_n) left_n--;
-            if (!second_start && right_n >= left_n + 1) right_n--;
-        }
-        update_graphs_and_texts(next); 
-    } catch (error) {
-        alert(error);
-    }
-}
-
+/**
+ * Copies data from one graph to the other
+ * @param {boolean} copy_left_to_right - true to copy FROM left TO right, false to copy FROM right TO left
+ */
 export function copy(copy_left_to_right) {
     let cy = copy_left_to_right ? cy_right : cy_left;
     let cy_other = copy_left_to_right ? cy_left : cy_right;
@@ -351,11 +412,20 @@ export function copy(copy_left_to_right) {
     cy.fit();
 }
 
+/**
+ * Fits desired graph into container
+ * @param {boolen} fit_right - true to fit right graph, false to copy left graph
+ */
 export function fit(fit_right) {
     if (fit_right) cy_right.fit();
     else cy_left.fit();
 }
 
+/**
+ * Loads premade graph set by {@link graph_to_load}
+ * @param {string} graph_to_load - name of thegraph to load 
+ * @param {boolen} load_right - true to load into right graph, false to load into left graph
+ */
 export function load_graph(graph_to_load, load_right) {
     cy_left.off('add remove');
     cy_right.off('add remove');

@@ -163,7 +163,7 @@ def bidirectional_Dijkstra_3(G, w, s, t):
                     middle_vertex = v
                     mu = v.d_b + u.d_f + w(u, v)
             fwd = not fwd
-    return 
+    return None
 
 def bidirectional_Dijkstra_4(G, w, s, t):
     """

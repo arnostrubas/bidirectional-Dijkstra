@@ -5,6 +5,11 @@ import * as graphs from './graphs.js';
                     GETTING DATA FROM CY
 ====================================================================
 */
+/**
+ * Returns only relevant data (nodes, edges,...) from {@link cy} 
+ * @param {cytoscape.Core} cy 
+ * @returns relevant data 
+ */
 export function clean_data(cy)
 {
     let nodes = cy.nodes().map(node => {
@@ -35,6 +40,12 @@ export function clean_data(cy)
                     DATA EXPORT AND IMPORT
 ====================================================================
 */
+
+/**
+ * Exports data
+ * @param {Object} data - data to be exported
+ * @param {string} file_name - name of the export file
+ */
 function generic_export(data, file_name)
 {
     const downloadLink = document.createElement('a');
@@ -45,7 +56,6 @@ function generic_export(data, file_name)
     downloadLink.click();
     document.body.removeChild(downloadLink);
 }
-
 
 export function export_as_jpg(cy)
 {
@@ -64,6 +74,11 @@ export function export_as_txt(cy)
     generic_export(url, 'graph_data_export.txt')
 }
 
+/**
+ * Import selected text file into {@link cy}
+ * @param {*} event 
+ * @param {cytoscape.Core} cy - cytoscape in which to import data 
+ */
 export function import_txt(event, cy)
 {
     const file = event.target.files[0];
@@ -105,6 +120,11 @@ export function import_txt(event, cy)
 ========================================================================
 */
 
+/**
+ * Loads premade graph into cytoscape container
+ * @param {cytoscape.Core} cy - cytoscape in which to load the graph
+ * @param {string} graph_to_load - name of the graph to be loaded
+ */
 export function load_premade_graph(cy, graph_to_load)
 {
     let graph = null;
@@ -139,10 +159,12 @@ export function load_premade_graph(cy, graph_to_load)
         cy.add(graph);
         cy.fit();
     }
-
-    return;
 }
 
+/**
+ * Loads start graph into {@link cy}
+ * @param {cytoscape.Core} cy - cytoscape in which to load the start graph 
+ */
 export function load_start_graph(cy)
 {
     cy.add(JSON.parse(JSON.stringify(graphs.start_graph)));

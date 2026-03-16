@@ -1,5 +1,8 @@
 import { getcyElements} from './cytoscape_script.js' 
 
+/**
+ * Puts all arguments into one JSON which is then returned
+ */
 function put_JSON_together(graph, search, end)
 {
     return {
@@ -9,6 +12,14 @@ function put_JSON_together(graph, search, end)
     }
 }
 
+/**
+ * Puts all arguments and elements of cytoscapes into one JSON
+ * @param {*} search_strat1 
+ * @param {*} search_strat2 
+ * @param {*} end_strat1 
+ * @param {*} end_strat2 
+ * @returns 
+ */
 export function create_json_of_graphs(search_strat1, search_strat2, end_strat1, end_strat2)
 {
     let cy1Data = getcyElements(false);

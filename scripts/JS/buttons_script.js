@@ -1,4 +1,4 @@
-import { load_graph, fit, copy, final_path_or_start, move, calculate, reset,
+import { load_graph, fit, copy, move_final_path_or_start, move, start_visualisation, reset,
     export_data, export_image, import_data,
     disableVertexAdding, enableVertexAdding, enableEdgeAdding, disableEdgeAdding, 
     disableVertexRemoving, enableVertexRemoving, enableEdgeRemoving, disableEdgeRemoving } from './cytoscape_script.js'
@@ -110,6 +110,9 @@ function btn_enable()
     rightImportDataBtn.disabled = false;
 }
 
+/**
+ * Adds a small format explanation for step explanation
+ */
 function show_step_text_expl(search_strat_left, search_strat_right, end_strat_left, end_strat_right)
 {
     if (search_strat_left === 'one_edge') step_expl_left.textContent += " ---- v_f and v_b are currently searched vertexes"
@@ -132,7 +135,7 @@ startBtn.addEventListener('click', () => {
             btn_disable();
             let json = create_json_of_graphs(search_strat_left, search_strat_right, end_strat_left, end_strat_right);
             show_step_text_expl(search_strat_left.value, search_strat_right.value, end_strat_left.value, end_strat_right.value);
-            calculate(json);
+            start_visualisation(json);
         }
     }
     catch (error) {
@@ -155,7 +158,7 @@ resetBtn.addEventListener('click', () => {
 nextBtn.addEventListener('click', () => {
     try {
         if (move_size.value == 'one_edge') move(true);
-        else final_path_or_start(true);
+        else move_final_path_or_start(true);
     }
     catch (error) {
         alert(error.message);
@@ -165,7 +168,7 @@ nextBtn.addEventListener('click', () => {
 prevBtn.addEventListener('click', () => {
     try {
         if (move_size.value == 'one_edge') move(false);
-        else final_path_or_start(false);
+        else move_final_path_or_start(false);
     }
     catch (error) {
         alert(error.message);

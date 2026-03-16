@@ -1246,6 +1246,9 @@ def visualise_algorithm(G, search, end):
     return json.dumps(res)
 
 def run_algorithm(graph_dict):
+    '''
+    runs algorithm with parameters specified in graph_dict
+    '''
     search = graph_dict["search"]
     end = graph_dict["end"]
     graph_dict = graph_dict["graph"]
@@ -1270,17 +1273,18 @@ def run_algorithm(graph_dict):
     return visualise_algorithm(G, search, end)
     
 def run(JSON):
+    '''
+    runs algorithms with parameters specified in JSON
+    '''
     json_dict = json.loads(JSON)
     part_one = json_dict["part_one"]
     part_two = json_dict["part_two"]
     result = {
         "part_one": {
             "steps": run_algorithm(part_one),
-            "path": None
         },
         "part_two": {
             "steps": run_algorithm(part_two),
-            "path": None
         }
     }
     return json.dumps(result)

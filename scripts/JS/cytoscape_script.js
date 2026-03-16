@@ -3,6 +3,7 @@ import edgehandles from 'https://esm.sh/cytoscape-edgehandles@4.0.1';
 cytoscape.use(edgehandles);
 import popper from 'https://esm.sh/cytoscape-popper@2.0.0';
 cytoscape.use(popper);
+import { show_popper } from './popper_script.js';
 import { layout, style } from './cy_style_script.js';
 import { setText, update_text_containers } from './queue_text_script.js'
 import { set_graph_select_to_default } from './buttons_script.js'
@@ -13,65 +14,6 @@ const container2 = document.getElementById('graph_container2');
 
 let running_visualisation = false;
 
-function show_popper(evt, cy)
-{
-    const getLabel = (id) => {
-        if (!id) return '-';
-        const n = cy.getElementById(id);
-        return n.length > 0 ? n.data('label') : '-';
-    };
-    const node = evt.target;
-
-    const div = document.createElement('div');
-    div.classList.add('popper');
-    div.innerHTML = `
-        <div style="font-weight: bold; margin-bottom: 5px; border-bottom: 1px solid #ccc;">
-            Uzel: ${node.data('label')}
-        </div>
-        <table style="border-spacing: 10px 2px; margin-left: -10px;">
-            <tr>
-                <td><strong>d<sub>f</sub>:</strong> ${node.data('d_f') === 999999999 ? '∞' : node.data('d_f')}</td>
-                <td><strong>d<sub>b</sub>:</strong> ${node.data('d_b') === 999999999 ? '∞' : node.data('d_b')}</td>
-            </tr>
-            <tr>
-                <td><strong>&pi;<sub>f</sub>:</strong> ${getLabel(node.data('pi_f'))}</td>
-                <td><strong>&pi;<sub>b</sub>:</strong> ${getLabel(node.data('pi_b'))}</td>
-            </tr>
-            <tr>
-                <td><strong>s<sub>f</sub>:</strong> ${node.data('state_f')}</td>
-                <td><strong>s<sub>b</sub>:</strong> ${node.data('state_b')}</td>
-            </tr>
-        </table>
-        <button class="popper_btn" id="start_change_btn">Nastavit jako START</button>
-        <button class="popper_btn" id="target_change_btn">Nastavit jako TARGET</button>
-    `;
-    document.body.appendChild(div);
-
-    if (running_visualisation || node.data('id') == -1) div.querySelector('#start_change_btn').disabled = true;
-    if (running_visualisation || node.data('id') == 0) div.querySelector('#target_change_btn').disabled = true;
-
-    div.querySelector('#start_change_btn').addEventListener('click', () => {
-        switch_vertexes(cy, -1, node.data('id'));
-        hide(); 
-    });
-    div.querySelector('#target_change_btn').addEventListener('click', () => {
-        switch_vertexes(cy, 0, node.data('id'));
-        hide(); 
-    });
-
-    const popper = node.popper({
-        content: div,
-        popper: { placement: 'top' }
-    });
-
-    const hide = () => {
-        div.remove();
-    };
-
-    cy.on('tap pan zoom cxttap add remove data', hide);
-    node.on('position', hide);
-}
-
 let cy_left = cytoscape({
     container: container1,
     layout: layout,
@@ -80,15 +22,15 @@ let cy_left = cytoscape({
     minZoom: 0.3,
     maxZoom: 3.0,
 });
-let eh1 = cy_left.edgehandles();
+let eh_left = cy_left.edgehandles();
 cy_left.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge, cy_left));
 cy_left.on('add remove', (event) => set_graph_select_to_default(false));
-cy_left.on('cxttap', 'node', (event) => show_popper(event, cy_left));
-let first_graph_list = [];
-let first_graph_n = 0;
-let first_graph_q_f = [];
-let first_graph_q_b = [];
-let first_graph_text = [];
+cy_left.on('cxttap', 'node', (event) => show_popper(event, cy_left, running_visualisation));
+let left_list = [];
+let left_n = 0;
+let left_q_f = [];
+let left_q_b = [];
+let left_text = [];
 
 let cy_right = cytoscape({
     container: container2,
@@ -98,15 +40,15 @@ let cy_right = cytoscape({
     minZoom: 0.3,
     maxZoom: 3.0,
 });
-let eh2 = cy_right.edgehandles();
+let eh_right = cy_right.edgehandles();
 cy_right.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => add_edge(addedEdge, cy_right));
 cy_right.on('add remove', (event) => set_graph_select_to_default(true));
-cy_right.on('cxttap', 'node', (event) => show_popper(event, cy_right));
-let second_graph_list = [];
-let second_graph_n = 0;
-let second_graph_q_f = [];
-let second_graph_q_b = [];
-let second_graph_text = [];
+cy_right.on('cxttap', 'node', (event) => show_popper(event, cy_right, running_visualisation));
+let right_list = [];
+let right_n = 0;
+let right_q_f = [];
+let right_q_b = [];
+let right_text = [];
 
 /* 
 ==================================================================================
@@ -148,23 +90,6 @@ function find_new_vertex_id(cy)
     return new_index;
 }
 
-function remove_from_selected_vertexes(cy)
-{
-    cy.forEach(v => {
-        if (v.id() === '0' || v.id() === '-1') alert("Cannot remove START/TARGET vertex");
-        else {
-            v.remove();
-        }
-    });
-}
-
-function remove_from_selected_edges(cy)
-{
-    cy.forEach(e => {
-        e.remove();
-    });
-}
-
 function add_vertex(event)
 {  
     const cy = event.cy;
@@ -185,19 +110,19 @@ function add_vertex(event)
 function remove_vertex() 
 {
     let selected_vertex1 = cy_left.$('node:selected');
-    if (selected_vertex1) remove_from_selected_vertexes(selected_vertex1);
+    if (selected_vertex1) selected_vertex1.remove();
 
     let selected_vertex2 = cy_right.$('node:selected');
-    if (selected_vertex2) remove_from_selected_vertexes(selected_vertex2);
+    if (selected_vertex2) selected_vertex2.remove();
 }
 
 function remove_edge()
 {
     let selected_edge1 = cy_left.$('edge:selected');
-    if (selected_edge1) remove_from_selected_edges(selected_edge1);
+    if (selected_edge1) selected_edge1.remove();
 
     let selected_edge2 = cy_right.$('edge:selected');
-    if (selected_edge2) remove_from_selected_edges(selected_edge2);
+    if (selected_edge2) selected_edge2.remove();
 }
 
 function reset_graphs()
@@ -209,11 +134,11 @@ function reset_graphs()
     cy_left.edges().forEach(e => {
         e.data("state", "");
     });
-    first_graph_list = [];
-    first_graph_q_f = [];
-    first_graph_q_b = [];
-    first_graph_text = [];
-    first_graph_n = 0;
+    left_list = [];
+    left_q_f = [];
+    left_q_b = [];
+    left_text = [];
+    left_n = 0;
 
     cy_right.nodes().forEach(n => {
         n.data("state_f","UNVISITED");
@@ -222,11 +147,11 @@ function reset_graphs()
     cy_right.edges().forEach(e => {
         e.data("state", "");
     });
-    second_graph_list = [];
-    second_graph_q_f = [];
-    second_graph_q_b = [];
-    second_graph_text = [];
-    second_graph_n = 0;
+    right_list = [];
+    right_q_f = [];
+    right_q_b = [];
+    right_text = [];
+    right_n = 0;
 }
 
 function update_graph(cy, elements, animate)
@@ -258,53 +183,21 @@ function update_graph(cy, elements, animate)
     });
 }
 
+function update_graphs_and_texts(animate)
+{
+    update_graph(cy_left, left_list[left_n], animate);
+    update_graph(cy_right, right_list[right_n], animate);
+    update_text_containers(left_q_f[left_n], left_q_b[left_n],
+                right_q_f[right_n], right_q_b[right_n],
+                left_text[left_n], right_text[right_n]);
+}
+
 function unselect()
 {
     cy_left.nodes().unselect();
     cy_right.nodes().unselect();
     cy_left.edges().unselect();
     cy_right.edges().unselect();
-}
-
-function switch_vertexes(cy, old_id, new_id)
-{
-    let old_vertex = cy.getElementById(old_id);
-    let new_vertex = cy.getElementById(new_id);
-    if (old_vertex.length <= 0 || new_vertex.length <= 0) alert("Invalid input/Vertex with that index doesnt exist!")
-    else {
-        let temp_position = { ...old_vertex.position() };
-        old_vertex.position(new_vertex.position());
-        new_vertex.position(temp_position);
-        cy.edges().forEach(edge => {
-            let data = edge.data();
-            let changing = false;
-            if (edge.source().id() == old_id) {
-                data.source = new_id;
-                changing = true;
-            } else if (edge.source().id() == new_id) {
-                data.source = old_id;
-                changing = true;
-            } 
-            if (edge.target().id() == old_id) {
-                data.target = new_id;
-                changing = true;
-            } else if (edge.target().id() == new_id) {
-                data.target = old_id;
-                changing = true;
-            }
-            if (changing) {
-                cy.remove(edge);
-                cy.add( {data: data} );
-            }
-        });
-    }
-}
-
-function update_texts()
-{
-    update_text_containers(first_graph_q_f[first_graph_n], first_graph_q_b[first_graph_n],
-                second_graph_q_f[second_graph_n], second_graph_q_b[second_graph_n],
-                first_graph_text[first_graph_n], second_graph_text[second_graph_n]);
 }
 
 /*
@@ -344,13 +237,13 @@ export function disableVertexRemoving()
 }
 
 export function enableEdgeAdding() {
-    eh1.enableDrawMode();
-    eh2.enableDrawMode();
+    eh_left.enableDrawMode();
+    eh_right.enableDrawMode();
 }
 
 export function disableEdgeAdding() {
-    eh1.disableDrawMode();
-    eh2.disableDrawMode();
+    eh_left.disableDrawMode();
+    eh_right.disableDrawMode();
 }
 
 export function enableEdgeRemoving()
@@ -382,108 +275,71 @@ export function getcyElements(get_cy_right) {
     else return data_func.clean_data(cy_left);
 }
 
+function load_from_py(part, list, q_f, q_b, text, cy)
+{
+    const steps = JSON.parse(part.steps);
+    const graph_data = steps.data;
+    
+    graph_data.forEach(e => {
+        let data = JSON.parse(e);
+        let graph = JSON.parse(data.graph);
+        let queue_f = JSON.parse(data.queue_f);
+        let queue_b = JSON.parse(data.queue_b);
+        
+        let elements = graph.elements;
+        list.push(elements)
+        q_f.push(queue_f);
+        q_b.push(queue_b);
+        text.push(data.text);
+    });
+}
+
 export function calculate(json)
 {
     running_visualisation = true;
     let result = window.run(json);
     const data = JSON.parse(result);
 
-    const first_part = data.part_one;
-    const first_steps = JSON.parse(first_part.steps);
-    const first_graph_data = first_steps.data;
+    load_from_py(data.part_one, left_list, left_q_f, left_q_b, left_text, cy_left);
+    load_from_py(data.part_two, right_list, right_q_f, right_q_b, right_text, cy_right);
 
-    const second_part = data.part_two;
-    const second_steps = JSON.parse(second_part.steps);
-    const second_graph_data = second_steps.data;
-
-    first_graph_data.forEach(e => {
-        let data = JSON.parse(e);
-        let graph = JSON.parse(data.graph);
-        let queue_f = JSON.parse(data.queue_f);
-        let queue_b = JSON.parse(data.queue_b);
-        
-        let elements = graph.elements;
-        first_graph_list.push(elements)
-        first_graph_q_f.push(queue_f);
-        first_graph_q_b.push(queue_b);
-        first_graph_text.push(data.text);
-    });
-    update_graph(cy_left, first_graph_list[first_graph_n], false);
-
-    second_graph_data.forEach(e => {
-        let data = JSON.parse(e);
-        let graph = JSON.parse(data.graph);
-        let queue_f = JSON.parse(data.queue_f);
-        let queue_b = JSON.parse(data.queue_b);
-        
-        let elements = graph.elements;
-        second_graph_list.push(elements)
-        second_graph_q_f.push(queue_f);
-        second_graph_q_b.push(queue_b);
-        second_graph_text.push(data.text);
-    });
-    update_graph(cy_right, second_graph_list[second_graph_n], false);
-
-    update_texts();
+    update_graphs_and_texts(false);
 }
 
 export function final_path_or_start(final)
 {
     if (final) {
-        first_graph_n = first_graph_list.length - 1;
-        second_graph_n = second_graph_list.length - 1;
-        update_graph(cy_left, first_graph_list[first_graph_n], false);
-        update_graph(cy_right, second_graph_list[second_graph_n], false);
-        update_texts();
+        left_n = left_list.length - 1;
+        right_n = right_list.length - 1;
     } else {
-        first_graph_n = 0;
-        second_graph_n = 0;
-        update_graph(cy_left, first_graph_list[first_graph_n], false);
-        update_graph(cy_right, second_graph_list[second_graph_n], false);
-        update_texts();
+        left_n = 0;
+        right_n = 0;
     }
+    update_graphs_and_texts(false);
 }
 
 export function move(next)
 {
-    if (next) {
-        try {
-            const first_done = first_graph_n + 1 == first_graph_list.length;
-            const second_done = second_graph_n + 1 == second_graph_list.length;
+    try {
+        if (next) {
+            const first_done = left_n + 1 == left_list.length;
+            const second_done = right_n + 1 == right_list.length;
 
-            if (first_done && second_done) {
-                throw "End of both algorithms"
-            };
-            if (!first_done) {
-                first_graph_n++;
-                update_graph(cy_left, first_graph_list[first_graph_n], true);
-            }
-            if (!second_done) {
-                second_graph_n++;
-                update_graph(cy_right, second_graph_list[second_graph_n], true);
-            }
-            update_texts();
-        } catch (error) {
-            alert(error)
-        }
-    } 
-    else {
-        try {
-            const first_start = first_graph_n == 0;
-            const second_start = second_graph_n == 0;
+            if (first_done && second_done) throw "End of both algorithms";
+            if (!first_done) left_n++;
+            if (!second_done) right_n++;
+        } 
+        else {
+            const first_start = left_n == 0;
+            const second_start = right_n == 0;
+
             if (first_start && second_start) throw "At the start of both algorithms";
-            if (!first_start && first_graph_n >= second_graph_n) {
-                first_graph_n--;
-                update_graph(cy_left, first_graph_list[first_graph_n], false);
-            }
-            if (!second_start && second_graph_n >= first_graph_n + 1) {
-                second_graph_n--;
-                update_graph(cy_right, second_graph_list[second_graph_n], false);
-            }
-            update_texts();
-        } catch (error) {
-            alert(error)
+            if (!first_start && left_n >= right_n) left_n--;
+            if (!second_start && right_n >= left_n + 1) right_n--;
         }
+        update_graphs_and_texts(next); 
+    } catch (error) {
+        alert(error);
     }
 }
 

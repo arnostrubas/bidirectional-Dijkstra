@@ -313,6 +313,7 @@ def bidirectional_Dijkstra_3(G, w, s, t):
                     middle_vertex = v
                     mu = v.d_b + u.d_f + w(u, v)
             fwd = not fwd
+    yield VisualData("no path found", queue_f=Q_f, queue_b=Q_b) # for visual purposes
     return None
 
 def bidirectional_Dijkstra_4(G, w, s, t):
@@ -325,9 +326,10 @@ def bidirectional_Dijkstra_4(G, w, s, t):
     Q_f.insert(s)
     Q_b = Queue(False)
     Q_b.insert(t)
+    did_bwd = False
     yield VisualData("fwd init " + s.label + ", bwd init " + t.label, queue_f=Q_f, queue_b=Q_b) # for visual purposes
-    while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
-        if (Q_f.count <= Q_b.count):
+    while ((not Q_f.isEmpty()) and (not Q_b.isEmpty())) or not did_bwd:
+        if (Q_f.count <= Q_b.count and Q_f.count != 0):
             v = Q_f.extractMin()
             v.state_f = "CLOSED"
             yield VisualData("fwd: Extracted and closed " + v.label + " (Q_f had less or equal vertexes)",queue_f=Q_f, queue_b=Q_b) # for visual purposes
@@ -351,6 +353,7 @@ def bidirectional_Dijkstra_4(G, w, s, t):
                         Q_f.update(u) 
                         yield VisualData("fwd: Changed priority of " + u.label + " to " + str(u.d_f), queue_f=Q_f, queue_b=Q_b) # for visual purposes
         else:
+            did_bwd = True
             v = Q_b.extractMin()
             v.state_b = "CLOSED"
             yield VisualData("bwd: Extracted and closed " + v.label + " (Q_b had less or equal vertexes)", queue_f=Q_f, queue_b=Q_b) # for visual purposes
@@ -450,9 +453,10 @@ def bidirectional_Dijkstra_6(G, w, s, t):
     middle_vertex = None
     current_node_f = None
     current_node_b = None
+    did_bwd = False
     yield VisualData("fwd init " + s.label + ", bwd init " + t.label, queue_f=Q_f, queue_b=Q_b) # for visual purposes
-    while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
-        if (Q_f.count <= Q_b.count):
+    while ((not Q_f.isEmpty()) and (not Q_b.isEmpty())) or not did_bwd:
+        if (Q_f.count <= Q_b.count and Q_f.count != 0):
             v = Q_f.extractMin()
             current_node_f = v
             v.state_f = "CLOSED"
@@ -481,6 +485,7 @@ def bidirectional_Dijkstra_6(G, w, s, t):
                     middle_vertex = v
                     mu = v.d_f + u.d_b + w(v, u)
         else:
+            did_bwd = True
             v = Q_b.extractMin()
             current_node_b = v
             v.state_b = "CLOSED"
@@ -508,6 +513,7 @@ def bidirectional_Dijkstra_6(G, w, s, t):
                     yield VisualData(u.label + " is closed in fwd and " + v.label + ".d_b + " + u.label + ".d_f + w(" + v.label + ", " + u.label  + ") < μ => " + mu_txt , queue_f=Q_f, queue_b=Q_b) # for visual purposes
                     middle_vertex = v
                     mu = v.d_b + u.d_f + w(u, v)
+    yield VisualData("no path found", queue_f=Q_f, queue_b=Q_b) # for visual purposes
     return None
 
 def bidirectional_Dijkstra_7(G, w, s, t):
@@ -703,6 +709,7 @@ def bidirectional_Dijkstra_9(G, w, s, t):
                     yield VisualData(u.label + " is closed in fwd and " + v.label + ".d_b + " + u.label + ".d_f + w(" + v.label + ", " + u.label  + ") < μ => " + mu_txt , queue_f=Q_f, queue_b=Q_b) # for visual purposes
                     middle_vertex = v
                     mu = v.d_b + u.d_f + w(u, v)
+    yield VisualData("no path found", queue_f=Q_f, queue_b=Q_b) # for visual purposes
     return None
 
 def bidirectional_Dijkstra_10(G, w, s, t):

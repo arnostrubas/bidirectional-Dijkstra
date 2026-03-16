@@ -175,8 +175,9 @@ def bidirectional_Dijkstra_4(G, w, s, t):
     Q_f.insert(s)
     Q_b = Queue(False)
     Q_b.insert(t)
-    while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
-        if (Q_f.count <= Q_b.count):
+    did_bwd = False
+    while ((not Q_f.isEmpty()) and (not Q_b.isEmpty())) or not did_bwd:
+        if (Q_f.count <= Q_b.count and Q_f.count != 0):
             v = Q_f.extractMin()
             v.state_f = "CLOSED"
             if (v.state_b == "CLOSED"):
@@ -193,6 +194,7 @@ def bidirectional_Dijkstra_4(G, w, s, t):
                         u.pi_f = v
                         Q_f.update(u) 
         else:
+            did_bwd = True
             v = Q_b.extractMin()
             v.state_b = "CLOSED"
             if (v.state_f == "CLOSED"):
@@ -269,8 +271,9 @@ def bidirectional_Dijkstra_6(G, w, s, t):
     middle_vertex = None
     current_node_f = None
     current_node_b = None
-    while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
-        if (Q_f.count <= Q_b.count):
+    did_bwd = False
+    while ((not Q_f.isEmpty()) and (not Q_b.isEmpty())) or not did_bwd:
+        if (Q_f.count <= Q_b.count and Q_f.count != 0):
             v = Q_f.extractMin()
             current_node_f = v
             v.state_f = "CLOSED"
@@ -291,6 +294,7 @@ def bidirectional_Dijkstra_6(G, w, s, t):
                     middle_vertex = v
                     mu = v.d_f + u.d_b + w(v, u)
         else:
+            did_bwd = True
             v = Q_b.extractMin()
             current_node_b = v
             v.state_b = "CLOSED"

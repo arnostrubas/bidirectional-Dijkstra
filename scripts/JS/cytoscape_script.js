@@ -172,11 +172,10 @@ function reset_graph(cy, list, q_f, q_b, text)
     cy.edges().forEach(e => {
         e.data("state", "");
     });
-
-    list = [];
-    q_f = [];
-    q_b = [];
-    text = [];
+    list.length = 0;
+    q_f.length = 0;
+    q_b.length = 0;
+    text.length = 0;
 }
 
 /**
@@ -204,7 +203,7 @@ function update_graph(cy, elements, animate)
     nodes.forEach(node => {
         let changed_node = cy.$('#' + node.data.id);
         let new_data = changed_node.data();
-        let old_data = node.data
+        let old_data = node.data;
         if (new_data.state_f != old_data.state_f ||
                 new_data.state_b != old_data.state_b ||
                 new_data.d_f != old_data.d_f ||

@@ -8,16 +8,17 @@ export let style = [
         selector: 'node',
         style: {
             'label': 'data(label)',
-            'width': '50px',
-            'height': '50px',
+            'width': '55px',
+            'height': '55px',
             'text-valign': 'center',
             'text-halign': 'center',
-            'font-size': '11px',
-            'border-width': 2,
-            'border-color': '#555',
+            'font-family': "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+            'font-size': '12px',
+            'border-width': 1.5,
+            'border-color': '#646464',
             'background-opacity': 0.5,
             'background-fill': 'linear-gradient',
-            'background-gradient-stop-colors': 'gray gray', 
+            'background-gradient-stop-colors': '#b4b4b4 #909090', 
             'background-gradient-stop-positions': '50% 50%',
             'background-gradient-direction': 'to-right',
             'transition-property': 'background-color',
@@ -27,33 +28,33 @@ export let style = [
     {
         selector: '.highlighted',
         style: {
-            'background-color': '#ff0000', // zlatá barva při bliknutí
-            'border-width': 4,
+            'background-color': '#ff0000', 
+            'border-width': 3,
             'border-color': '#ff0000'
         }
     },
     {
         selector: 'node[state_f = "PATH"][state_b = "PATH"]',
         style: {
-            'background-gradient-stop-colors': 'green green',
+            'background-gradient-stop-colors': '#018803 #018803',
         }
     },
     {
         selector: 'node[state_f = "UNVISITED"][state_b = "OPEN"]',
         style: {
-            'background-gradient-stop-colors': 'gray #31c8fa', 
+            'background-gradient-stop-colors': '#b4b4b4 #31c8fa', 
         }
     },
     {
         selector: 'node[state_f = "UNVISITED"][state_b = "CLOSED"]',
         style: {
-            'background-gradient-stop-colors': 'gray #0006a5', 
+            'background-gradient-stop-colors': '#b4b4b4 #0006a5', 
         }
     },
     {
         selector: 'node[state_f = "OPEN"][state_b = "UNVISITED"]',
         style: {
-            'background-gradient-stop-colors': 'orange gray', 
+            'background-gradient-stop-colors': 'orange #909090', 
         }
     },
     {
@@ -71,7 +72,7 @@ export let style = [
     {
         selector: 'node[state_f = "CLOSED"][state_b = "UNVISITED"]',
         style: {
-            'background-gradient-stop-colors': 'red gray', 
+            'background-gradient-stop-colors': 'red #909090', 
         }
     },
     {
@@ -101,7 +102,8 @@ export let style = [
             'line-color': '#999',
             'target-arrow-shape': 'triangle',
             'target-arrow-color': '#999',
-            'label': 'data(weight)', 
+            'label': 'data(weight)',
+            'font-family': "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", 
             'font-size': '20px',
             'color': '#555',
             'text-background-color': 'white',
@@ -111,8 +113,8 @@ export let style = [
     {
         selector: 'edge[state = "PATH"]',
         style: {
-            'line-color': 'green',      
-            'target-arrow-color': 'green', 
+            'line-color': '#007502',      
+            'target-arrow-color': '#007502', 
             'width': 4,                    
             'opacity': 1            
         }

@@ -73,9 +73,11 @@ export function show_popper(evt, cy, running_visualisation)
                 <td><strong>s<sub>b</sub>:</strong> ${node.data('state_b')}</td>
             </tr>
         </table>
-        <button class="popper_btn" id="start_change_btn">Nastavit jako START</button>
-        <button class="popper_btn" id="target_change_btn">Nastavit jako TARGET</button>
-    `;
+        <div id="popper_btns">
+            <button class="popper_btn" id="start_change_btn">Nastavit jako START</button>
+            <button class="popper_btn" id="target_change_btn">Nastavit jako TARGET</button>
+        <div>
+        `;
     document.body.appendChild(div);
 
     if (running_visualisation || node.data('id') == -1) div.querySelector('#start_change_btn').disabled = true;

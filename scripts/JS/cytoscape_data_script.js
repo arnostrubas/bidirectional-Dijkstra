@@ -157,7 +157,7 @@ export function load_premade_graph(cy, graph_to_load)
     if (graph != null) {
         cy.remove(cy.elements());
         cy.add(graph);
-        cy.fit();
+        cy.fit(15);
     }
 }
 
@@ -168,5 +168,5 @@ export function load_premade_graph(cy, graph_to_load)
 export function load_start_graph(cy)
 {
     cy.add(JSON.parse(JSON.stringify(graphs.start_graph)));
-    cy.fit();
+    cy.fit(15);
 }

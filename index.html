@@ -38,14 +38,18 @@
                 <input class="checkbox" type="checkbox" id="remove_edge"> Remove edge (click on edge)
             </label>
         </div> 
-        <div class="empty2"></div>   
+        <div class="empty"></div>   
         <div>
             <div id="start_reset">
-                <button class="main_button" id="start" disabled>Start</button>
-                <button class="main_button" id="reset" disabled>Reset</button>
+                <button class="start_reset_button" id="start" disabled>Start</button>
+                <button class="start_reset_button" id="reset" disabled>Reset</button>
             </div>
         </div>
         <div id="steps">
+            <div id="steps_buttons">
+                <button class="move_button" id="prev_step" disabled>Previous step</button>
+                <button class="move_button" id="next_step" disabled>Next step</button>
+            </div>
             <div id="step_size">
                 <div id="steps_text">Select step size</div>
                 <select id="number_of_steps">
@@ -53,12 +57,8 @@
                     <option value="end_result">Show only shortest path</option>
                 </select>
             </div>
-            <div id="steps_buttons">
-                <button class="main_button" id="prev_step" disabled>Previous step</button>
-                <button class="main_button" id="next_step" disabled>Next step</button>
-            </div>
         </div>
-        <div class="empty"></div>
+        <div class="empty2"></div>
         <div class="useful_links_texts">
             <a href="https://github.com/arnostrubas/bidirectional-Dijsktra/blob/main/README.md">README</a>
             <div><strong>Right click on vertex to show its data</strong></div>

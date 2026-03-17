@@ -31,10 +31,10 @@ button {
 
 .checkboxes {
     display: flex;
-    flex: 1.6;
+    flex: 1.7;
     flex-direction: column;
     font-size: 0.8vw;
-    gap: 12px
+    gap: 10px
 }
 
 #start_reset {
@@ -51,12 +51,45 @@ button {
     gap: 5px;
 }
 
-.empty {
-    flex: 2.3;
+#number_of_steps {
+    display: flex;
+    flex: 1;
+    cursor: pointer;
+}
+
+#steps_buttons {
+    display: flex;
+    flex: 1;
+    gap: 10px;
+}
+
+.move_button {
+    font-size: 1vw; 
+    background-color: rgba(113, 162, 252, 0.756);
+    box-shadow: 0 5px 13px rgba(0, 0, 0, 0.2); 
+    color: rgb(6, 44, 114);
+    cursor: pointer; 
+    border: none; 
+    padding: 10px 15px;
+    flex: 1;
+    height: 75%;
+}
+
+.move_button:not(:disabled):hover { 
+    background-color: #236ab6c5; 
+}
+
+.move_button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
 }
 
 .empty2 {
-    flex: 0.7;
+    flex: 2.1;
+}
+
+.empty {
+    flex: 0.5;
 }
 
 #above_containers {
@@ -131,9 +164,9 @@ button {
 #explain_text1, #explain_text2 {
     border: 1px solid #dee2e6;
     font-size: 1vw;
-    padding: 10px 15px;
+    padding: 10px;
     overflow: auto;
-    height: 30px;
+    min-height: 25px;
     white-space: pre-wrap;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
 }
@@ -179,33 +212,31 @@ button {
     flex: 1;
     box-shadow: 0 5px 13px rgba(0, 0, 0, 0.15); 
     border: 1px solid #dee2e6;
-    padding: 15px;
+    padding: 12px;
     font-family: sans-serif;
     font-size: 1.3vw;
-    min-height: 20px;
 }
 
-.main_button {
-    font-size: 1.2vw; 
-    background-color: #648cfa;
+.start_reset_button {
+    font-size: 1.5vw; 
     cursor: pointer; 
     border: none; 
     padding: 10px 15px;
-}
-
-.main_button:hover { 
-    background-color: #3c6df4;; 
-}
-
-.main_button:disabled {
-    background-color: #648cfa;
-    opacity: 0.6;
-    cursor: not-allowed;
+    height: 75%;
 }
 
 #start {
-    background-color: #388a43;
+    background-color: #49b257;
     color: rgb(0, 67, 0);
+}
+
+#start:not(:disabled):hover {
+    background-color: #307e39;
+}
+
+#start:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
 }
 
 #reset {
@@ -213,39 +244,45 @@ button {
     color: rgb(158, 1, 1)
 }
 
+#reset:not(:disabled):hover {
+    background-color: #c56666;
+}
+
 #reset:disabled {
-    background-color: #fab2b2;
-    color: rgb(175, 106, 106)
+    cursor: not-allowed;
+    opacity: 0.4;
 }
 
 .fit_btn {
     flex: 1;
     background-color: rgba(113, 162, 252, 0.756);
     box-shadow: 0 5px 13px rgba(0, 0, 0, 0.2); 
-    color: rgba(72, 136, 255, 0.756)
+    color: rgb(6, 44, 114);
     cursor: pointer; 
     border: none; 
     padding: 10px;
 }
 
-.fit_btn:hover { 
-    background-color: #0056b3; 
+.fit_btn:not(:disabled):hover { 
+    background-color: #236ab6c5; 
 }
 
 .copy_btn {
     flex: 1;
     background-color: rgba(113, 162, 252, 0.756);
     box-shadow: 0 5px 13px rgba(0, 0, 0, 0.2); 
+    color: rgb(6, 44, 114);
     cursor: pointer; 
     border: none; 
     padding: 10px 15px;
 }
 
-.copy_btn:hover { 
-    background-color: #0056b3; 
+.copy_btn:not(:disabled):hover { 
+    background-color: #236ab6c5; 
 }
 
 .copy_btn:disabled {
+    color: #4c4c4cb3;
     background-color: #929292;
     cursor: not-allowed;
 }
@@ -264,17 +301,19 @@ button {
 
 .export_btn {
     background-color: #439cfb3b;
+    color: #05458a9c;
     box-shadow: 0 5px 13px rgba(0, 0, 0, 0.08); 
     cursor: pointer; 
     border: none; 
     padding: 10px;
 }
 
-.export_btn:hover { 
+.export_btn:not(:disabled):hover { 
     background-color:  #439cfbbc; 
 }
 
 .export_btn:disabled {
+    color: #4c4c4cb3;
     background-color: #929292;
     cursor: not-allowed;
 }
@@ -302,23 +341,29 @@ button {
     border-radius: 4px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     width: 10%;
+    gap: 10px;
+}
+
+#popper_btns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 10px
 }
 
 .popper_btn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    margin-top: 8px;
-    border-radius: 4px;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    width: 100%; 
+    font-size: 0.7vw; 
+    background-color: rgba(113, 162, 252, 0.756);
+    box-shadow: 0 5px 13px rgba(0, 0, 0, 0.2); 
+    color: rgb(6, 44, 114);
+    cursor: pointer; 
+    border: none; 
+    padding: 10px 15px;
+    width: 100%;
 }
 
-.popper_btn:hover {
-    background-color: #0056b3;
+.popper_btn:not(:disabled):hover {
+    background-color: #236ab6c5; 
 }
 
 .popper_btn:disabled {
@@ -328,9 +373,9 @@ button {
 }
 
 .useful_links_texts {
-    flex: 0.8;
+    flex: 1;
     flex-direction: column;
-    font-size: 0.7vw;
+    font-size: 0.8vw;
     background-color: rgba(209, 209, 209, 0.578);
     padding: 10px;
 }

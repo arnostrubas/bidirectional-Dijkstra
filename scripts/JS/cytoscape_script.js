@@ -18,7 +18,7 @@ let cy_left = cytoscape({
     container: container1,
     layout: layout,
     style: style,
-    wheelSensitivity: 0.1,
+    wheelSensitivity: 0.3,
     minZoom: 0.3,
     maxZoom: 3.0,
 });
@@ -37,7 +37,7 @@ let cy_right = cytoscape({
     container: container2,
     layout: layout,
     style: style,
-    wheelSensitivity: 0.1,
+    wheelSensitivity: 0.3,
     minZoom: 0.3,
     maxZoom: 3.0,
 });
@@ -422,8 +422,8 @@ export function copy(copy_left_to_right) {
  * @param {boolen} fit_right - true to fit right graph, false to copy left graph
  */
 export function fit(fit_right) {
-    if (fit_right) cy_right.fit();
-    else cy_left.fit();
+    if (fit_right) cy_right.fit(15);
+    else cy_left.fit(15);
 }
 
 /**

@@ -163,7 +163,7 @@ button {
 
 #explain_text1, #explain_text2 {
     border: 1px solid #dee2e6;
-    font-size: 1vw;
+    font-size: 0.9vw;
     padding: 10px;
     overflow: auto;
     min-height: 25px;

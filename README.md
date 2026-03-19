@@ -3,7 +3,7 @@ This is a README for a web app which is part my bachelor thesis.
 The web app is for visualising the different versions of a bidirectional Dijkstra algorithm.
 
 If you encounter any errors during the usage of the app or you have any ideas for improving the app, reach out to me via email: arnost.rubas@gmail.com
-![screenshot of the app](image.png)
+![screenshot of the app](/figures/app_screenshot.png)
 1 - graphs
 
     you can rearrange the graph however you like, it wont be changed (unless you reload the page)

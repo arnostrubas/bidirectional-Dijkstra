@@ -163,6 +163,9 @@ def bidirectional_Dijkstra_3(G, w, s, t):
                     middle_vertex = v
                     mu = v.d_b + u.d_f + w(u, v)
             fwd = not fwd
+    if middle_vertex:
+        NCPP(G, 2, middle_vertex)
+        return mu
     return None
 
 def bidirectional_Dijkstra_4(G, w, s, t):
@@ -314,6 +317,9 @@ def bidirectional_Dijkstra_6(G, w, s, t):
                 if (u.state_f == "CLOSED" and v.d_b + u.d_f + w(u, v) < mu):
                     middle_vertex = v
                     mu = v.d_b + u.d_f + w(u, v)
+    if middle_vertex:
+        NCPP(G, 2, middle_vertex)
+        return mu
     return None
 
 def bidirectional_Dijkstra_7(G, w, s, t):
@@ -461,6 +467,9 @@ def bidirectional_Dijkstra_9(G, w, s, t):
                 if (u.state_f == "CLOSED" and v.d_b + u.d_f + w(u, v) < mu):
                     middle_vertex = v
                     mu = v.d_b + u.d_f + w(u, v)
+    if middle_vertex:
+        NCPP(G, 2, middle_vertex)
+        return mu
     return None
 
 def bidirectional_Dijkstra_10(G, w, s, t):
@@ -618,10 +627,6 @@ def bidirectional_Dijkstra_12(G, w, s, t):
     current_node_f = None
     current_node_b = None
 
-    '''
-    next two functions yield True when one neighbour has been explored. 
-    yield False is only for visual purposes
-    '''
     def forward_one_edge(G, Q_f):
         nonlocal mu, middle_vertex, current_node_b, current_node_f
         while (not Q_f.isEmpty()):
@@ -647,6 +652,8 @@ def bidirectional_Dijkstra_12(G, w, s, t):
                 if (u.state_b == "CLOSED" and v.d_f + u.d_b + w(v, u) < mu):
                     middle_vertex = v
                     mu = v.d_f + u.d_b + w(v, u)
+        if middle_vertex:
+            yield True
         return None
     
     def backward_one_edge(G, Q_b):
@@ -674,6 +681,8 @@ def bidirectional_Dijkstra_12(G, w, s, t):
                 if (u.state_f == "CLOSED" and v.d_b + u.d_f + w(u, v) < mu):
                     middle_vertex = v
                     mu = v.d_b + u.d_f + w(u, v)
+        if middle_vertex:
+            yield True
         return None
 
     init(G, s, t)

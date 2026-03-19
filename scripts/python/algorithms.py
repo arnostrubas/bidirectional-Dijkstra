@@ -313,6 +313,11 @@ def bidirectional_Dijkstra_3(G, w, s, t):
                     middle_vertex = v
                     mu = v.d_b + u.d_f + w(u, v)
             fwd = not fwd
+    if middle_vertex:
+        yield VisualData("Nothing else to explore, extracting the shortest path from vₛₜ.", queue_f=Q_f, queue_b=Q_b) # for visual purposes
+        NCPP(G, 2, middle_vertex)
+        yield VisualData("Length of shortest path is " + str(mu), queue_f=Q_f, queue_b=Q_b) # for visual purposes 
+        return mu
     yield VisualData("no path found", queue_f=Q_f, queue_b=Q_b) # for visual purposes
     return None
 
@@ -513,6 +518,11 @@ def bidirectional_Dijkstra_6(G, w, s, t):
                     yield VisualData(u.label + " is closed in fwd and " + v.label + ".d_b + " + u.label + ".d_f + w(" + v.label + ", " + u.label  + ") < μ => " + mu_txt , queue_f=Q_f, queue_b=Q_b) # for visual purposes
                     middle_vertex = v
                     mu = v.d_b + u.d_f + w(u, v)
+    if middle_vertex:
+        yield VisualData("Nothing else to explore, extracting the shortest path from vₛₜ.", queue_f=Q_f, queue_b=Q_b) # for visual purposes
+        NCPP(G, 2, middle_vertex)
+        yield VisualData("Length of shortest path is " + str(mu), queue_f=Q_f, queue_b=Q_b) # for visual purposes 
+        return mu
     yield VisualData("no path found", queue_f=Q_f, queue_b=Q_b) # for visual purposes
     return None
 
@@ -709,6 +719,11 @@ def bidirectional_Dijkstra_9(G, w, s, t):
                     yield VisualData(u.label + " is closed in fwd and " + v.label + ".d_b + " + u.label + ".d_f + w(" + v.label + ", " + u.label  + ") < μ => " + mu_txt , queue_f=Q_f, queue_b=Q_b) # for visual purposes
                     middle_vertex = v
                     mu = v.d_b + u.d_f + w(u, v)
+    if middle_vertex:
+        yield VisualData("Nothing else to explore, extracting the shortest path from vₛₜ.", queue_f=Q_f, queue_b=Q_b) # for visual purposes
+        NCPP(G, 2, middle_vertex)
+        yield VisualData("Length of shortest path is " + str(mu), queue_f=Q_f, queue_b=Q_b) # for visual purposes 
+        return mu
     yield VisualData("no path found", queue_f=Q_f, queue_b=Q_b) # for visual purposes
     return None
 
@@ -951,6 +966,11 @@ def bidirectional_Dijkstra_12(G, w, s, t):
                     middle_vertex = v
                     mu = v.d_f + u.d_b + w(v, u)
                     yield(True, "v_f: " + current_node_f.label + ", v_b: " + (current_node_b.label if current_node_b else "-") + ". " + u.label + " is closed in bwd and " + v.label + ".d_f + " + u.label + ".d_b + w(" + v.label + ", " + u.label  + ") < μ => " + mu_txt) # for visual purposes
+        if middle_vertex:
+            yield VisualData("Nothing else to explore, extracting the shortest path from vₛₜ.", queue_f=Q_f, queue_b=Q_b) # for visual purposes
+            NCPP(G, 2, middle_vertex)
+            yield VisualData("Length of shortest path is " + str(mu), queue_f=Q_f, queue_b=Q_b) # for visual purposes 
+            return mu
         yield (False, "No path found") # for visual purposes
         return None
     
@@ -984,6 +1004,11 @@ def bidirectional_Dijkstra_12(G, w, s, t):
                     middle_vertex = v
                     mu = v.d_b + u.d_f + w(u, v)
                     yield (True, "v_f: " + current_node_f.label + ", v_b: " + current_node_b.label + ". " + u.label + " is closed in fwd and " + v.label + ".d_b + " + u.label + ".d_f + w(" + v.label + ", " + u.label  + ") < μ => " + mu_txt) # for visual purposes
+        if middle_vertex:
+            yield VisualData("Nothing else to explore, extracting the shortest path from vₛₜ.", queue_f=Q_f, queue_b=Q_b) # for visual purposes
+            NCPP(G, 2, middle_vertex)
+            yield VisualData("Length of shortest path is " + str(mu), queue_f=Q_f, queue_b=Q_b) # for visual purposes 
+            return mu
         yield (False, "No path found") # for visual purposes
         return None
 

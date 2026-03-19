@@ -135,6 +135,10 @@ button {
     gap: 18px;
 }
 
+ .graph_description_link {
+    font-size: small;
+ }
+
 .select {
     width: 100%;            
     padding: 8px;            

@@ -127,16 +127,10 @@ function show_step_text_expl(search_strat_left, search_strat_right, end_strat_le
 
 startBtn.addEventListener('click', () => {
     try { 
-        if (search_strat_left.value === 'default' || search_strat_right.value === 'default' ||
-            end_strat_left.value === 'default' || end_strat_right.value === 'default') {
-                alert("vyberte všechny strategie");
-        }
-        else {
-            btn_disable();
-            let json = create_json_of_graphs(search_strat_left, search_strat_right, end_strat_left, end_strat_right);
-            show_step_text_expl(search_strat_left.value, search_strat_right.value, end_strat_left.value, end_strat_right.value);
-            start_visualisation(json);
-        }
+        btn_disable();
+        let json = create_json_of_graphs(search_strat_left, search_strat_right, end_strat_left, end_strat_right);
+        show_step_text_expl(search_strat_left.value, search_strat_right.value, end_strat_left.value, end_strat_right.value);
+        start_visualisation(json);
     }
     catch (error) {
         alert(error.message);
@@ -145,8 +139,8 @@ startBtn.addEventListener('click', () => {
 
 resetBtn.addEventListener('click', () => {
     try {
-        step_expl_left.textContent = "Step explanation";
-        step_expl_right.textContent = "Step explanation";
+        step_expl_left.textContent = "";
+        step_expl_right.textContent = "";
         btn_enable();
         reset();
     }

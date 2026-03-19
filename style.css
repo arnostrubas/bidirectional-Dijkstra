@@ -330,10 +330,6 @@ button {
     gap: 10px;
 }
 
-.strategy_text {
-    font-weight: bold;
-}
-
 .popper {
     background-color: rgba(255, 255, 255, 0.9);
     padding: 5px 10px;

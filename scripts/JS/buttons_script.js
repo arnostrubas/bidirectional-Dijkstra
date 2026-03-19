@@ -115,10 +115,10 @@ function btn_enable()
  */
 function show_step_text_expl(search_strat_left, search_strat_right, end_strat_left, end_strat_right)
 {
-    if (search_strat_left === 'one_edge') step_expl_left.textContent += " ---- v_f and v_b are currently searched vertexes"
-    if (search_strat_right === 'one_edge') step_expl_right.textContent += " ---- v_f and v_b are currently searched vertexes"
-    if (end_strat_left === 'using_search_distance') step_expl_left.textContent += " ---- μ - length of shortest path found so far, vₛₜ vertex on this path"
-    if (end_strat_right === 'using_search_distance') step_expl_right.textContent += " ----  μ - length of shortest path found so far, vₛₜ vertex on this path"
+    if (search_strat_left === 'one_edge') step_expl_left.textContent += " -- v_f and v_b are currently searched vertexes"
+    if (search_strat_right === 'one_edge') step_expl_right.textContent += " -- v_f and v_b are currently searched vertexes"
+    if (end_strat_left === 'using_search_distance') step_expl_left.textContent += " -- μ - length of shortest path found so far, vₛₜ vertex on this path"
+    if (end_strat_right === 'using_search_distance') step_expl_right.textContent += " --  μ - length of shortest path found so far, vₛₜ vertex on this path"
 }
 
 // =============================

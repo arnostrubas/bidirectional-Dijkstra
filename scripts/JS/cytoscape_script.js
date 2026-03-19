@@ -141,7 +141,11 @@ function add_vertex(event)
 function remove_vertex(cy) 
 {
     let selected_vertex = cy.$('node:selected');
-    if (selected_vertex) selected_vertex.remove();
+    if (selected_vertex) {
+        if (selected_vertex.id() == 0 || selected_vertex.id() == -1) {
+            alert("Cannot remove START/TARGET vertex!");
+        } else selected_vertex.remove();
+    }
 }
 
 /**

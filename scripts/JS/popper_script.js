@@ -57,7 +57,7 @@ export function show_popper(evt, cy, running_visualisation)
     div.classList.add('popper');
     div.innerHTML = `
         <div style="font-weight: bold; margin-bottom: 5px; border-bottom: 1px solid #ccc;">
-            Uzel: ${node.data('label')}
+            Vertex: ${node.data('label')}
         </div>
         <table style="border-spacing: 10px 2px; margin-left: -10px;">
             <tr>
@@ -74,8 +74,8 @@ export function show_popper(evt, cy, running_visualisation)
             </tr>
         </table>
         <div id="popper_btns">
-            <button class="popper_btn" id="start_change_btn">Nastavit jako START</button>
-            <button class="popper_btn" id="target_change_btn">Nastavit jako TARGET</button>
+            <button class="popper_btn" id="start_change_btn">Set as START</button>
+            <button class="popper_btn" id="target_change_btn">Set as TARGET</button>
         <div>
         `;
     document.body.appendChild(div);

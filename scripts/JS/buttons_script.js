@@ -36,7 +36,7 @@ const search_strat_right = document.getElementById('search_strategy_right');
 const load_graph_left = document.getElementById('load_graph_left');
 const load_graph_right = document.getElementById('load_graph_right');
 
-const move_size = document.getElementById('number_of_steps');
+const move_size = document.getElementById('number_of_steps_select');
 
 const step_expl_left = document.getElementById('step_expl_left');
 const step_expl_right = document.getElementById('step_expl_right');

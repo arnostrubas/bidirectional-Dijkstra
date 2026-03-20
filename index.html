@@ -52,7 +52,7 @@
             </div>
             <div id="step_size">
                 <div id="steps_text">Select step size</div>
-                <select id="number_of_steps">
+                <select id="number_of_steps_select">
                     <option value="one_edge">One step</option>
                     <option value="end_result">Show only shortest path</option>
                 </select>
@@ -68,7 +68,7 @@
         <div class="above_containers_part">
             <div class="button_selects">
                 <div class="graph_select">
-                    <div><strong>Select pre-made graph</strong>   <a class="graph_description_link" href=https://github.com/arnostrubas/bidirectional-Dijkstra/tree/main/graphs>Graphs description</a></div>
+                    <div class="premade_graph_text"><strong>Select pre-made graph</strong> <a class="graph_description_link" href=https://github.com/arnostrubas/bidirectional-Dijkstra/tree/main/graphs>Graphs description</a></div>
                     <select class="select" id="load_graph_left">
                         <option value="Default"></option>
                         <option value="start_graph">Start graph</option>
@@ -91,7 +91,7 @@
                 </div>
                 <div class="strategy_select">
                     <div class="selects">
-                        <div class="strategy_text">Search strategy</div>
+                        <div class="strategy_text"><strong>Search strategy</strong></div>
                         <select class="select" id="search_strategy_left">
                             <option value="one_vertex">After one vertex</option>
                             <option value="one_edge">After one edge</option>
@@ -101,7 +101,7 @@
                         </select>
                     </div>
                     <div class="selects">
-                        <div class="strategy_text">Ending strategy</div>
+                        <div class="strategy_text"><strong>Ending strategy</strong></div>
                         <select class="select" id="end_strategy_left">
                             <option value="same_vertex_closed">Same vertex closed</option>
                             <option value="using_search_distance">Distance of search</option>
@@ -119,7 +119,7 @@
         <div class="above_containers_part" >
             <div class="button_selects" id="above_right">
                 <div class="graph_select">
-                    <div><strong>Select pre-made graph</strong> <a class="graph_description_link" href=https://github.com/arnostrubas/bidirectional-Dijkstra/tree/main/graphs>Graphs description</a></div>
+                    <div class="premade_graph_text"><strong>Select pre-made graph</strong> <a class="graph_description_link" href=https://github.com/arnostrubas/bidirectional-Dijkstra/tree/main/graphs>Graphs description</a></div>
                     <select class="select" id="load_graph_right">
                         <option value="Default"></option>
                         <option value="start_graph">Start graph</option>
@@ -142,7 +142,7 @@
                 </div>
                 <div class="strategy_select">
                     <div class="selects">
-                        <div class="strategy_text">Search strategy</div>
+                        <div class="strategy_text"><strong>Search strategy</strong></div>
                         <select class="select" id="search_strategy_right">
                             <option value="one_vertex">After one vertex</option>
                             <option value="one_edge">After one edge</option>
@@ -152,7 +152,7 @@
                         </select>
                     </div>
                     <div class="selects">
-                        <div class="strategy_text">Ending strategy</div>
+                        <div class="strategy_text"><strong>Ending strategy</strong></div>
                         <select class="select" id="end_strategy_right">
                             <option value="same_vertex_closed">Same vertex closed</option>
                             <option value="using_search_distance">Distance of search</option>
@@ -163,7 +163,7 @@
                 </div>
             </div>
             <div class="explanation_container">
-                <div class="strategy_text">Step explanation<span id="step_expl_right"></span></div>
+                <div class="strategy_text"><strong>Step explanation</strong><span id="step_expl_right"></span></div>
                 <div id="explain_text2"></div> 
             </div>
         </div>

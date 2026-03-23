@@ -43,26 +43,20 @@ Main buttons used for visualisation. \
 `Select number of steps` in default shows visualisation after each step, but when Show only shortest path option is selected, the next step button shows the last step of the algorithm (shortest path if it has been found), the previous step button shows the first step of the algorithm (inicialisation).
 
 ### 5 - Search and End strategy selectors
+Here you can select Search and End strategies to be visualised at each side. If you select `Dijkstra` as one of the strategies, normal Dijkstra algorithm is used. 
+
 ### 6 - Additional buttons
+Here you can find useful buttons and select. Their function is following: \
+`Export image` - Exports the graph as a jpg \
+`Export data` - Exports the graph's data as a txt. Useful when u want to save the graph before closing the app and then using it easily again when opening the app again. \
+`Import data` - Imports the graph's data, provided as txt. Import only the data that u exported earlier.\
+`Fit to container` - Adjusts the graph's position, so it can be seen in the container. Doesnt change vertex positions.
+`Copy from left/right` - Allows you to copy graph from one side to another. Useful when you want to compare two different strategies on custom graph, thanks to this you dont have to create the graph twice. Asks for confirmation to prevent accidental click.
+`Select premade graph` - Allows you to load a premade graph that showcase some interesting things about the different strategies. Each graph is explained at the link provided (or in folder graphs in this repository).
+
 ### 7 - Checkboxes for vertex/edge adding/removing
-
-
-
-5 - buttons and checkboxex that allow user to change the graph
-
-    allowed only before starting the calculation
-
-    checkbox add to both graphs - !!!NOT IMPLEMENTED!!!!
-
-    Vertex adding - when checked, user can click at a free space inside the graph and new vertex will be generated
-
-    Edge adding - when checked, user can add edges from two nodes by holding from a source vertex and the draging to end node
-
-    when either of these two is selected, moving the graph/nodes around may not work
-
-    Delete selected vertex - when user selects a node (by clicking on it and it being highligted in blue) he can remove this node (and all edges leading from/to this node) by clicking this button
-
-    Delete selected edge - similar to vertex deleting
-
-    python ready - since the webapp uses python for calculations, it is necessary to wait for the python script to load. Turns green when python is succesfully loaded. Start is enabled after python is loaded
-
+Vertexes that allow you to change the graph. Each graph is change separetely. If you wanna add to both graphs, either click to both, or use the `Copy` buttons mentioned earlier. There are 4 checkboxes:\
+`Add vertex` - allows you to add vertex by clicking at empty space of the container\
+`Remove vertex` - allows you to remove vertex by clicking on the vertex you want to remove. All edges comming into/from this vertex are also removed\
+`Add edge` - allows you to add edge, by holding and dragging from source vertex to the vertex where the edge should end. You are then asked to set the edge's weight. The action is rejected if you enter wrong weight or if you try to create multigraph.\
+`Remove edge` - Allows you to remove edge, by clicking on the edge you want to remove.\

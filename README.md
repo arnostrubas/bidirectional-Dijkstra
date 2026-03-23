@@ -1,44 +1,52 @@
-This is a README for a web app which is part my bachelor thesis.
+# Bidirectional Dijkstra visualisation
+
+This is a README for a web app that is part my bachelor thesis.
 
 The web app is for visualising the different versions of a bidirectional Dijkstra algorithm.
 
 If you encounter any errors during the usage of the app or you have any ideas for improving the app, reach out to me via email: arnost.rubas@gmail.com
+
+## Web app screenshot
 ![screenshot of the app](/figures/app_screenshot.png)
-1 - graphs
 
-    you can rearrange the graph however you like, it wont be changed (unless you reload the page)
+## Sections description
+## 1 - Graphs
 
-    the color of the node is split into two halfs. Left half represents forward search, right half represents backward search
-    
-    gray - node is unvisited in forward/backward search
+Main section in which two graphs are shown. Each graph is separete, change in one graph won't affect the other. You can rearange the vertexes by dragging them around the container. 
 
-    yellow - node is open in the forward search
-    red - node is closed in the forward search
-    green - node is open in the backward search
-    purple - node is closed in the backward search
+When you right click the vertex, small pop-up window with vertex data shows up. The pop-up window looks like this:
 
-    at the end of the algorithm, the final path (all its nodes and edges) is colored blue
+![vertex pop-up window](/figures/pop-up.png)
 
-2 - priority queues
+You can see all the atributes of the vertex. Note, that when the visualisation isn't running, these values have no real meaning. There are also two buttons, `Set as START` and `Set as TARGET`. These buttons allow you to change the START and TARGET vertex. You can only do this before the start of the visualisation, when the visualisation is running, these buttons are disabled.
 
-    forward and backward priority queues are shown here. The format is label with upper index, which indicates the priority of the vertex
+The color of the vertex indicates the state of the vertex (so you dont have to view the pop-up window every time you want to see the state). Left side of the vertex indicates the vertex state in forward search, right side in the backward search.
+#### Color meaning
+`Gray` - UNVISITED \
+`Yellow` - OPEN in forward search \
+`Red` - CLOSED in forward search \
+`Light blue` - OPEN in backward search \
+`Blue` - CLOSED in backward search \
+`Green` - Showed only at the end of the algorithm, highlights the shortest path
 
-3 - part when you can select what version of the algorithm is used
+### 2 - Queues
+Two sets of priority queues, two priority queues for each graph. The elements in this queue are the vertex labels. Each element has and upper index, which indicates the priority of the vertex.
 
-    if Dijkstra algorithm is selected in atleast one of the strategies, Dijkstra algorithm is used
-    when not using Dijkstra, the two selected strategies are used
+### 3 - Explanation of last step
+Text field, in which the last step is shortly explained. Sometimes the format of the explanation can be a bit complicated, in that case the format is explained above the container (after the Step explanation label). When the shortest path is found, the lenght of this path is shown here.
 
-4 - Main buttons
+### 4 - Visualisation buttons
+Main buttons used for visualisation. \
+`START` button inicialises the visualisation. Calculates the steps and enables showing them. Also disables some buttons/selects/checkboxes, which shouldn't work during visualisation (for example you cannot remove a vertex during the visualisation).\
+`RESET` button stops the visualisation, which can be stopped at any point. After reset, the visualisation is lost (and then calculated at the next START press).
+`Previous step` and `Next step` buttons allows user to view the steps of the visualisation 
+`Select number of steps` in default shows visualisation after each step, but when Show only shortest path option is selected, the next step button shows the last step of the algorithm (shortest path if it has been found), the previous step button shows the first step of the algorithm (inicialisation).
 
-    Start - calculates the algorithms and starts the visualisation. Once started, the Next/Previous buttons are enabled
+### 5 - Search and End strategy selectors
+### 6 - Additional buttons
+### 7 - Checkboxes for vertex/edge adding/removing
 
-    Reset - Resets the calculation, allows graph changes - see part 5
 
-    Next step - shows next step. The node that was changed is momentaraly highlighted by a red ring (if the color isnt changed, check priority queues)
-
-    Previous step - shows previous step
-
-    Step size - selection of the visualisation, user can either see the algorithm step by step, or just the full path
 
 5 - buttons and checkboxex that allow user to change the graph
 

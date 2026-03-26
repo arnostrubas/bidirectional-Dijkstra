@@ -331,10 +331,11 @@ def bidirectional_Dijkstra_4(G, w, s, t):
     Q_f.insert(s)
     Q_b = Queue(False)
     Q_b.insert(t)
+    did_fwd = False
     did_bwd = False
     yield VisualData("fwd init " + s.label + ", bwd init " + t.label, queue_f=Q_f, queue_b=Q_b) # for visual purposes
-    while ((not Q_f.isEmpty()) and (not Q_b.isEmpty())) or not did_bwd:
-        if (Q_f.count <= Q_b.count and Q_f.count != 0):
+    while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
+        if (not did_fwd or (did_bwd and Q_f.count <= Q_b.count)):
             v = Q_f.extractMin()
             v.state_f = "CLOSED"
             yield VisualData("fwd: Extracted and closed " + v.label + " (Q_f had less or equal vertexes)",queue_f=Q_f, queue_b=Q_b) # for visual purposes
@@ -394,9 +395,12 @@ def bidirectional_Dijkstra_5(G, w, s, t):
     Q_f.insert(s)
     Q_b = Queue(False)
     Q_b.insert(t)
+    did_fwd = False
+    did_bwd = False
     yield VisualData("fwd init " + s.label + ", bwd init " + t.label, queue_f=Q_f, queue_b=Q_b) # for visual purposes
     while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
-        if (Q_f.count <= Q_b.count):
+        if (not did_fwd or (did_bwd and Q_f.count <= Q_b.count)):
+            did_fwd = True
             v = Q_f.extractMin()
             v.state_f = "CLOSED"
             yield VisualData("fwd: Extracted and closed " + v.label + " (Q_f had less or equal vertexes)", queue_f=Q_f, queue_b=Q_b) # for visual purposes               
@@ -419,6 +423,7 @@ def bidirectional_Dijkstra_5(G, w, s, t):
                     yield VisualData("Length of found path is " + str(u.d_f + u.d_b), queue_f=Q_f, queue_b=Q_b) # for visual purposes
                     return u.d_f + u.d_b
         else:
+            did_bwd = True
             v = Q_b.extractMin()
             v.state_b = "CLOSED"
             yield VisualData("bwd: Extracted and closed " + " (Q_b had less or equal vertexes)" + v.label, queue_f=Q_f, queue_b=Q_b) # for visual purposes
@@ -458,10 +463,12 @@ def bidirectional_Dijkstra_6(G, w, s, t):
     middle_vertex = None
     current_node_f = None
     current_node_b = None
+    did_fwd = False
     did_bwd = False
     yield VisualData("fwd init " + s.label + ", bwd init " + t.label, queue_f=Q_f, queue_b=Q_b) # for visual purposes
-    while ((not Q_f.isEmpty()) and (not Q_b.isEmpty())) or not did_bwd:
-        if (Q_f.count <= Q_b.count and Q_f.count != 0):
+    while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
+        if (not did_fwd or (did_bwd and Q_f.count <= Q_b.count)):
+            did_fwd = True
             v = Q_f.extractMin()
             current_node_f = v
             v.state_f = "CLOSED"

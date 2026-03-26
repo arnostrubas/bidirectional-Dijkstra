@@ -1,4 +1,4 @@
-import cytoscape from 'https://esm.sh/cytoscape@3.28.1';
+import cytoscape from 'https://esm.sh/cytoscape@3.33.1';
 import edgehandles from 'https://esm.sh/cytoscape-edgehandles@4.0.1';
 cytoscape.use(edgehandles);
 import popper from 'https://esm.sh/cytoscape-popper@2.0.0';

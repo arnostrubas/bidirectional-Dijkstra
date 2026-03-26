@@ -178,9 +178,10 @@ def bidirectional_Dijkstra_4(G, w, s, t):
     Q_f.insert(s)
     Q_b = Queue(False)
     Q_b.insert(t)
+    did_fwd = False
     did_bwd = False
-    while ((not Q_f.isEmpty()) and (not Q_b.isEmpty())) or not did_bwd:
-        if (Q_f.count <= Q_b.count and Q_f.count != 0):
+    while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
+        if (not did_fwd or (did_bwd and Q_f.count <= Q_b.count)):
             v = Q_f.extractMin()
             v.state_f = "CLOSED"
             if (v.state_b == "CLOSED"):
@@ -225,8 +226,11 @@ def bidirectional_Dijkstra_5(G, w, s, t):
     Q_f.insert(s)
     Q_b = Queue(False)
     Q_b.insert(t)
+    did_fwd = False
+    did_bwd = False
     while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
-        if (Q_f.count <= Q_b.count):
+        if (not did_fwd or (did_bwd and Q_f.count <= Q_b.count)):
+            did_fwd = True
             v = Q_f.extractMin()
             v.state_f = "CLOSED"              
             for u in sorted(G.successors(v), key=lambda node: node.id):
@@ -243,6 +247,7 @@ def bidirectional_Dijkstra_5(G, w, s, t):
                 if (u.state_b == "OPEN" or u.state_b == "CLOSED"):
                     return NCPP(G, 1)
         else:
+            did_bwd = True
             v = Q_b.extractMin()
             v.state_b = "CLOSED"
             for u in sorted(G.predecessors(v), key=lambda node: node.id):
@@ -274,9 +279,11 @@ def bidirectional_Dijkstra_6(G, w, s, t):
     middle_vertex = None
     current_node_f = None
     current_node_b = None
+    did_fwd = False
     did_bwd = False
-    while ((not Q_f.isEmpty()) and (not Q_b.isEmpty())) or not did_bwd:
-        if (Q_f.count <= Q_b.count and Q_f.count != 0):
+    while (not Q_f.isEmpty()) and (not Q_b.isEmpty()):
+        if (not did_fwd or (did_bwd and Q_f.count <= Q_b.count)):
+            did_fwd = True
             v = Q_f.extractMin()
             current_node_f = v
             v.state_f = "CLOSED"

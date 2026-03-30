@@ -1,7 +1,7 @@
-# Bidirectional Dijkstra visualisation
-
 ## License
 This project is licensed under the **BSD 3-Clause License**. See the [LICENSE](LICENSE) file for the full license text.
+
+# Bidirectional Dijkstra visualisation
 
 This is a README for a web app that is part my bachelor thesis.
 

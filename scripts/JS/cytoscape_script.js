@@ -1,3 +1,12 @@
+/**
+ * Copyright (c) 2026, Arnošt Rubáš
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD 3-Clause License.
+ * The full text of the license can be found in the LICENSE file 
+ * in the root directory of this project.
+ */
+
 import cytoscape from 'https://esm.sh/cytoscape@3.33.1';
 import edgehandles from 'https://esm.sh/cytoscape-edgehandles@4.0.1';
 cytoscape.use(edgehandles);

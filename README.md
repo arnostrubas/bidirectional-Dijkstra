@@ -1,5 +1,8 @@
 # Bidirectional Dijkstra visualisation
 
+## License
+This project is licensed under the **BSD 3-Clause License**. See the [LICENSE](LICENSE) file for the full license text.
+
 This is a README for a web app that is part my bachelor thesis.
 
 The web app is for visualising the different versions of a bidirectional Dijkstra algorithm.
@@ -60,3 +63,11 @@ Vertexes that allow you to change the graph. Each graph is change separetely. If
 `Remove vertex` - allows you to remove vertex by clicking on the vertex you want to remove. All edges comming into/from this vertex are also removed\
 `Add edge` - allows you to add edge, by holding and dragging from source vertex to the vertex where the edge should end. You are then asked to set the edge's weight. The action is rejected if you enter wrong weight or if you try to create multigraph.\
 `Remove edge` - Allows you to remove edge, by clicking on the edge you want to remove.\
+
+
+
+## Acknowledgments / Third-party libraries
+This project uses the following open-source libraries:
+* [Cytoscape.js](https://js.cytoscape.org/) 
+* [NetworkX](https://networkx.org/)
+* [PyScript](https://pyscript.net/)

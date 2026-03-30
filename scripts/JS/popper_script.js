@@ -1,4 +1,13 @@
 /**
+ * Copyright (c) 2026, Arnošt Rubáš
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD 3-Clause License.
+ * The full text of the license can be found in the LICENSE file 
+ * in the root directory of this project.
+ */
+
+/**
  * Switches ids of two vertexes. Also reroutes all edge leading in/from these vertexes so only the ids are changed
  * @param {cytoscape.Core} cy - cytoscape in which vertexes should be switched  
  * @param {*} old_id - id of first vertex

@@ -159,6 +159,9 @@ export function load_premade_graph(cy, graph_to_load)
         case "same_vertex_closed":
             graph = JSON.parse(JSON.stringify(graphs.same_vertex_closed_example));
             break;
+        case "less_open_vertexes_example":
+            graph = JSON.parse(JSON.stringify(graphs.less_open_vertexes_example));
+            break;
         default:
             break;
     }

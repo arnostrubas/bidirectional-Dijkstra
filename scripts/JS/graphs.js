@@ -315,3 +315,39 @@ export let huge_graph = [
     { data: { id: 'e95', source: '63', target: '59', weight: 10 } },
     { data: { id: 'e96', source: '23', target: '26', weight: 4 } } 
 ]
+
+export let less_open_vertexes_example = [
+    { data: { id: '-1', label: 'START' }, position: { x: 8, y: -9 } },
+    { data: { id: '0', label: 'TARGET' }, position: { x: 466, y: -11 } },
+    { data: { id: '1', label: '1' }, position: { x: -66, y: -110 } },
+    { data: { id: '2', label: '2' }, position: { x: -51, y: 158 } },
+    { data: { id: '3', label: '3' }, position: { x: 608, y: -14 } },
+    { data: { id: '4', label: '4' }, position: { x: 60, y: -212 } },
+    { data: { id: '6', label: '6' }, position: { x: 295, y: 171 } },
+    { data: { id: '7', label: '7' }, position: { x: 575, y: 174 } },
+    { data: { id: '9', label: '9' }, position: { x: 457, y: -205 } },
+    { data: { id: '8', label: '8' }, position: { x: 102, y: 98 } },
+    { data: { id: '5', label: '5' }, position: { x: 133, y: -123 } },
+    { data: { id: '10', label: '10' }, position: { x: 245, y: -18 } },
+    { data: { id: '11', label: '11' }, position: { x: 366, y: 27 } },
+    { data: { id: '12', label: '12' }, position: { x: 366, y: -118 } },
+
+    { data: { id: 'e1', source: '9', target: '3', weight: 1 } },
+    { data: { id: 'e2', source: '-1', target: '1', weight: 5 } },
+    { data: { id: 'e3', source: '-1', target: '2', weight: 6 } },
+    { data: { id: 'e4', source: '6', target: '7', weight: 4 } },
+    { data: { id: 'e5', source: '1', target: '4', weight: 4 } },
+    { data: { id: 'e6', source: '-1', target: '8', weight: 6 } },
+    { data: { id: 'e7', source: '2', target: '6', weight: 4 } },
+    { data: { id: 'e8', source: '4', target: '9', weight: 10 } },
+    { data: { id: 'e9', source: '3', target: '0', weight: 4 } },
+    { data: { id: 'e10', source: '7', target: '3', weight: 7 } },
+    { data: { id: 'e11', source: '1', target: '5', weight: 1 } },
+    { data: { id: 'e12', source: '5', target: '10', weight: 2 } },
+    { data: { id: 'e13', source: '8', target: '10', weight: 4 } },
+    { data: { id: 'e14', source: '8', target: '5', weight: 1 } },
+    { data: { id: 'e15', source: '10', target: '11', weight: 5 } },
+    { data: { id: 'e16', source: '5', target: '12', weight: 5 } },
+    { data: { id: 'e17', source: '12', target: '11', weight: 7 } },
+    { data: { id: 'e18', source: '11', target: '6', weight: 5 } }
+];

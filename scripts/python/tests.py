@@ -1,6 +1,6 @@
 import networkx as nx
 from custom_classes import *
-import algorithms_clean as alg
+import algorithms_implementation as alg
 from functools import partial
 import math
 

@@ -10,7 +10,7 @@ from functools import partial
 from js import window # type: ignore
 import json
 from other_functions import *
-from algorithms import *
+from algorithms_visualisation import *
 from json_functions import *
 
 def visualise_algorithm(G, search, end):
